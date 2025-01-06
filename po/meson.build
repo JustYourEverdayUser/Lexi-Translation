@@ -1,0 +1,1 @@
+i18n.gettext('Lexi', preset: 'glib', args: ['--package-name=Lexi'])
