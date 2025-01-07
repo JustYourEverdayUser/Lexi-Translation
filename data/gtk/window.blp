@@ -1,1 +1,151 @@
 using Gtk 4.0;
+using Adw 1;
+
+template $LexiWindow : Adw.ApplicationWindow {
+  title: "Lexi";
+  width-request: 360;
+  height-request: 100;
+
+  Adw.ToastOverlay toast_overlay {
+    Adw.NavigationView navigation_view {
+      Adw.NavigationPage lexicon_page {
+        title: "Lexi";
+
+        Adw.OverlaySplitView overlay_split_view {
+          sidebar-width-fraction: 0.25;
+          show-sidebar: true;
+
+          [sidebar]
+          Adw.NavigationPage sidebar_page {
+            title: _("Collections");
+
+            Adw.ToolbarView {
+              [top]
+              Adw.HeaderBar {
+                [start]
+                Button {
+                  icon-name: "toggle-sidebar-symbolic";
+                  tooltip-text: _("Toggle sidebar");
+                  action-name: "win.toggle_sidebar";
+                }
+              }
+
+              ScrolledWindow sidebar_scrolled_window {
+                ListBox collections_listbox {
+                  styles ["navigation-sidebar"]
+                }
+              }
+            }
+          }
+
+          Adw.ToolbarView lexicon_view {
+            [top]
+            Adw.HeaderBar lexicon_headerbar {
+              [start]
+              Button show_sidebar_button {
+                icon-name: "toggle-sidebar-symbolic";
+                tooltip-text: _("Toggle sidebar");
+                action-name: "win.toggle_sidebar";
+                visible: bind overlay_split_view.show-sidebar inverted;
+              }
+
+              Revealer left_buttons_revealer {
+                transition-type: none;
+                valign: start;
+                halign: start;
+
+                Box {
+                  orientation: horizontal;
+
+                  Button add_pair {
+                    icon-name: "add-pair-symbolic";
+                    tooltip-text: _("Add new key-value pair to this Lexicon");
+                    action-name: "win.add_pair";
+                  }
+
+                  ToggleButton toggle_search_button {
+                    icon-name: "toggle-search-symbolic";
+                    tooltip-text: _("Toggle search");
+                    action-name: "win.toggle_search";
+                  }
+                }
+              }
+
+              [end]
+              MenuButton {
+                icon-name: "app-menu-symbolic";
+                tooltip-text: _("App settings and info");
+                menu-model: app_menu;
+              }
+
+              [end]
+              Revealer right_buttons_revealer {
+                transition-type: none;
+                valign: start;
+                halign: start;
+
+                Box {
+                  orientation: horizontal;
+
+                  MenuButton sorting_button {
+                    icon-name: "sort-symbolic";
+                    tooltip-text: _("Sorting method");
+                  }
+                }
+              }
+            }
+
+            [top]
+            SearchBar search_bar {
+              search-mode-enabled: bind toggle_search_button.active bidirectional;
+              key-capture-widget: navigation_view;
+
+              Adw.Clamp {
+                maximum-size: 500;
+                tightening-threshold: 500;
+
+                SearchEntry search_entry {
+                  placeholder-text: _("Search");
+                  hexpand: true;
+
+                  ShortcutController {
+                    Shortcut {
+                      trigger: "Escape";
+                      action: "action(win.toggle_search)";
+                    }
+                  }
+                }
+              }
+            }
+
+            Overlay {
+              ScrolledWindow lexicon_scrolled_window {
+                FlowBox lexicon {
+                  homogeneous: true;
+                  halign: center;
+                  max-children-per-line: 100;
+                  valign: start;
+                  column-spacing: 12;
+                  row-spacing: 12;
+                  margin-bottom: 12;
+                  margin-end: 12;
+                  margin-start: 12;
+                  margin-top: 12;
+                  selection-mode: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+menu app_menu {
+  section {
+    item (_("Preferences"), "win.show_preferences")
+    item (_("Keybindings"), "win.show-help-overlay")
+    item (_("About"), "app.about")
+  }
+}

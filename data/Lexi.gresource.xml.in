@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="@PREFIX@">
+    <file preprocess="xml-stripblanks">@APP_ID@.metainfo.xml</file>
+    <file preprocess="xml-stripblanks">gtk/window.ui</file>
+  </gresource>
+  <!-- Icons -->
+  <gresource prefix="@PREFIX@/icons/scalable/actions/">
+    <file alias="toggle-sidebar-symbolic.svg">icons/icons/symbolic/toggle-sidebar-symbolic.svg</file>
+    <file alias="add-pair-symbolic.svg">icons/icons/symbolic/add-pair-symbolic.svg</file>
+    <file alias="toggle-search-symbolic.svg">icons/icons/symbolic/toggle-search-symbolic.svg</file>
+    <file alias="sort-symbolic.svg">icons/icons/symbolic/sort-symbolic.svg</file>
+    <file alias="app-menu-symbolic.svg">icons/icons/symbolic/app-menu-symbolic.svg</file>
+  </gresource>
+</gresources>

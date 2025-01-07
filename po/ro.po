@@ -1,0 +1,63 @@
+# Romanian translations for Lexi package.
+# Copyright (C) 2025 THE Lexi'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Lexi package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Lexi\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-07 23:55+0300\n"
+"PO-Revision-Date: 2025-01-07 23:55+0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: data/gtk/window.blp:12
+msgid "Lexicon"
+msgstr ""
+
+#: data/gtk/window.blp:20
+msgid "Collections"
+msgstr ""
+
+#: data/gtk/window.blp:28 data/gtk/window.blp:47
+msgid "Toggle sidebar"
+msgstr ""
+
+#: data/gtk/window.blp:62
+msgid "Add new key-value pair to this Lexicon"
+msgstr ""
+
+#: data/gtk/window.blp:68
+msgid "Toggle search"
+msgstr ""
+
+#: data/gtk/window.blp:77
+msgid "App settings and info"
+msgstr ""
+
+#: data/gtk/window.blp:92
+msgid "Sorting method"
+msgstr ""
+
+#: data/gtk/window.blp:108
+msgid "Search"
+msgstr ""
+
+#: data/gtk/window.blp:147
+msgid "Preferences"
+msgstr ""
+
+#: data/gtk/window.blp:148
+msgid "Keybindings"
+msgstr ""
+
+#: data/gtk/window.blp:149
+msgid "About"
+msgstr ""

@@ -1,0 +1,12 @@
+from gi.repository import Adw, Gio
+
+APP_ID = "@APP_ID@"
+VERSION = "@VERSION@"
+PREFIX = "@PREFIX@"
+CACHEV = "@CACHEV@"
+
+schema = Gio.Settings.new(APP_ID)
+state_schema = Gio.Settings.new(APP_ID + ".State")
+
+app: Adw.Application = None
+win: Adw.ApplicationWindow = None

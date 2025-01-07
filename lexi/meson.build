@@ -6,18 +6,14 @@ configure_file(
   configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
+  install_mode: 'r-xr-xr-x'
 )
 
-# install_data(
-#   [
-#     'application_delegate.py',
-#     'main.py',
-#     'window.py',
-#     'preferences.py',
-#     'details_dialog.py',
-#     'game.py',
-#     'game_cover.py',
-#     configure_file(input: 'shared.py.in', output: 'shared.py', configuration: conf),
-#   ],
-#   install_dir: moduledir,
-# )
+install_data(
+  [
+    'main.py',
+    'window.py',
+    configure_file(input: 'shared.py.in', output: 'shared.py', configuration: conf),
+  ],
+  install_dir: moduledir,
+)
