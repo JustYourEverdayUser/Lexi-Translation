@@ -1,0 +1,9 @@
+- key: key
+  value: value
+  resources_id: some_hash
+  resources:
+    - type: video
+      res: some_hash
+    - type: audio
+      res: some_hash2
+# ...

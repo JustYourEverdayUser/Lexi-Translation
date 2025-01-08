@@ -19,7 +19,8 @@ disable=raw-checker-failed,
         missing-module-docstring,
         relative-beyond-top-level,
         import-error,
-        no-name-in-module
+        no-name-in-module,
+        unspecified-encoding
 
 
 [TYPECHECK]
@@ -34,15 +35,15 @@ additional-builtins=_
 
 [FORMAT]
 
-max-line-length = 88
+max-line-length=88
 
 
 [BASIC]
 
 class-naming-style=PascalCase
-module-naming-style=PascalCase, snake_case
+module-naming-style=any
 function-naming-style=snake_case
 const-naming-style=UPPER_CASE
-method-nameing-style=snake_case
-variable-nameing-style=snake_case
+method-naming-style=snake_case
+variable-naming-style=snake_case
 include-naming-hint=yes

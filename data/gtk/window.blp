@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $LexiWindow : Adw.ApplicationWindow {
+template $LexiWindow: Adw.ApplicationWindow {
   title: "Lexi";
   width-request: 360;
   height-request: 100;
@@ -28,110 +28,211 @@ template $LexiWindow : Adw.ApplicationWindow {
                   tooltip-text: _("Toggle sidebar");
                   action-name: "win.toggle_sidebar";
                 }
+
+                [end]
+                MenuButton {
+                  icon-name: "app-menu-symbolic";
+                  tooltip-text: _("App settings and info");
+                  menu-model: app_menu;
+                }
               }
 
               ScrolledWindow sidebar_scrolled_window {
                 ListBox collections_listbox {
-                  styles ["navigation-sidebar"]
+                  styles [
+                    "navigation-sidebar"
+                  ]
                 }
               }
             }
           }
 
           Adw.ToolbarView lexicon_view {
-            [top]
-            Adw.HeaderBar lexicon_headerbar {
-              [start]
-              Button show_sidebar_button {
-                icon-name: "toggle-sidebar-symbolic";
-                tooltip-text: _("Toggle sidebar");
-                action-name: "win.toggle_sidebar";
-                visible: bind overlay_split_view.show-sidebar inverted;
-              }
+            Adw.NavigationSplitView lexicon_split_view {
+              sidebar-width-fraction: 0.4;
+              max-sidebar-width: 999999;
 
-              Revealer left_buttons_revealer {
-                transition-type: none;
-                valign: start;
-                halign: start;
+              [sidebar]
+              Adw.NavigationPage lexicon_navigation_page {
+                title: _("Lexicon");
 
-                Box {
-                  orientation: horizontal;
+                Adw.ToolbarView {
+                  [top]
+                  Adw.HeaderBar {
+                    [start]
+                    Button {
+                      icon-name: "toggle-sidebar-symbolic";
+                      tooltip-text: _("Toggle sidebar");
+                      action-name: "win.toggle_sidebar";
+                      visible: bind overlay_split_view.show-sidebar inverted;
+                    }
 
-                  Button add_pair {
-                    icon-name: "add-pair-symbolic";
-                    tooltip-text: _("Add new key-value pair to this Lexicon");
-                    action-name: "win.add_pair";
+                    ToggleButton toggle_search_button {
+                      icon-name: "toggle-search-symbolic";
+                      tooltip-text: _("Toggle search");
+                      action-name: "win.toggle_search";
+                    }
+
+                    [end]
+                    MenuButton {
+                      icon-name: "sort-symbolic";
+                      tooltip-text: _("Sorting method");
+                    }
                   }
 
-                  ToggleButton toggle_search_button {
-                    icon-name: "toggle-search-symbolic";
-                    tooltip-text: _("Toggle search");
-                    action-name: "win.toggle_search";
+                  [top]
+                  SearchBar search_bar {
+                    search-mode-enabled: bind toggle_search_button.active bidirectional;
+                    key-capture-widget: navigation_view;
+
+                    Adw.Clamp {
+                      maximum-size: 500;
+                      tightening-threshold: 500;
+
+                      SearchEntry search_entry {
+                        placeholder-text: _("Search");
+                        hexpand: true;
+
+                        ShortcutController {
+                          Shortcut {
+                            trigger: "Escape";
+                            action: "action(win.toggle_search)";
+                          }
+                        }
+                      }
+                    }
                   }
-                }
-              }
 
-              [end]
-              MenuButton {
-                icon-name: "app-menu-symbolic";
-                tooltip-text: _("App settings and info");
-                menu-model: app_menu;
-              }
-
-              [end]
-              Revealer right_buttons_revealer {
-                transition-type: none;
-                valign: start;
-                halign: start;
-
-                Box {
-                  orientation: horizontal;
-
-                  MenuButton sorting_button {
-                    icon-name: "sort-symbolic";
-                    tooltip-text: _("Sorting method");
+                  ScrolledWindow lexicon_scrolled_window {
+                    ListBox lexicon {
+                      styles [
+                        "navigation-sidebar"
+                      ]
+                    }
                   }
-                }
-              }
-            }
 
-            [top]
-            SearchBar search_bar {
-              search-mode-enabled: bind toggle_search_button.active bidirectional;
-              key-capture-widget: navigation_view;
+                  [bottom]
+                  Box {
+                    orientation: horizontal;
+                    margin-bottom: 8;
+                    hexpand: true;
+                    spacing: 2;
+                    margin-end: 4;
 
-              Adw.Clamp {
-                maximum-size: 500;
-                tightening-threshold: 500;
+                    Button {
+                      icon-name: "add-pair-symbolic";
+                      tooltip-text: _("Add key-value pair");
+                      action-name: "win.add_pair";
+                      has-frame: false;
+                    }
 
-                SearchEntry search_entry {
-                  placeholder-text: _("Search");
-                  hexpand: true;
+                    Entry pair_key_entry {
+                      hexpand: true;
+                      placeholder-text: _("Pair key");
+                    }
 
-                  ShortcutController {
-                    Shortcut {
-                      trigger: "Escape";
-                      action: "action(win.toggle_search)";
+                    ToggleButton {
+                      icon-name: "toggle-selection-symbolic";
+                      tooltip-text: _("Toggle selection mode");
+                      action-name: "win.toggle_selection";
+                      has-frame: false;
                     }
                   }
                 }
               }
-            }
 
-            Overlay {
-              ScrolledWindow lexicon_scrolled_window {
-                FlowBox lexicon {
-                  homogeneous: true;
-                  halign: center;
-                  max-children-per-line: 100;
-                  valign: start;
-                  column-spacing: 12;
-                  row-spacing: 12;
-                  margin-bottom: 12;
-                  margin-end: 12;
-                  margin-start: 12;
-                  margin-top: 12;
-                  selection-mode: none;
+              Adw.NavigationPage pair {
+                title: "Pair";
+
+                Adw.ToolbarView {
+                  [top]
+                  Adw.HeaderBar {}
+
+                  Box {
+                    orientation: vertical;
+                    margin-bottom: 12;
+                    margin-end: 12;
+                    margin-start: 12;
+                    margin-top: 12;
+                    spacing: 4;
+                    homogeneous: true;
+
+                    Box {
+                      orientation: vertical;
+                      spacing: 4;
+
+                      Frame {
+                        ScrolledWindow {
+                          TextView pair_text_view {
+                            wrap-mode: word;
+                            right-margin: 4;
+                            bottom-margin: 4;
+                            top-margin: 4;
+                            left-margin: 4;
+                            hexpand: true;
+                            vexpand: true;
+                          }
+                        }
+                      }
+
+                      Box {
+                        orientation: horizontal;
+                      }
+                    }
+
+                    Box {
+                      orientation: vertical;
+                      spacing: 8;
+                      hexpand: true;
+
+                      Box {
+                        valign: center;
+
+                        Label {
+                          label: _("Attachments:");
+
+                          styles ["title-2"]
+                        }
+
+                        Box {
+                          orientation: horizontal;
+                          halign: end;
+                          hexpand: true;
+                          margin-end: 8;
+
+                          MenuButton {
+                            label: _("Attach");
+                            tooltip-text: _("Add new attachment");
+                            menu-model: attach_menu;
+
+                            styles ["suggested-action"]
+                          }
+                        }
+                      }
+                      
+                      ScrolledWindow attachments_scrolled_window {
+                        ListBox attachments {
+                          hexpand: true;
+                          vexpand: true;
+                          selection-mode: none;
+
+                          Adw.ActionRow {
+                            activatable: true;
+                            title: "Sun's hiding";
+                            subtitle: "suns-hiding.mp4";
+
+                            [prefix]
+                            Image {
+                              icon-name: "camera-video-symbolic";
+                              pixel-size: 28;
+                            }
+                          }
+
+                          styles ["navigation-sidebar"]
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -147,5 +248,13 @@ menu app_menu {
     item (_("Preferences"), "win.show_preferences")
     item (_("Keybindings"), "win.show-help-overlay")
     item (_("About"), "app.about")
+  }
+}
+
+menu attach_menu {
+  section {
+    item (_("File"), "res_manager.attach_file")
+    item (_("Audio"), "res_manager.attach_audio")
+    item (_("Video"), "res_manager.attach_video")
   }
 }

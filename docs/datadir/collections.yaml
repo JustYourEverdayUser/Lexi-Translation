@@ -1,8 +1,5 @@
-collections:
-  - path: /some_hash
-    name: English
-    icon: some-icon-name-symbolic
-  - path: /some_hash2
-    name: German
-    icon: some-icon-name-symbolic
-    # ...
+- id: some_hash
+  name: English
+- id: some_hash2
+  name: German
+  # ...

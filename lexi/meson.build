@@ -9,6 +9,9 @@ configure_file(
   install_mode: 'r-xr-xr-x'
 )
 
+install_subdir('ui', install_dir: moduledir)
+install_subdir('utils', install_dir: moduledir)
+
 install_data(
   [
     'main.py',

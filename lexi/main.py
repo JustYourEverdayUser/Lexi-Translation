@@ -1,10 +1,7 @@
 import os
 import sys
 
-import gi
-
-# import yaml
-from gi.repository import Adw, Gdk, Gio, GLib, Gtk
+from gi.repository import Adw, Gdk, Gio, Gtk
 
 from lexi import shared
 from lexi.window import LexiWindow
@@ -22,8 +19,8 @@ class LexiApplication(Adw.Application):
         theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
         theme.add_resource_path(shared.PREFIX + "/data/icons")
 
-    def do_activate(self) -> None:
-        win = self.props.active_window
+    def do_activate(self) -> None:  # pylint: disable=arguments-differ
+        win = self.props.active_window  # pylint: disable=no-member
         if not win:
             shared.win = win = LexiWindow(application=self)
 
@@ -75,4 +72,9 @@ class LexiApplication(Adw.Application):
 def main(_version):
     """App entrypint"""
     shared.app = app = LexiApplication()
+    if not os.path.exists(shared.data_dir + "/collections.yaml"):
+        file = open(shared.data_dir + "/collections.yaml", "x+")
+        file.write("[]")
+        file.close()
+
     return app.run(sys.argv)

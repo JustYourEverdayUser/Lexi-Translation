@@ -9,35 +9,41 @@ class LexiWindow(Adw.ApplicationWindow):
 
     __gtype_name__ = "LexiWindow"
 
-    toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
-    navigation_view: Adw.NavigationView = Gtk.Template.Child()
-    lexicon_page: Adw.NavigationPage = Gtk.Template.Child()
-    overlay_split_view: Adw.OverlaySplitView = Gtk.Template.Child()
-    sidebar_page: Adw.NavigationPage = Gtk.Template.Child()
-    sidebar_scrolled_window: Gtk.ScrolledWindow = Gtk.Template.Child()
-    collections_listbox: Gtk.ListBox = Gtk.Template.Child()
-    show_sidebar_button: Gtk.Button = Gtk.Template.Child()
-    left_buttons_revealer: Gtk.Revealer = Gtk.Template.Child()
-    add_pair: Gtk.Button = Gtk.Template.Child()
-    toggle_search_button: Gtk.ToggleButton = Gtk.Template.Child()
-    right_buttons_revealer: Gtk.Revealer = Gtk.Template.Child()
-    sorting_button: Gtk.MenuButton = Gtk.Template.Child()
-    search_bar: Gtk.SearchBar = Gtk.Template.Child()
-    search_entry: Gtk.SearchEntry = Gtk.Template.Child()
-    lexicon_scrolled_window: Gtk.ScrolledWindow = Gtk.Template.Child()
-    lexicon: Gtk.FlowBox = Gtk.Template.Child()
+    gtc = Gtk.Template.Child
+    toast_overlay: Adw.ToastOverlay = gtc()
+    navigation_view: Adw.NavigationView = gtc()
+    lexicon_page: Adw.NavigationPage = gtc()
+    overlay_split_view: Adw.OverlaySplitView = gtc()
+    sidebar_page: Adw.NavigationPage = gtc()
+    sidebar_scrolled_window: Gtk.ScrolledWindow = gtc()
+    collections_listbox: Gtk.ListBox = gtc()
+    lexicon_view: Adw.ToolbarView = gtc()
+    lexicon_split_view: Adw.NavigationSplitView = gtc()
+    lexicon_navigation_page: Adw.NavigationPage = gtc()
+    toggle_search_button: Gtk.ToggleButton = gtc()
+    search_bar: Gtk.SearchBar = gtc()
+    search_entry: Gtk.SearchEntry = gtc()
+    lexicon_scrolled_window: Gtk.ScrolledWindow = gtc()
+    lexicon: Gtk.ListBox = gtc()
+    pair_key_entry: Gtk.Entry = gtc()
+    pair: Adw.NavigationPage = gtc()
+    pair_text_view: Gtk.TextView = gtc()
+    attachments_scrolled_window: Gtk.ScrolledWindow = gtc()
+    attachments: Gtk.ListBox = gtc()
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
+
+        if shared.APP_ID.endswith("Devel"):
+            self.add_css_class("devel")
 
         self.search_bar.connect_entry(self.search_entry)
 
     def on_toggle_sidebar_action(self, *_args) -> None:
         """Toggles sidebar of `self`"""
-        if self.navigation_view.get_visible_page() is self.lexicon_page:
-            self.overlay_split_view.set_show_sidebar(
-                not self.overlay_split_view.get_show_sidebar()
-            )
+        self.overlay_split_view.set_show_sidebar(
+            not self.overlay_split_view.get_show_sidebar()
+        )
 
     def on_toggle_search_action(self, *_args) -> None:
         """Toggles search field of `self`"""

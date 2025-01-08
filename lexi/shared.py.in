@@ -1,12 +1,17 @@
-from gi.repository import Adw, Gio
+from pathlib import Path
+
+from gi.repository import Adw, Gio, GLib
 
 APP_ID = "@APP_ID@"
 VERSION = "@VERSION@"
 PREFIX = "@PREFIX@"
 CACHEV = "@CACHEV@"
 
+data_dir = GLib.get_user_data_dir()
+
 schema = Gio.Settings.new(APP_ID)
 state_schema = Gio.Settings.new(APP_ID + ".State")
 
 app: Adw.Application = None
 win: Adw.ApplicationWindow = None
+collection_controller = None

@@ -1,5 +1,7 @@
-entries:
-  - name: some_amazing_name
-  - name: some_amazing_name2
-  - name: some_amazing_name3
-  # ...
+- name: some_amazing_name
+  tags: [some_tag1, some_tag2]
+- name: some_amazing_name2
+  tags: [some_tag1, some_tag2]
+- name: some_amazing_name3
+  tags: []
+# ...
