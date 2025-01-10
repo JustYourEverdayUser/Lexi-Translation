@@ -1,4 +1,4 @@
-id: io.github.dzheremi2.Lexi
+id: io.github.dzheremi2.Lexi.Devel
 runtime: org.gnome.Platform
 runtime-version: "47"
 sdk: org.gnome.Sdk
@@ -47,7 +47,7 @@ modules:
     buildsystem: meson
     run-tests: true
     config-opts:
-      - -Dprofile=release
+      - -Dprofile=development
     sources:
       - type: dir
         path: ../..
