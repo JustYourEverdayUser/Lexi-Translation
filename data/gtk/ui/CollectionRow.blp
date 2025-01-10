@@ -1,22 +1,19 @@
 using Gtk 4.0;
 
-template $CollectionRow : Gtk.Box {
+template $DictRow: Gtk.Box {
   orientation: horizontal;
   hexpand: true;
-  spacing: 4;
-  valign: center;
-  
-  ToggleButton expand_button {
-    icon-name: "list-expander-right-symbolic";
-    tooltip-text: _("Expand");
-    has-frame: false;
-  }
-  
-  Label label {
+  spacing: 6;
+
+  Image icon {}
+
+  Label label_text {
     ellipsize: end;
     label: "Quansonian";
     use-markup: false;
-    
-    styles ["heading"]
+
+    styles [
+      "heading"
+    ]
   }
 }

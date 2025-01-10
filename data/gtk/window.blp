@@ -37,11 +37,23 @@ template $LexiWindow: Adw.ApplicationWindow {
                 }
               }
 
-              ScrolledWindow sidebar_scrolled_window {
-                ListBox collections_listbox {
-                  styles [
-                    "navigation-sidebar"
-                  ]
+              Adw.NavigationView sidebar_navigation_view {
+                Adw.NavigationPage collections_navigation_page {
+                  ScrolledWindow sidebar_scrolled_window {
+                    ListBox collections_listbox {
+                      styles [
+                        "navigation-sidebar"
+                      ]
+                    }
+                  }
+                }
+
+                Adw.NavigationPage lexicons_navigation_page {
+                  ScrolledWindow lexicons_scrolled_window {
+                    ListBox lexicons_list_box {
+                      styles ["navigation-sidebar"]
+                    }
+                  }
                 }
               }
             }
