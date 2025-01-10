@@ -4,5 +4,6 @@ Exec=Lexi
 Icon=@APP_ID@
 Terminal=false
 Type=Application
+Categories=Utility;Dictionary;GTK;
+Keywords=dict;dictonary;word;words;key;value;markdown;
 StartupNotify=true
-DBusActivatable=true
