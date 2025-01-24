@@ -10,7 +10,7 @@ configure_file(
 )
 
 install_subdir('ui', install_dir: moduledir)
-install_subdir('utils', install_dir: moduledir)
+# install_subdir('utils', install_dir: moduledir)
 
 install_data(
   [

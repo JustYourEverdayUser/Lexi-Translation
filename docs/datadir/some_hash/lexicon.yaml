@@ -1,0 +1,10 @@
+- key: smth
+  value: smth
+  id: smth
+  attachments: [true, false, false, true] # document, audio, video, text
+  resources:
+    - type: audio
+      file: path
+    - type: video
+      file: path
+# ...

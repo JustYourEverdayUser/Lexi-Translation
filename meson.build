@@ -28,6 +28,7 @@ conf.set('PYTHON', py_installation.full_path())
 conf.set('APP_ID', app_id)
 conf.set('PREFIX', prefix)
 conf.set('VERSION', meson.project_version())
+conf.set('CACHEV', 1)
 conf.set('localedir', join_paths(get_option('prefix') / get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 

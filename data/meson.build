@@ -3,7 +3,7 @@ blueprints = custom_target(
     input: files(
         'gtk/window.blp',
         'gtk/ui/PairRow.blp',
-        'gtk/ui/DictRow.blp'
+        'gtk/ui/LexiconRow.blp'
     ),
     output: '.',
     command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],

@@ -1,6 +1,5 @@
+from typing import TextIO
 from gi.repository import Adw, Gio
-
-from lexi.utils.Controllers import CollectionsController
 
 APP_ID: str
 VERSION: str
@@ -13,4 +12,5 @@ state_schema: Gio.Settings
 
 app: Adw.Application
 win: Adw.ApplicationWindow
-collection_controller: CollectionsController
+data_file: TextIO
+data: dict

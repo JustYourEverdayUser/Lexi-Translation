@@ -1,0 +1,8 @@
+lexicons:
+  - id: some_hash
+    name: English
+  - id: some_hash2
+    name: German
+    # ...
+last-lexicon: null
+data-version: 1

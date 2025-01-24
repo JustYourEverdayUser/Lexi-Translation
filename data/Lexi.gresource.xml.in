@@ -4,7 +4,8 @@
     <file preprocess="xml-stripblanks">@APP_ID@.metainfo.xml</file>
     <file preprocess="xml-stripblanks">gtk/window.ui</file>
     <file preprocess="xml-stripblanks">gtk/ui/PairRow.ui</file>
-    <file preprocess="xml-stripblanks">gtk/ui/DictRow.ui</file>
+    <file preprocess="xml-stripblanks">gtk/ui/LexiconRow.ui</file>
+    <file alias="style.css">gtk/css/style.css</file>
   </gresource>
   <!-- Icons -->
   <gresource prefix="@PREFIX@/icons/scalable/actions/">
@@ -15,7 +16,7 @@
     <file alias="app-menu-symbolic.svg">icons/icons/symbolic/app-menu-symbolic.svg</file>
     <file alias="toggle-selection-symbolic.svg">icons/icons/symbolic/toggle-selection-symbolic.svg</file>
     <file alias="list-expander-right-symbolic.svg">icons/icons/symbolic/list-expander-right-symbolic.svg</file>
-    <file alias="collection-symbolic.svg">icons/icons/symbolic/collection-symbolic.svg</file>
     <file alias="lexicon-symbolic.svg">icons/icons/symbolic/lexicon-symbolic.svg</file>
+    <file alias="no-found-symbolic.svg">icons/icons/symbolic/no-found-symbolic.svg</file>
   </gresource>
 </gresources>
