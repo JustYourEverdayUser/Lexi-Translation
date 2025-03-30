@@ -1,7 +1,11 @@
-from gi.repository import Adw, Gtk
+import os
+import random
+import string
+
+from gi.repository import Adw, Gdk, Gtk
 
 from lexi import shared
-from lexi.ui.LexiconRow import LexiconRow
+from lexi.ui import widgets
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/window.ui")
@@ -12,72 +16,127 @@ class LexiWindow(Adw.ApplicationWindow):
 
     gtc = Gtk.Template.Child
 
-    # Status pages
+    # Define UI components as class attributes
     no_lexicons_yet: Adw.StatusPage = gtc()
+    no_words_yet: Adw.StatusPage = gtc()
+    lexicon_not_selected: Adw.StatusPage = gtc()
 
-    # Main window
-    toast_overlay: Adw.ToastOverlay = gtc()
-    navigation_view: Adw.NavigationView = gtc()
-    main_navigation_page: Adw.NavigationPage = gtc()
-    overlay_split_view: Adw.OverlaySplitView = gtc()
-    lexicon_split_view: Adw.NavigationSplitView = gtc()
+    add_lexicon_popover: Gtk.Popover = gtc()
+    add_lexicon_popover_entry_row: Adw.EntryRow = gtc()
 
-    # Lexicons sidebar
-    sidebar_page: Adw.NavigationPage = gtc()
     lexicons_scrolled_window: Gtk.ScrolledWindow = gtc()
-    lexicons_listbox: Gtk.ListBox = gtc()
-
-    # Lexicon sidebar
-    lexicon_navigation_page: Adw.NavigationPage = gtc()
-    toggle_search_button: Gtk.ToggleButton = gtc()
+    lexicons_list_box: Gtk.ListBox = gtc()
+    lexicon_scrolled_window: Gtk.ScrolledWindow = gtc()
+    lexicon_list_box: Gtk.ListBox = gtc()
+    navigation_view: Adw.NavigationView = gtc()
+    overlay_split_view: Adw.OverlaySplitView = gtc()
+    lexcion_split_view: Adw.NavigationSplitView = gtc()
     search_bar: Gtk.SearchBar = gtc()
     search_entry: Gtk.SearchEntry = gtc()
-    lexicon_scrolled_window: Gtk.ScrolledWindow = gtc()
-    lexicon: Gtk.ListBox = gtc()
-    pair_key_entry: Gtk.Entry = gtc()
 
-    # Pair page
-    pair: Adw.NavigationPage = gtc()
-    pair_text_view: Gtk.TextView = gtc()
-    attachments_scrolled_window: Gtk.ScrolledWindow = gtc()
-    attachments: Gtk.ListBox = gtc()
+    lexicon_nav_page: Adw.NavigationPage = gtc()
+    word_nav_page: Adw.NavigationPage = gtc()
 
-    # Popovers
-    add_lexicon_popover: Gtk.Popover = gtc()
-    name_lexicon_entry: Adw.EntryRow = gtc()
-    add_lexicon_popover_2: Gtk.Popover = gtc()
-    name_lexicon_entry_2: Adw.EntryRow = gtc()
+    word_entry_row: Adw.EntryRow = gtc()
+    pronunciation_entry_row: Adw.EntryRow = gtc()
+    translations_expander_row: Adw.ExpanderRow = gtc()
+    word_type_expander_row: Adw.ExpanderRow = gtc()
+    examples_expander_row: Adw.ExpanderRow = gtc()
+    references_expander_row: Adw.ExpanderRow = gtc()
+    save_word_button: Gtk.Button = gtc()
+    selection_mode_toggle_button: Gtk.ToggleButton = gtc()
+    delete_selected_words_button: Gtk.Button = gtc()
+    delete_selected_words_button_revealer: Gtk.Revealer = gtc()
+    words_bottom_bar_revealer: Gtk.Revealer = gtc()
+
+    ipa_charset_flow_box: Gtk.FlowBox = gtc()
+
+    # Variables to store the currently loaded lexicon and word
+    loaded_lexicon: widgets.LexiconRow = None
+    loaded_word: widgets.WordRow = None
+    selected_words: list = []
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
+        # Add a CSS class for development mode
         if shared.APP_ID.endswith("Devel"):
             self.add_css_class("devel")
 
+        if shared.schema.get_boolean("word-autosave"):
+            self.save_word_button.remove_css_class("suggested-action")
+            self.save_word_button.set_tooltip_text(_("Word autosave is enabled"))
+            self.save_word_button.set_sensitive(False)
+        else:
+            self.save_word_button.add_css_class("suggested-action")
+            self.save_word_button.set_sensitive(True)
+
+        if self.lexicon_list_box.get_selected_row() is None:
+            self.lexicon_scrolled_window.set_child(self.lexicon_not_selected)
+
+        key_kapture_controller = Gtk.EventControllerKey()
+        self.add_controller(key_kapture_controller)
+
+        # Connections
         self.search_bar.connect_entry(self.search_entry)
-        self.name_lexicon_entry.connect(
-            "apply", lambda entry_row: shared.app.add_lexicon(entry_row.get_text())
+        self.add_lexicon_popover_entry_row.connect(
+            "changed", self.on_add_lexicon_entry_changed
         )
-        self.name_lexicon_entry_2.connect(
-            "apply", lambda entry_row: shared.app.add_lexicon(entry_row.get_text())
+        self.add_lexicon_popover_entry_row.connect(
+            "apply", self.on_add_lexicon_entry_activated
         )
+        key_kapture_controller.connect("key-pressed", self.on_key_pressed)
 
+        # Extracts ListBoxes from expander rows
+        for epxander_row in (
+            (self.translations_expander_row, "translations"),
+            (self.word_type_expander_row, "word_type"),
+            (self.examples_expander_row, "examples"),
+            (self.references_expander_row, "references"),
+        ):
+            for item in epxander_row[0].get_child():
+                for _item in item:
+                    if isinstance(_item, Gtk.ListBox):
+                        setattr(self, epxander_row[1] + "_list_box", _item)
+                        break
+
+        # Build the sidebar with lexicons
         self.build_sidebar()
+        self.set_word_rows_sensetiveness(False)
 
+    def on_key_pressed(
+        self, _controller: Gtk.EventControllerKey, keyval: int, *_args
+    ) -> None:
+        """Emits on any key press
+
+        Parameters
+        ----------
+        _controller : Gtk.EventControllerKey
+            Gtk.EventControllerKey emitted this method
+        keyval : int
+            pressed key value
+        """
+        if keyval == Gdk.KEY_Escape:
+            # Handle Escape key press
+            if self.selection_mode_toggle_button.get_active():
+                self.selection_mode_toggle_button.set_active(False)
+
+    @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
-        """Toggles sidebar of `self`"""
+        """Toggle the visibility of the sidebar."""
         self.overlay_split_view.set_show_sidebar(
             not self.overlay_split_view.get_show_sidebar()
         )
 
     def on_toggle_search_action(self, *_args) -> None:
-        """Toggles search field of `self`"""
-        if self.navigation_view.get_visible_page() == self.main_navigation_page:
+        """Toggle the search bar visibility."""
+        if self.overlay_split_view.get_show_sidebar():
             search_bar = self.search_bar
             search_entry = self.search_entry
         else:
             return
 
+        # Toggle search mode and focus the search entry if enabled
         search_bar.set_search_mode(not (search_mode := search_bar.get_search_mode()))
 
         if not search_mode:
@@ -85,24 +144,171 @@ class LexiWindow(Adw.ApplicationWindow):
 
         search_entry.set_text("")
 
-    def build_sidebar(self) -> None:
-        """Rebuilds lexicons sidebar content"""
-        self.lexicons_listbox.remove_all()
-        if len(shared.data["lexicons"]) > 0:
-            lexicons = []
-            for lexicon in shared.data["lexicons"]:
-                lexicons.append(lexicon)
-            lexicons = sorted(lexicons, key=lambda x: x["name"].lower())
-            for lexicon in lexicons:
-                self.lexicons_listbox.append(
-                    LexiconRow(label=lexicon["name"], identificator=lexicon["id"])
-                )
-            self.lexicons_scrolled_window.set_child(self.lexicons_listbox)
+    def on_add_lexicon_entry_changed(self, row: Adw.EntryRow) -> None:
+        """Handle changes in the add lexicon entry row."""
+        if row.get_text() == "":
+            row.add_css_class("error")
         else:
+            if "error" in row.get_css_classes():
+                row.remove_css_class("error")
+
+    def on_add_lexicon_entry_activated(self, row: Adw.EntryRow) -> None:
+        """Handle activation of the add lexicon entry row."""
+        if row.get_text() == "":
+            self.add_lexicon_popover.popdown()
+            return
+
+        # Generate a unique random ID for the new lexicon
+        while True:
+            random_id: str = "".join(
+                random.choices(string.ascii_lowercase + string.digits, k=16)
+            )
+            if not os.path.exists(
+                os.path.join(shared.data_dir, "lexicons", random_id) + ".yaml"
+            ):
+                break
+
+        # Create a new lexicon file with the generated ID
+        file = open(
+            os.path.join(shared.data_dir, "lexicons", random_id) + ".yaml",
+            "x+",
+            encoding="utf-8",
+        )
+        file.write(f"name: {row.get_text()}\nid: {random_id}\nwords: []")
+        file.flush()
+
+        # Reset the popover and rebuild the sidebar
+        self.add_lexicon_popover.popdown()
+        self.add_lexicon_popover_entry_row.set_text("")
+        self.build_sidebar()
+
+    def build_sidebar(self) -> None:
+        """Build the sidebar with a list of lexicons."""
+        if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
+            # Clear the list box and populate it with lexicons
+            self.lexicons_list_box.remove_all()
+            lexicon_rows: list = []
+            for file in os.listdir(os.path.join(shared.data_dir, "lexicons")):
+                lexicon_rows.append(
+                    widgets.LexiconRow(os.path.join(shared.data_dir, "lexicons", file))
+                )
+            lexicon_rows.sort(key=lambda row: row.name)
+            for row in lexicon_rows:
+                self.lexicons_list_box.append(row)
+            self.lexicons_scrolled_window.set_child(self.lexicons_list_box)
+        else:
+            # Show a placeholder if no lexicons are available
             self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
 
-    def on_open_lexicon_actions_menu_action(self, *_args) -> None:
-        """Presents lexicon action menu on F10 press"""
-        for row in self.lexicons_listbox:  # pylint: disable=not-an-iterable
-            if row.has_focus():
-                row.get_child().open_menu()
+    @Gtk.Template.Callback()
+    def on_lexicon_selected(self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
+        """Handle selection of a lexicon."""
+        self.lexicon_list_box.remove_all()
+        if len(row.get_child().data["words"]) != 0:
+            # Populate the list box with words from the selected lexicon
+            for word in row.get_child().data["words"]:
+                self.lexicon_list_box.append(widgets.WordRow(word, row.get_child()))
+            self.lexicon_scrolled_window.set_child(self.lexicon_list_box)
+            self.lexicon_nav_page.set_title(row.get_child().name)
+            self.words_bottom_bar_revealer.set_reveal_child(True)
+        else:
+            # Show a placeholder if no words are available
+            self.lexicon_scrolled_window.set_child(self.no_words_yet)
+            self.lexicon_nav_page.set_title("Lexi")
+        self.loaded_lexicon = row.get_child()
+
+    @Gtk.Template.Callback()
+    def on_word_entry_changed(self, row: Adw.EntryRow) -> None:
+        """Emits when the word entry is changed
+
+        Parameters
+        ----------
+        row : Adw.EntryRow
+            Adw.EntryRow emitted this method
+        """
+        self.loaded_word.word = row.get_text()
+
+    @Gtk.Template.Callback()
+    def on_pronunciation_entry_changed(self, row: Adw.EntryRow) -> None:
+        """Emits when the pronunciation entry is changed
+
+        Parameters
+        ----------
+        row : Adw.EntryRow
+            Adw.EntryRow emitted this method
+        """
+        self.loaded_word.pronunciation = row.get_text()
+
+    @Gtk.Template.Callback()
+    def on_word_list_prop_button_pressed(self, button: Gtk.Button) -> None:
+        """When any of expandable rows "add" buttons pressed
+
+        Parameters
+        ----------
+        button : Gtk.Button
+            Gtk.Button emitted this method
+        """
+        self.loaded_word.add_list_prop(button)
+
+    @Gtk.Template.Callback()
+    def on_add_word_action(self, *_args) -> None:
+        """Shows the add word dialog"""
+        self.loaded_lexicon.show_add_word_dialog()
+
+    @Gtk.Template.Callback()
+    def selection_mode_button_toggled(self, button: Gtk.ToggleButton) -> None:
+        """Toggled selection mode
+
+        Parameters
+        ----------
+        button : Gtk.ToggleButton
+            Gtk.ToggleButton emitted this method
+        """
+        self.set_selection_mode(button.get_active())
+
+    def set_selection_mode(self, enabled: bool) -> None:
+        """Set the selection mode of the words list box."""
+        # Gratefully "stolen" from
+        # https://github.com/flattool/warehouse/blob/0a18e5d81b8b06e45bf493b3ff31c12edbd36869/src/packages_page/packages_page.py#L226
+        if enabled:
+            self.lexicon_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        else:
+            self.lexicon_list_box.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        self.selection_mode_toggle_button.set_active(enabled)
+
+        i = 0
+        row: widgets.WordRow
+        while row := self.lexicon_list_box.get_row_at_index(i):
+            i += 1
+            row.check_button.set_active(False)
+            row.check_button_revealer.set_reveal_child(enabled)
+        self.delete_selected_words_button_revealer.set_reveal_child(enabled)
+
+    @Gtk.Template.Callback()
+    def on_delete_selected_words_action(self, *_args) -> None:
+        """Delete selected words"""
+        for row in self.selected_words:
+            self.selected_words.remove(row)
+            row.delete()
+        self.set_selection_mode(False)
+        if self.lexicon_list_box.get_row_at_index(0) is None:
+            self.lexicon_scrolled_window.set_child(self.no_words_yet)
+            self.words_bottom_bar_revealer.set_reveal_child(False)
+            self.set_word_rows_sensetiveness(False)
+
+    def set_word_rows_sensetiveness(self, active: bool) -> None:
+        """Set the sensitivity of word entry rows
+
+        Parameters
+        ----------
+        active : bool
+            should the rows be sensetive or not
+        """
+        self.word_entry_row.set_sensitive(active)
+        self.pronunciation_entry_row.set_sensitive(active)
+        self.translations_expander_row.set_sensitive(active)
+        self.word_type_expander_row.set_sensitive(active)
+        self.examples_expander_row.set_sensitive(active)
+        self.references_expander_row.set_sensitive(active)
+        if not shared.schema.get_boolean("word-autosave"):
+            self.save_word_button.set_sensitive(active)

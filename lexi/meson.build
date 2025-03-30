@@ -1,4 +1,5 @@
-moduledir = python_dir / 'lexi'
+pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
+moduledir = pkgdatadir / 'lexi'
 
 configure_file(
   input: 'lexi.in',
@@ -9,7 +10,9 @@ configure_file(
   install_mode: 'r-xr-xr-x'
 )
 
-install_subdir('ui', install_dir: moduledir)
+install_subdir('ui', install_dir: moduledir, exclude_files: [
+  'widgets.pyi'
+])
 # install_subdir('utils', install_dir: moduledir)
 
 install_data(

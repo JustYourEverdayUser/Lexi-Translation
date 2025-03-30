@@ -12,15 +12,14 @@ python = import('python')
 py_installation = python.find_installation('python3')
 
 pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
-python_dir = join_paths(get_option('prefix'), py_installation.get_install_dir())
 
 profile = get_option('profile')
 if profile == 'development'
-    app_id = 'io.github.dzheremi2.Lexi.Devel'
-    prefix = '/io/github/dzheremi2/Lexi/Devel'
+    app_id = 'io.github.dzheremi2.lexi.Devel'
+    prefix = '/io/github/dzheremi2/lexi/Devel'
 elif profile == 'release'
-    app_id = 'io.github.dzheremi2.Lexi'
-    prefix = '/io/github/dzheremi2/Lexi'
+    app_id = 'io.github.dzheremi2.lexi'
+    prefix = '/io/github/dzheremi2/lexi'
 endif
 
 conf = configuration_data()

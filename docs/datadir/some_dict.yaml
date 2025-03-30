@@ -1,0 +1,16 @@
+name: Some name
+id: some id
+words:
+  - id: 1
+    word: Maś
+    translations:
+      - Mom
+      # ...
+    pronunciation: some text with IPA characters
+    types: ["noun", "verb"]
+    examples:
+      - Ti es in'ir maśThis is my mom
+      # ...
+    references:
+      - 10 # id to ref to
+      # ...

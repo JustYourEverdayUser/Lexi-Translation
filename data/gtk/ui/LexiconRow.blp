@@ -1,47 +1,85 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $LexiconRow : Gtk.Box {
+template $LexiconRow : Box {
   orientation: horizontal;
-  hexpand: true;
-  spacing: 6;
-  height-request: 40;
+  margin-start: 8;
+  margin-top: 4;
+  margin-end: 4;
+  margin-bottom: 4;
+  spacing: 8;
+  height-request: 34;
 
   Image {
     icon-name: "lexicon-symbolic";
   }
 
-  Label label_text {
+  Label title {
+    halign: start;
     ellipsize: end;
     use-markup: false;
+    hexpand: true;
 
-    styles ["heading"]
+    styles [
+      'heading'
+    ]
   }
 }
 
-PopoverMenu actions_menu_popover {
-  menu-model: actions_menu;
-}
+Adw.Dialog add_word_dialog {
+  content-width: 400;
+  content-height: 300;
 
-Popover entry_popover {
-  position: bottom;
-
-  Box {
+  Adw.Clamp {
     orientation: horizontal;
-    margin-bottom: 4;
-    margin-end: 4;
-    margin-start: 4;
-    margin-top: 4;
+    maximum-size: 400;
+    tightening-threshold: 400;
 
-    Adw.EntryRow entry_popover_entry_row {
-      show-apply-button: true;
+    Adw.Clamp {
+      orientation: vertical;
+      maximum-size: 300;
+      tightening-threshold: 300;
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {}
+
+        Box {
+          orientation: vertical;
+          spacing: 16;
+          margin-top: 8;
+          margin-start: 8;
+          margin-end: 8;
+
+          ListBox {
+            Adw.EntryRow word_entry_row {
+              title: _("Word");
+              changed => $check_if_word_is_empty();
+            }
+
+            Adw.EntryRow translation_entry_row {
+              title: _("Translation");
+            }
+
+            Adw.EntryRow example_entry_row {
+              title: _("Example");
+            }
+
+            styles ["boxed-list"]
+          }
+
+          Box {
+            halign: center;
+
+            Button {
+              label: _("Add word");
+              clicked => $add_word();
+
+              styles ["pill", "suggested-action"]
+            }
+          }
+        }
+      }
     }
-  }
-}
-
-menu actions_menu {
-  section {
-    item (_("Rename"), "lexicon.rename")
-    item (_("Delete"), "lexicon.delete")
   }
 }

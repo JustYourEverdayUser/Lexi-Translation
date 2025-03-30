@@ -1,12 +1,10 @@
 import os
-import random
-import string
 import sys
 
-import yaml
 from gi.repository import Adw, Gdk, Gio, Gtk
 
 from lexi import shared
+from lexi.ui.IPA import generate_table
 from lexi.window import LexiWindow
 
 
@@ -25,15 +23,14 @@ class LexiApplication(Adw.Application):
     def do_activate(self) -> None:  # pylint: disable=arguments-differ
         win = self.props.active_window  # pylint: disable=no-member
         if not win:
-            shared.win = win = LexiWindow(application=self)
+            shared.win = LexiWindow(application=self)
+            generate_table()
 
         self.create_actions(
             {
                 # fmt: off
                 ("quit",("<primary>q","<primary>w",),),
-                ("toggle_sidebar", ("F9",), shared.win),
-                ("toggle_search", ("<primary>f",), shared.win),
-                ("open_lexicon_actions_menu", ("F10",), shared.win)
+                ("toggle_sidebar",("F9",), shared.win),
                 # fmt: on
             }
         )
@@ -49,46 +46,6 @@ class LexiApplication(Adw.Application):
         )
 
         shared.win.present()
-
-    def add_lexicon(self, name: str) -> None:
-        """Adds new lexicon and saves it to the local storage
-
-        Parameters
-        ----------
-        name : str
-            name of the new lexicon
-        """
-        while True:
-            random_id: str = "".join(
-                random.choices(string.ascii_lowercase + string.digits, k=16)
-            )
-            if not os.path.exists(os.path.join(shared.data_dir, random_id)):
-                break
-
-        shared.data["lexicons"].append({"name": name, "id": random_id})
-        os.makedirs(
-            os.path.join(shared.data_dir, random_id, "resources"), exist_ok=True
-        )
-        with open(
-            os.path.join(shared.data_dir, random_id, "lexicon.yaml"),
-            "x+",
-            encoding="utf-8",
-        ) as file:
-            file.write("[]")
-        shared.data_file.seek(0)
-        shared.data_file.truncate(0)
-        yaml.dump(
-            shared.data,
-            shared.data_file,
-            sort_keys=False,
-            encoding=None,
-            allow_unicode=True,
-        )
-        shared.win.name_lexicon_entry.set_text("")
-        shared.win.name_lexicon_entry_2.set_text("")
-        shared.win.add_lexicon_popover.popdown()
-        shared.win.add_lexicon_popover_2.popdown()
-        shared.win.build_sidebar()
 
     def on_quit_action(self, *_args) -> None:
         self.quit()
@@ -117,13 +74,8 @@ class LexiApplication(Adw.Application):
 
 def main(_version):
     """App entrypint"""
-    if not os.path.exists(shared.data_dir + "/lexicons.yaml"):
-        file = open(shared.data_dir + "/lexicons.yaml", "x+")
-        file.write("lexicons: []\nlast-lexicon: null\ndata-version: 1")
-        file.close()
-
-    shared.data_file = open(shared.data_dir + "/lexicons.yaml", "r+", encoding="utf-8")
-    shared.data = yaml.safe_load(shared.data_file)
+    if not os.path.exists(os.path.join(shared.data_dir, "lexicons")):
+        os.mkdir(os.path.join(shared.data_dir, "lexicons"))
 
     shared.app = app = LexiApplication()
 

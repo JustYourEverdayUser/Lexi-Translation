@@ -13,6 +13,4 @@ schema = Gio.Settings.new(APP_ID)
 state_schema = Gio.Settings.new(APP_ID + ".State")
 
 app: Adw.Application = None
-win: Adw.ApplicationWindow = None
-data_file = None
-data = None
+win = None

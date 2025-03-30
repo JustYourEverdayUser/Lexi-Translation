@@ -1,30 +1,13 @@
 using Gtk 4.0;
 using Adw 1;
 
-Adw.StatusPage no_lexicons_yet {
-  icon-name: "no-found-symbolic";
-  title: _("No lexicons found yet");
-
-  MenuButton status_page_add_lexicon_button {
-    label: _("Add Lexicon");
-    popover: add_lexicon_popover;
-
-    styles [
-      "pill",
-      "suggested-action"
-    ]
-  }
-
-  styles ["compact"]
-}
-
 template $LexiWindow : Adw.ApplicationWindow {
   title: "Lexi";
   width-request: 360;
   height-request: 100;
 
   Adw.Breakpoint {
-    condition ("max-width: 650")
+    condition ("max-width: 677")
 
     setters {
       overlay_split_view.collapsed: true;
@@ -36,237 +19,396 @@ template $LexiWindow : Adw.ApplicationWindow {
 
     setters {
       overlay_split_view.collapsed: true;
-      lexicon_split_view.collapsed: true;
+      lexcion_split_view.collapsed: true;
+      lexicon_list_box.selection-mode: none;
     }
   }
 
   Adw.ToastOverlay toast_overlay {
     Adw.NavigationView navigation_view {
-      Adw.NavigationPage main_navigation_page {
+      Adw.NavigationPage {
+        title: "Lexi";
+
         Adw.OverlaySplitView overlay_split_view {
-          sidebar-width-fraction: 0.25;
+          collapsed: false;
           show-sidebar: true;
 
           [sidebar]
-          Adw.NavigationPage sidebar_page {
+          Adw.NavigationPage sidebar_nav_page {
             title: _("Lexicons");
 
             Adw.ToolbarView {
               [top]
               Adw.HeaderBar {
                 [start]
-                Button {
-                  icon-name: "toggle-sidebar-symbolic";
-                  tooltip-text: _("Toggle sidebar");
-                  action-name: "win.toggle_sidebar";
+                Box {
+                  orientation: horizontal;
+
+                  Button toggle_sidebar_button {
+                    icon-name: "toggle-sidebar-symbolic";
+                    tooltip-text: _("Toggle sidebar");
+                    clicked => $on_toggle_sidebar_action();
+                  }
+                  ToggleButton toggle_lexicons_search_button {
+                    icon-name: "toggle-search-symbolic";
+                    tooltip-text: _("Find Lexicon");
+                  }
                 }
 
                 [end]
-                MenuButton {
-                  icon-name: "app-menu-symbolic";
-                  tooltip-text: _("App settings and info");
-                  menu-model: app_menu;
-                }
+                Box {
+                  orientation: horizontal;
 
-                [end]
-                MenuButton {
-                  icon-name: "add-pair-symbolic";
-                  tooltip-text: _("Add new lexicon");
-                  popover: add_lexicon_popover_2;
+                  MenuButton {
+                    icon-name: "add-symbolic";
+                    tooltip-text: _("Add Lexicon");
+                    popover: add_lexicon_popover;
+                  }
+                  MenuButton {
+                    icon-name: "app-menu-symbolic";
+                    tooltip-text: _("App menu");
+                    menu-model: app_menu;
+                  }
+                }
+              }
+              [top]
+              SearchBar search_bar {
+                search-mode-enabled: bind toggle_lexicons_search_button.active bidirectional;
+                key-capture-widget: navigation_view;
+
+                Adw.Clamp {
+                  SearchEntry search_entry {
+                    placeholder-text: _("Search…");
+                    hexpand: true;
+
+                    ShortcutController {
+                      Shortcut {
+                        trigger: "Escape";
+                        action: "action(win.toggle_search)";
+                      }
+                    }
+                  }
                 }
               }
 
               ScrolledWindow lexicons_scrolled_window {
-                ListBox lexicons_listbox {
-                  hexpand: true;
-                  
+                ListBox lexicons_list_box {
+                  selection-mode: single;
+                  row-selected => $on_lexicon_selected();
+
                   styles ["navigation-sidebar"]
                 }
               }
             }
           }
 
-          Adw.ToolbarView {
-            Adw.NavigationSplitView lexicon_split_view {
-              sidebar-width-fraction: 0.5;
-              max-sidebar-width: 999999;
+          Adw.NavigationSplitView lexcion_split_view {
+            sidebar-width-fraction: 0.5;
+            max-sidebar-width: 999999;
 
-              [sidebar]
-              Adw.NavigationPage lexicon_navigation_page {
-                title: _("Lexicon");
+            [sidebar]
+            Adw.NavigationPage lexicon_nav_page {
+              title: "Lexi";
 
-                Adw.ToolbarView {
-                  [top]
-                  Adw.HeaderBar {
-                    [start]
-                    Button {
-                      icon-name: "toggle-sidebar-symbolic";
-                      tooltip-text: _("Toggle sidebar");
-                      action-name: "win.toggle_sidebar";
-                      visible: bind overlay_split_view.show-sidebar inverted;
-                    }
-
-                    [start]
-                    ToggleButton toggle_search_button {
-                      icon-name: "toggle-search-symbolic";
-                      tooltip-text: _("Toggle search");
-                      action-name: "win.toggle_search";
-                    }
-
-                    [end]
-                    MenuButton {
-                      icon-name: "sort-symbolic";
-                      tooltip-text: _("Sorting method");
-                    }
+              Adw.ToolbarView {
+                [top]
+                Adw.HeaderBar {
+                  [start]
+                  Button {
+                    icon-name: bind toggle_sidebar_button.icon-name;
+                    tooltip-text: bind toggle_sidebar_button.tooltip-text;
+                    visible: bind overlay_split_view.show-sidebar inverted;
+                    clicked => $on_toggle_sidebar_action();
                   }
-                  
-                  [top]
-                  SearchBar search_bar {
-                    search-mode-enabled: bind toggle_search_button.active bidirectional;
-                    key-capture-widget: navigation_view;
+                }
 
-                    Adw.Clamp {
-                      maximum-size: 500;
-                      tightening-threshold: 500;
+                ScrolledWindow lexicon_scrolled_window {
+                  hexpand: true;
+                  vexpand: true;
 
-                      SearchEntry search_entry {
-                        placeholder-text: _("Search");
-                        hexpand: true;
-
-                        ShortcutController {
-                          Shortcut {
-                            trigger: "Escape";
-                            action: "action(win.toggle_search)";
-                          }
-                        }
-                      }
-                    }
+                  ListBox lexicon_list_box {
+                    styles ["navigation-sidebar"]
                   }
+                }
 
-                  ScrolledWindow lexicon_scrolled_window {
-                    ListBox lexicon {
-                      styles ["navigation-sidebar"]
-                    }
-                  }
+                [bottom]
+                Revealer words_bottom_bar_revealer {
+                  transition-type: slide_up;
+                  transition-duration: 200;
 
-                  [bottom]
                   Box {
-                    orientation: horizontal;
-                    margin-bottom: 8;
+                    vexpand: false;
                     hexpand: true;
                     spacing: 2;
+                    margin-bottom: 4;
                     margin-end: 4;
+                    margin-start: 4;
+                    orientation: horizontal;
+
+                    ToggleButton selection_mode_toggle_button {
+                      icon-name: "toggle-selection-symbolic";
+                      tooltip-text: _("Select words");
+                      toggled => $selection_mode_button_toggled();
+
+                      styles ["flat"]
+                    }
+
+                    Revealer delete_selected_words_button_revealer {
+                      transition-type: slide_right;
+                      transition-duration: 200;
+
+                      Button delete_selected_words_button {
+                        icon-name: "delete-symbolic";
+                        tooltip-text: _("Delete selected words");
+                        clicked => $on_delete_selected_words_action();
+
+                        styles ["destructive-action"]
+                      }
+                    }
+
+                    Entry lexicon_search_entry {
+                      hexpand: true;
+                      placeholder-text: _("Find a word");
+                    }
 
                     Button {
-                      icon-name: "add-pair-symbolic";
-                      tooltip-text: _("Add key-value pair");
-                      action-name: "win.add_pair";
-                      has-frame: false;
-                    }
-
-                    Entry pair_key_entry {
-                      hexpand: true;
-                      placeholder-text: _("Pair key");
-                    }
-
-                    ToggleButton {
-                      icon-name: "toggle-selection-symbolic";
-                      tooltip-text: _("Toggle selection mode");
-                      action-name: "win.toggle_selection";
-                      has-frame: false;
+                      icon-name: "add-symbolic";
+                      tooltip-text: _("Add word");
+                      clicked => $on_add_word_action();
+                      
+                      styles ["flat"]
                     }
                   }
                 }
               }
+            }
 
-              Adw.NavigationPage pair {
-                title: _("Pair");
+            [content]
+            Adw.NavigationPage word_nav_page {
+              title: _("Word");
 
-                Adw.ToolbarView {
-                  [top]
-                  Adw.HeaderBar {}
+              Adw.ToolbarView {
+                [top]
+                Adw.HeaderBar {
+                  [start]
+                  Button save_word_button {
+                    label: _("Save");
 
-                  Box {
-                    orientation: vertical;
-                    margin-bottom: 12;
-                    margin-end: 12;
-                    margin-start: 12;
-                    margin-top: 12;
-                    spacing: 4;
-                    homogeneous: true;
+                    styles ["suggested-action"]
+                  }
+                }
 
-                    Box {
-                      orientation: vertical;
-                      spacing: 4;
-                      
-                      ScrolledWindow {
-                        TextView pair_text_view {
-                          wrap-mode: word;
-                          right-margin: 4;
-                          bottom-margin: 4;
-                          top-margin: 4;
-                          left-margin: 4;
-                          hexpand: true;
-                          vexpand: true;
+                Adw.Clamp {
+                  ScrolledWindow {
+                    vexpand: false;
 
-                          styles ["rounded-border"]
-                        }
+                    Adw.PreferencesGroup {
+                      vexpand: false;
+                      margin-start: 4;
+                      margin-end: 4;
+                      margin-top: 4;
+                      margin-bottom: 4;
+
+                      Adw.EntryRow word_entry_row {
+                        title: _("Word");
+                        use-markup: false;
+                        changed => $on_word_entry_changed();
                       }
-                    }
 
-                    Box {
-                      orientation: vertical;
-                      spacing: 8;
-                      hexpand: true;
+                      Adw.EntryRow pronunciation_entry_row {
+                        title: _("Pronunciation");
+                        use-markup: false;
+                        changed => $on_pronunciation_entry_changed();
+                      }
 
-                      Box {
-                        valign: center;
+                      Adw.ExpanderRow translations_expander_row {
+                        title: _("Translations");
 
-                        Label {
-                          label: _("Attachments:");
-
-                          styles ["title-2"]
-                        }
-
+                        [suffix]
                         Box {
-                          orientation: horizontal;
-                          halign: end;
-                          hexpand: true;
-                          margin-end: 8;
+                          valign: center;
 
-                          MenuButton {
-                            label: _("Attach");
-                            tooltip-text: _("Add new attachment");
-                            menu-model: attach_menu;
+                          Button {
+                            icon-name: "add-symbolic";
+                            tooltip-text: _("Add translation");
+                            clicked => $on_word_list_prop_button_pressed();
 
-                            styles ["suggested-action"]
+                            styles ["flat"]
                           }
                         }
                       }
 
-                      ScrolledWindow attachments_scrolled_window {
-                        ListBox attachments {
-                          hexpand: true;
-                          vexpand: true;
-                          selection-mode: none;
+                      Adw.ExpanderRow word_type_expander_row {
+                        title: _("Word Type");
 
-                          Adw.ActionRow {
-                            activatable: true;
-                            title: "Sun's hiding";
-                            subtitle: "suns-hiding.mp4";
+                        Adw.ActionRow {
+                          title: _("Noun");
 
-                            [prefix]
-                            Image {
-                              icon-name: "camera-video-symbolic";
-                              pixel-size: 28;
-                            }
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Verb");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+                        
+                        Adw.ActionRow {
+                          title: _("Adjective");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Adverb");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Pronoun");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Preposition");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Conjunction");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Interjection");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Article");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Idiom");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Clause");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+                        Adw.
+                        ActionRow {
+                          title: _("Prefix");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+
+                        Adw.ActionRow {
+                          title: _("Suffix");
+
+                          [suffix]
+                          CheckButton {}
+                        }
+                      }
+
+                      Adw.ExpanderRow examples_expander_row {
+                        title: _("Examples");
+
+                        [suffix]
+                        Box {
+                          valign: center;
+
+                          Button {
+                            icon-name: "add-symbolic";
+                            tooltip-text: _("Add example");
+                            clicked => $on_word_list_prop_button_pressed();
+
+                            styles ["flat"]
                           }
+                        }
+                      }
 
-                          styles ["navigation-sidebar"]
+                      Adw.ExpanderRow references_expander_row {
+                        title: _("References");
+
+                        [suffix]
+                        Box {
+                          valign: center;
+
+                          Button {
+                            icon-name: "add-symbolic";
+                            tooltip-text: _("Add example");
+
+                            styles ["flat"]
+                          }
                         }
                       }
                     }
                   }
+                }
+
+                [bottom]
+                Adw.BottomSheet ipa_bottom_sheet {
+                  modal: false;
+                  sheet: Adw.ToolbarView {
+                    [top]
+                    Adw.HeaderBar {
+                      decoration-layout: ":close";
+                    }
+                    
+                    ScrolledWindow {
+                      propagate-natural-height: true;
+                      propagate-natural-width: true;
+
+                      FlowBox ipa_charset_flow_box {
+                        homogeneous: true;
+                        valign: start;
+                        max-children-per-line: 1000;
+                        halign: center;
+                        row-spacing: 6;
+                        column-spacing: 4;
+                        margin-bottom: 8;
+                        margin-end: 8;
+                        margin-start: 8;
+                        margin-top: 8;
+
+                        Button {
+                          height-request: 50;
+                          label: _("ⱱ");
+                          styles ["pill", "image-button"]
+                        }
+                      }
+                    }
+                  };
+                  bottom-bar: Adw.Bin {
+                    height-request: 40;
+
+                    Label {
+                      label: _("IPA Characters");
+                    }
+                  };
                 }
               }
             }
@@ -277,20 +419,49 @@ template $LexiWindow : Adw.ApplicationWindow {
   }
 }
 
-menu app_menu {
-  section {
-    item (_("Preferences"), "win.show_preferences")
-    item (_("Keybindings"), "win.show-help-overlay")
-    item (_("About"), "app.about")
-  }
+Adw.StatusPage no_lexicons_yet {
+  title: _("No Lexicons found yet");
+  icon-name: "add-symbolic";
+
+  styles ["compact"]
 }
 
-menu attach_menu {
-  section {
-    item (_("File"), "res_manager.attach_file")
-    item (_("Audio"), "res_manager.attach_audio")
-    item (_("Video"), "res_manager.attach_video")
+Adw.StatusPage no_lexicons_found {
+  title: _("No Lexicons found");
+  description: _("No Lexicons found for this search request");
+  icon-name: "no-found-symbolic";
+
+  styles ["compact"]
+}
+
+Adw.StatusPage no_words_yet {
+  title: _("No Words found yet");
+  icon-name: "add-symbolic";
+
+  Box {
+    halign: center;
+
+    Button {
+      label: _("Add Word");
+      clicked => $on_add_word_action();
+
+      styles ["pill"]
+    }
   }
+
+  styles ["compact"]
+}
+
+Adw.StatusPage no_words_found {
+  title: _("No Words found");
+  description: _("No Words found for this search request");
+  icon-name: "no-found-symbolic";
+}
+
+Adw.StatusPage lexicon_not_selected {
+  title: _("No Lexicon selected");
+  description: _("Please select a lexicon to view its words");
+  icon-name: "lexicon-symbolic";
 }
 
 Popover add_lexicon_popover {
@@ -303,26 +474,17 @@ Popover add_lexicon_popover {
     margin-start: 4;
     margin-top: 4;
 
-    Adw.EntryRow name_lexicon_entry {
-      title: _("Name");
+    Adw.EntryRow add_lexicon_popover_entry_row {
+      title: _("Lexicon name");
       show-apply-button: true;
     }
   }
 }
 
-Popover add_lexicon_popover_2 {
-  position: bottom;
-
-  Box {
-    orientation: horizontal;
-    margin-bottom: 4;
-    margin-end: 4;
-    margin-start: 4;
-    margin-top: 4;
-
-    Adw.EntryRow name_lexicon_entry_2 {
-      title: _("Name");
-      show-apply-button: true;
-    }
+menu app_menu {
+  section {
+    item (_("Preferences"), "win.show_preferences")
+    item (_("Keybindings"), "win.show-help-overlay")
+    item (_("About"), "app.about")
   }
 }

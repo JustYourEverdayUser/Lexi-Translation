@@ -1,0 +1,21 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WordRow : Adw.ActionRow {
+  activatable: true;
+  hexpand: true;
+  activated => $load_word();
+
+  [suffix]
+  Revealer check_button_revealer {
+    transition-type: crossfade;
+    transition-duration: 100;
+
+    CheckButton check_button {
+      tooltip-text: _("Selection check button");
+      toggled => $on_check_button_toggled();
+
+      styles ["selection-mode"]
+    }
+  }
+}

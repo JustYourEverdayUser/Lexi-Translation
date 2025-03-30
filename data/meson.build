@@ -2,8 +2,8 @@ blueprints = custom_target(
     'blueprints',
     input: files(
         'gtk/window.blp',
-        'gtk/ui/PairRow.blp',
-        'gtk/ui/LexiconRow.blp'
+        'gtk/ui/LexiconRow.blp',
+        'gtk/ui/WordRow.blp'
     ),
     output: '.',
     command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
@@ -24,7 +24,7 @@ gnome.compile_resources(
 
 desktop_file = i18n.merge_file(
     input: configure_file(
-        input: 'io.github.dzheremi2.Lexi.desktop.in',
+        input: 'io.github.dzheremi2.lexi.desktop.in',
         output: app_id + '.desktop.in',
         configuration: conf
     ),
@@ -42,7 +42,7 @@ endif
 
 appstream_file = i18n.merge_file(
     input: configure_file(
-        input: 'io.github.dzheremi2.Lexi.metainfo.xml.in',
+        input: 'io.github.dzheremi2.lexi.metainfo.xml.in',
         output: app_id + '.metainfo.xml.in',
         configuration: conf,
     ),
@@ -64,7 +64,7 @@ endif
 
 install_data(
   configure_file(
-    input: 'io.github.dzheremi2.Lexi.gschema.xml.in',
+    input: 'io.github.dzheremi2.lexi.gschema.xml.in',
     output: app_id + '.gschema.xml',
     configuration: conf,
   ),

@@ -1,6 +1,6 @@
-id: io.github.dzheremi2.Lexi.Devel
+id: io.github.dzheremi2.lexi.Devel
 runtime: org.gnome.Platform
-runtime-version: "47"
+runtime-version: "48"
 sdk: org.gnome.Sdk
 command: lexi
 finish-args:
@@ -39,7 +39,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.gnome.org/jwestman/blueprint-compiler
-        tag: v0.14.0
+        tag: v0.16.0
     cleanup:
       - "*"
   - name: lexi

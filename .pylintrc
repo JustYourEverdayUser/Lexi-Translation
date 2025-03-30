@@ -20,7 +20,8 @@ disable=raw-checker-failed,
         relative-beyond-top-level,
         import-error,
         no-name-in-module,
-        unspecified-encoding
+        unspecified-encoding,
+        consider-using-with
 
 
 [TYPECHECK]
