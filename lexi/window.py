@@ -51,6 +51,7 @@ class LexiWindow(Adw.ApplicationWindow):
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
     references_dialog: Adw.Dialog = gtc()
     references_dialog_list_box: Gtk.ListBox = gtc()
+    lexicon_search_entry: Gtk.Entry = gtc()
 
     ipa_charset_flow_box: Gtk.FlowBox = gtc()
 
@@ -88,6 +89,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
         # Connections
         self.lexicon_list_box.set_sort_func(self.sort_words)
+        self.lexicon_list_box.set_filter_func(self.filter_words)
         self.search_bar.connect_entry(self.search_entry)
         self.add_lexicon_popover_entry_row.connect(
             "changed", self.on_add_lexicon_entry_changed
@@ -176,6 +178,18 @@ class LexiWindow(Adw.ApplicationWindow):
                 return -1
             else:
                 return 0
+
+    def filter_words(self, row: Gtk.ListBoxRow) -> bool:
+        """Filter words in the list box based on the search entry text"""
+        try:
+            text: str = self.lexicon_search_entry.get_text().lower()
+            filtered: bool = text != "" and not (
+                text in row.word.lower()
+                or (row.translation and text in row.translation.lower())
+            )
+            return not filtered
+        except AttributeError:
+            pass
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
@@ -395,3 +409,8 @@ class LexiWindow(Adw.ApplicationWindow):
         self.references_expander_row.set_sensitive(active)
         if not shared.schema.get_boolean("word-autosave"):
             self.save_word_button.set_sensitive(active)
+
+    @Gtk.Template.Callback()
+    def on_search_entry_changed(self, *_args) -> None:
+        """Emits when the search entry is changed"""
+        self.lexicon_list_box.invalidate_filter()
