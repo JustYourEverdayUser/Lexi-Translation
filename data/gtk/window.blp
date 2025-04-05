@@ -27,8 +27,6 @@ template $LexiWindow : Adw.ApplicationWindow {
   Adw.ToastOverlay toast_overlay {
     Adw.NavigationView navigation_view {
       Adw.NavigationPage {
-        title: "Lexi";
-
         Adw.OverlaySplitView overlay_split_view {
           collapsed: false;
           show-sidebar: true;
@@ -119,6 +117,13 @@ template $LexiWindow : Adw.ApplicationWindow {
                     tooltip-text: bind toggle_sidebar_button.tooltip-text;
                     visible: bind overlay_split_view.show-sidebar inverted;
                     clicked => $on_toggle_sidebar_action();
+                  }
+
+                  [end]
+                  MenuButton {
+                    icon-name: "sort-symbolic";
+                    tooltip-text: _("Sort by…");
+                    menu-model: sort;
                   }
                 }
 
@@ -377,7 +382,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     Adw.HeaderBar {
                       decoration-layout: ":close";
                     }
-                    
+
                     ScrolledWindow {
                       propagate-natural-height: true;
                       propagate-natural-width: true;
@@ -393,12 +398,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                         margin-end: 8;
                         margin-start: 8;
                         margin-top: 8;
-
-                        Button {
-                          height-request: 50;
-                          label: _("ⱱ");
-                          styles ["pill", "image-button"]
-                        }
                       }
                     }
                   };
@@ -486,5 +485,41 @@ menu app_menu {
     item (_("Preferences"), "win.show_preferences")
     item (_("Keybindings"), "win.show-help-overlay")
     item (_("About"), "app.about")
+  }
+}
+
+menu sort {
+  section {
+    item {
+      label: _("Ascending");
+      action: "win.sort_method";
+      target: "up";
+    }
+
+    item {
+      label: _("Descending");
+      action: "win.sort_method";
+      target: "down";
+    }
+  }
+
+  section {
+    item {
+      label: _("Word");
+      action: "win.sort";
+      target: "word";
+    }
+
+    item {
+      label: _("First Translation");
+      action: "win.sort";
+      target: "first_trnslt";
+    }
+
+    item {
+      label: _("By References");
+      action: "win.sort";
+      target: "by_ref";
+    }
   }
 }

@@ -1,9 +1,12 @@
+import os
 from typing import TextIO
 
 import yaml
-from gi.repository import Adw, Gtk
+from gi.repository import Adw, Gio, Gtk
 
 from lexi import shared
+
+gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/LexiconRow.ui")
@@ -12,24 +15,50 @@ class LexiconRow(Gtk.Box):
 
     Parameters
     ----------
-    file : TextIO
+    file : str
         The file to load the lexicon from.
     """
 
     __gtype_name__ = "LexiconRow"
 
-    add_word_dialog: Adw.Dialog = Gtk.Template.Child()
-    word_entry_row: Adw.EntryRow = Gtk.Template.Child()
-    translation_entry_row: Adw.EntryRow = Gtk.Template.Child()
-    example_entry_row: Adw.EntryRow = Gtk.Template.Child()
+    add_word_dialog: Adw.Dialog = gtc()
+    word_entry_row: Adw.EntryRow = gtc()
+    translation_entry_row: Adw.EntryRow = gtc()
+    example_entry_row: Adw.EntryRow = gtc()
+    actions_popover: Gtk.PopoverMenu = gtc()
+    rename_popover: Gtk.Popover = gtc()
+    rename_entry: Adw.EntryRow = gtc()
+    deletion_alert_dialog: Adw.AlertDialog = gtc()
 
-    title: Gtk.Label = Gtk.Template.Child()
+    title: Gtk.Label = gtc()
 
-    def __init__(self, file: TextIO) -> None:
+    def __init__(self, file: str) -> None:
         super().__init__()
         self.file: TextIO = open(file, "r+")
         self.data: dict = yaml.safe_load(self.file)
         self.title.set_label(self.data["name"])
+        self.actions_popover.set_parent(self)
+        self.rename_popover.set_parent(self)
+
+        self.rmb_gesture = Gtk.GestureClick(button=3)
+        self.long_press_gesture = Gtk.GestureLongPress()
+        self.add_controller(self.rmb_gesture)
+        self.add_controller(self.long_press_gesture)
+        self.rmb_gesture.connect("released", lambda *_: self.actions_popover.popup())
+        self.long_press_gesture.connect(
+            "pressed", lambda *_: self.actions_popover.popup()
+        )
+
+        actions: Gio.SimpleActionGroup = Gio.SimpleActionGroup.new()
+        rename_action: Gio.SimpleAction = Gio.SimpleAction.new("rename", None)
+        rename_action.connect("activate", self.rename_lexicon)
+        delete_action: Gio.SimpleAction = Gio.SimpleAction.new("delete", None)
+        delete_action.connect(
+            "activate", lambda *_: self.deletion_alert_dialog.present(shared.win)
+        )
+        actions.add_action(rename_action)
+        actions.add_action(delete_action)
+        self.insert_action_group("lexicon", actions)
 
     def save_lexicon(self) -> None:
         """Save the lexicon to the file."""
@@ -38,6 +67,45 @@ class LexiconRow(Gtk.Box):
         yaml.dump(
             self.data, self.file, sort_keys=False, encoding=None, allow_unicode=True
         )
+
+    @Gtk.Template.Callback()
+    def delete_lexicon(self, _alert_dialog: Adw.AlertDialog, response: str) -> None:
+        if response == "delete":
+            if shared.win.loaded_lexicon == self:
+                shared.win.set_word_rows_sensetiveness(False)
+                try:
+                    if shared.win.loaded_word.lexicon == self:
+                        shared.win.loaded_word.delete()
+                except AttributeError:
+                    pass
+
+                shared.win.lexicon_scrolled_window.set_child(
+                    shared.win.lexicon_not_selected
+                )
+                shared.win.words_bottom_bar_revealer.set_reveal_child(False)
+
+            self.file.close()
+            os.remove(self.file.name)
+            shared.win.build_sidebar()
+
+    def rename_lexicon(self, *_args) -> None:
+        self.rename_popover.popup()
+        self.rename_entry.set_text(self.name)
+
+    @Gtk.Template.Callback()
+    def on_rename_entry_changed(self, text: Gtk.Text) -> None:
+        if text.get_text_length() == 0:
+            self.rename_entry.add_css_class("error")
+        else:
+            if "error" in self.rename_entry.get_css_classes():
+                self.rename_entry.remove_css_class("error")
+
+    @Gtk.Template.Callback()
+    def do_rename(self, entry_row: Adw.EntryRow) -> None:
+        if entry_row.get_text() != "":
+            self.name = entry_row.get_text()
+        self.rename_popover.popdown()
+        shared.win.build_sidebar()
 
     def show_add_word_dialog(self) -> None:
         """Shows the add word dialog"""
@@ -73,7 +141,7 @@ class LexiconRow(Gtk.Box):
         new_word = {
             "id": max((word["id"] for word in self.data["words"]), default=0) + 1,
             "word": word,
-            "translations": [translation],
+            "translations": translation if translation == [] else [translation],
             "pronunciation": "",
             "types": [],
             "examples": example if example == [] else [example],
@@ -126,8 +194,8 @@ class WordRow(Adw.ActionRow):
 
     __gtype_name__ = "WordRow"
 
-    check_button: Gtk.CheckButton = Gtk.Template.Child()
-    check_button_revealer: Gtk.Revealer = Gtk.Template.Child()
+    check_button: Gtk.CheckButton = gtc()
+    check_button_revealer: Gtk.Revealer = gtc()
 
     def __init__(self, word: dict, lexicon: LexiconRow) -> None:
         super().__init__()

@@ -209,12 +209,12 @@ class LexiWindow(Adw.ApplicationWindow):
             for word in row.get_child().data["words"]:
                 self.lexicon_list_box.append(widgets.WordRow(word, row.get_child()))
             self.lexicon_scrolled_window.set_child(self.lexicon_list_box)
-            self.lexicon_nav_page.set_title(row.get_child().name)
             self.words_bottom_bar_revealer.set_reveal_child(True)
         else:
             # Show a placeholder if no words are available
             self.lexicon_scrolled_window.set_child(self.no_words_yet)
-            self.lexicon_nav_page.set_title("Lexi")
+            self.words_bottom_bar_revealer.set_reveal_child(False)
+        self.lexicon_nav_page.set_title(row.get_child().name)
         self.loaded_lexicon = row.get_child()
 
     @Gtk.Template.Callback()

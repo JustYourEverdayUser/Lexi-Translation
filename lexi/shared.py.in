@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from gi.repository import Adw, Gio, GLib
 
 APP_ID = "@APP_ID@"

@@ -8,18 +8,27 @@ class LexiconRow(Gtk.Box):
 
     Parameters
     ----------
-    file : TextIO
+    file : str
         The file to load the lexicon from.
     """
+
     __gtype_name__: str
     add_word_dialog: Adw.Dialog
     word_entry_row: Adw.EntryRow
     translation_entry_row: Adw.EntryRow
     example_entry_row: Adw.EntryRow
+    actions_popover: Gtk.PopoverMenu
+    rename_popover: Gtk.Popover
+    rename_entry: Adw.EntryRow
+    deletion_alert_dialog: Adw.AlertDialog
     title: Gtk.Label
 
-    def __init__(self, file: TextIO) -> None: ...
+    def __init__(self, file: str) -> None: ...
     def save_lexicon(self) -> None: ...
+    def delete_lexicon(self, _alert_dialog: Adw.AlertDialog, response: str) -> None: ...
+    def rename_lexicon(self, *_args) -> None: ...
+    def on_rename_entry_changed(self, text: Gtk.Text) -> None: ...
+    def do_rename(self, entry_row: Adw.EntryRow) -> None: ...
     def show_add_word_dialog(self) -> None: ...
     def add_word(self, *_args) -> None: ...
     def check_if_word_is_empty(self, row: Adw.EntryRow) -> None: ...
@@ -35,6 +44,7 @@ class WordRow(Adw.ActionRow):
     word : dict
         a dict with the word [id, word, pronunciation, translations, types, examples, references]
     """
+
     __gtype_name__: str
     check_button: Gtk.CheckButton
     check_button_revealer: Gtk.Revealer
