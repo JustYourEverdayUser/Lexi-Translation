@@ -11,8 +11,8 @@ concurrency:
   group: release-${{ github.sha }}
 
 jobs:
-  flatpak:
-    name: Flatpak
+  flatpak-devel:
+    name: Flatpak Devel
     runs-on: ubuntu-latest
     container:
       image: bilelmoussaoui/flatpak-github-actions:gnome-47
@@ -20,8 +20,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Flatpak Builder
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6.4
         with:
           bundle: io.github.dzheremi2.lexi.Devel.flatpak
           manifest-path: build-aux/flatpak/io.github.dzheremi2.lexi.Devel.yaml
+  
+  flatpak-release:
+    if: contains(github.event.head_commit.message, 'RELEASE')
+    name: Flatpak Release
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-47
+      options: --privileged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Flatpak Builder
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6.4
+        with:
+          bundle: io.github.dzheremi2.lexi.flatpak
+          manifest-path: build-aux/flatpak/io.github.dzheremi2.lexi.yaml

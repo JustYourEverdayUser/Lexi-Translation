@@ -7,51 +7,41 @@ concurrency:
   group: release-${{ github.sha }}
 
 jobs:
-  flatpak-release:
-    name: Flatpak Release
-    runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-47
-      options: --privileged
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Flatpak Builder
-        uses: flatpak/flatpak-github-actions/flatpak-builder@v6.3
-        with:
-          bundle: io.github.dzheremi2.Lexi.Devel.flatpak
-          manifest-path: build-aux/flatpak/io.github.dzheremi2.Lexi.yaml
-
   publish-release:
-    needs: flatpak-release
+    name: Publish Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
+
+      - name: Download workflow artifact
+        uses: dawidd6/action-download-artifact@v9
         with:
-          name: io.github.dzheremi2.Lexi-x86-64
-      - name: Extract Release Notes
+          workflow: bundle.yml
+          commit: ${{ github.sha }}
+
+      - name: Get release notes
         shell: python
         run: |
           import re, textwrap
-          file = open("./data/io.github.dzheremi2.Lexi.metainfo.xml.in", "r", encoding="utf-8")
-          string = file.read()
-          file.close()
+          open_file = open("./data/io.github.dzheremi2.lexi.metainfo.xml.in", "r", encoding="utf-8")
+          string = open_file.read()
+          open_file.close()
           string = re.findall("<release.*>\s*<description.*>\n([\s\S]*?)\s*</description>\s*<\/release>", string)[0]
           string = textwrap.dedent(string)
-          file = open("release_notes", "w", encoding="utf-8")
-          file.write(string)
-          file.close()
-      - name: Get Tag Name
+          open_file = open("release_notes", "w", encoding="utf-8")
+          open_file.write(string)
+          open_file.close()
+
+      - name: Get tag name
         id: get_tag_name
         run: echo tag_name=${GITHUB_REF#refs/tags/} >> $GITHUB_OUTPUT
-      - name: Publish Release
-        uses: softprops/action-gh-release@v2.1.0
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2.2.1
         with:
           files: |
-            io.github.dzheremi2.Lexi-x86_64/io.github.dzheremi2.Lexi.flatpak
+            io.github.dzheremi2.lexi-x86_64/io.github.dzheremi2.lexi.flatpak
           fail_on_unmatched_files: true
           tag_name: ${{ steps.get_tag_name.outputs.tag_name }}
           body_path: release_notes

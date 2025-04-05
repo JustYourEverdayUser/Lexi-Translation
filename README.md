@@ -7,7 +7,7 @@
 [installs-img]: https://img.shields.io/flathub/downloads/io.github.dzheremi2.lexi?style=for-the-badge&color=gree&logo=flathub
 
 [![GitHub Release](https://img.shields.io/github/v/release/Dzheremi2/Lexi?style=for-the-badge&color=000B3C&logo=github)](https://github.com/Dzheremi2/Lexi/releases/latest)
-<!-- <a href="https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk"><img alt="Flathub Version" src="https://img.shields.io/flathub/v/io.github.dzheremi2.lrcmake-gtk?style=for-the-badge&logo=flathub&color=lightblue"></a> -->
+<!-- <a href="https://flathub.org/apps/io.github.dzheremi2.lexi"><img alt="Flathub Version" src="https://img.shields.io/flathub/v/io.github.dzheremi2.lexi?style=for-the-badge&logo=flathub&color=lightblue"></a> -->
 <a href="https://github.com/Dzheremi2/Lexi/actions"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Dzheremi2/Lexi/.github%2Fworkflows%2Fbundle.yml?style=for-the-badge&logo=github"></a>
 [![GitHub License](https://img.shields.io/github/license/Dzheremi2/Lexi?style=for-the-badge&color=C25D00)](https://github.com/Dzheremi2/Lexi/blob/master/LICENSE)
 
