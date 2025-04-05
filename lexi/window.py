@@ -102,6 +102,7 @@ class LexiWindow(Adw.ApplicationWindow):
         self.add_controller(key_kapture_controller)
 
         # Connections
+        self.lexicons_list_box.set_filter_func(self.filter_lexicons)
         self.lexicon_list_box.set_sort_func(self.sort_words)
         self.lexicon_list_box.set_filter_func(self.filter_words)
         self.search_bar.connect_entry(self.search_entry)
@@ -193,6 +194,17 @@ class LexiWindow(Adw.ApplicationWindow):
                 return -1
             else:
                 return 0
+
+    def filter_lexicons(self, row: Gtk.ListBoxRow) -> bool:
+        """Sorts lexicons in the list box based on their names"""
+        try:
+            text: str = self.search_entry.get_text().lower()
+            filtered: bool = text != "" and not (
+                text in row.get_child().name.lower()
+            )  # pylint: disable=superfluous-parens
+            return not filtered
+        except AttributeError as e:
+            print(e)
 
     def filter_words(self, row: Gtk.ListBoxRow) -> bool:
         """Filter words in the list box based on the search entry text"""
@@ -459,3 +471,8 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.loaded_word.word_dict["types"][word_type] = False
         if shared.schema.get_boolean("word-autosave"):
             self.loaded_lexicon.save_lexicon()
+
+    @Gtk.Template.Callback()
+    def on_lexicon_search_entry_changed(self, *_args) -> None:
+        """Emits when the lexicon search entry is changed"""
+        self.lexicons_list_box.invalidate_filter()

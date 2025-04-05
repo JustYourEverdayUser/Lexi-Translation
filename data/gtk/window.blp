@@ -78,6 +78,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                   SearchEntry search_entry {
                     placeholder-text: _("Search…");
                     hexpand: true;
+                    changed => $on_lexicon_search_entry_changed();
 
                     ShortcutController {
                       Shortcut {
