@@ -1,0 +1,49 @@
+name: Bug Report
+description: Lexi bug that you found out
+title: "[Bug]: "
+labels: ["bug"]
+assignees: Dzheremi2
+body:
+  - type: checkboxes
+    attributes:
+      label: Validation checkboxes
+      description: Required checkboxes (if not checkmarked, then issue will be marked as invalid)
+      options:
+        - label: I have searched for my issue around issue tracker and didn't find anything (closed issues count as well)
+          required: true
+        - label: I'm using English language for this issue. Non-English issue will be marked as invalid
+          required: true
+        - label: I declare that this issue is not a question. If you want to ask something, go to the Discussions
+          required: true
+  - type: input
+    attributes:
+      label: Lexi version
+      description: What version of Lexi are you using? (if using Devel, please point it here)
+      placeholder: "2.0 or Devel #commit_id"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction steps
+      description: Steps to reproduce bug you have encountered
+      placeholder: "1. Add a word..."
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: What you expected to see
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behavior
+      description: What you seeing currently
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: Some info that may help to fix this bug
+    validations:
+      required: false
