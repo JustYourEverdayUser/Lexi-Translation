@@ -1,0 +1,45 @@
+# Contributing
+
+## Indirect Contributing
+>[!TIP]
+>Any issue that's already resolved but not published yet is marked with `fix-available` label. If the issue is closed, then it was already published.
+#### Feature Requests
+If you want some feature to be implemented within the app, [create](https://github.com/Dzheremi2/Lexi/issues) an issue with `Feature Request` template and describe what you want to be implemented. The more information about the feature you provide, the faster, and precisely, it would be implemented.
+
+#### Bug Reports
+If you found a bug, and you're not that lazy, then you should report this bug by [creating](https://github.com/Dzheremi2/Lexi/issues) an issue with `Bug Report` template and provide as much information about it as possible.
+
+>[!NOTE]
+>If your issue got an `unable-reproduce` label, then you probably should give more information about how it can be reproduced. Or this just means that this issue belongs only to your side. Anyway, issues with `unable-reproduce` wouldn't be worked on until they have got reproduced (`successfully-reproduced` label)
+
+## Direct Contributing
+#### Code Contributing
+To directly contribute to the app, [fork](https://github.com/Dzheremi2/Lexi/fork) the repo, make your changes and [open](https://github.com/Dzheremi2/Lexi/pulls) a pull request. If your code satisfies the maintainer, then it would be merged, and you will be mentioned in the upcoming release and added to the `About App` section in the app.
+
+>[!IMPORTANT]
+>Code in pull requests should respect the [Project's Code Style](#code-style).
+
+## Build
+In VSCode you can install [Flatpak](https://marketplace.visualstudio.com/items?itemName=bilelmoussaoui.flatpak-vscode) extension, select needed manifest (should be `build-aux/flatpak/io.github.dzheremi2.lexi.Devel.yaml`) and then use `Flatpak: Build` command from VSCode command palette.
+
+##### Dependencies:
+org.gnome.Platform (v48)
+```shell
+flatpak install org.gnome.Platform/x86_64/48 --system
+```
+org.gnome.Sdk (v48)
+```shell
+flatpak install org.gnome.Sdk/x86_64/48 --system
+```
+
+## Code Style
+The code is formatted by [Black](https://github.com/psf/black) formatter and linted with [Pylint](https://www.pylint.org). Imports are sorted by [isort](https://github.com/pycqa/isort).
+The main IDE for developing this project is VSCode. Extensions for both these are available on VSCode Marketplace. The current configuration is embedded within the repo (`.vscode/settings.json`)
+
+All new methods should be type hinted, static variables should be type hinted too. All methods should have docstrings in numpy docstring format ([extension](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) for automatic docstrings generation)
+After you're done with your feature or bug fix, please, don't forget to update corresponding `.pyi` files (if you're creating new `.py` files, don't forget to create corresponding `.pyi` files too)
+>[!NOTE]
+>If you're too lazy to do all these things, please, mention it in your pull request message for the maintainers to do this instead of you.
+
+>[!TIP]
+> Also, if you don't understand something, you could research the repo structure or ask the maintainer for help on the [Discussions](https://github.com/Dzheremi2/Lexi/discussions)
