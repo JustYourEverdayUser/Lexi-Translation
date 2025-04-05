@@ -19,7 +19,7 @@ template $LexiWindow : Adw.ApplicationWindow {
 
     setters {
       overlay_split_view.collapsed: true;
-      lexcion_split_view.collapsed: true;
+      lexicon_split_view.collapsed: true;
       lexicon_list_box.selection-mode: none;
     }
   }
@@ -100,7 +100,7 @@ template $LexiWindow : Adw.ApplicationWindow {
             }
           }
 
-          Adw.NavigationSplitView lexcion_split_view {
+          Adw.NavigationSplitView lexicon_split_view {
             sidebar-width-fraction: 0.5;
             max-sidebar-width: 999999;
 
@@ -365,6 +365,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "add-symbolic";
                             tooltip-text: _("Add example");
+                            clicked => $on_references_add_button_pressed();
 
                             styles ["flat"]
                           }
@@ -411,6 +412,37 @@ template $LexiWindow : Adw.ApplicationWindow {
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+Adw.Dialog references_dialog {
+  title: _("Refer a Word");
+  content-height: 600;
+  content-width: 450;
+
+  Adw.Clamp {
+    orientation: horizontal;
+    maximum-size: 450;
+    tightening-threshold: 450;
+
+    Adw.Clamp {
+      orientation: vertical;
+      maximum-size: 600;
+      tightening-threshold: 600;
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {}
+
+        ScrolledWindow {
+          ListBox references_dialog_list_box {
+            selection-mode: none;
+
+            styles ["navigation-sidebar"]
           }
         }
       }

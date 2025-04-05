@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks">gtk/window.ui</file>
     <file preprocess="xml-stripblanks">gtk/ui/LexiconRow.ui</file>
     <file preprocess="xml-stripblanks">gtk/ui/WordRow.ui</file>
+    <file preprocess="xml-stripblanks">gtk/ui/ReferenceRow.ui</file>
     <file alias="style.css">gtk/css/style.css</file>
   </gresource>
   <!-- Icons -->
@@ -18,5 +19,6 @@
     <file alias="lexicon-symbolic.svg">icons/icons/symbolic/lexicon-symbolic.svg</file>
     <file alias="no-found-symbolic.svg">icons/icons/symbolic/no-found-symbolic.svg</file>
     <file alias="delete-symbolic.svg">icons/icons/symbolic/delete-symbolic.svg</file>
+    <file alias="times-referenced-symbolic.svg">icons/icons/symbolic/times-referenced-symbolic.svg</file>
   </gresource>
 </gresources>

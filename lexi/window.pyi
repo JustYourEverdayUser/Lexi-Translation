@@ -24,7 +24,7 @@ class LexiWindow(Adw.ApplicationWindow):
     lexicon_list_box: Gtk.ListBox
     navigation_view: Adw.NavigationView
     overlay_split_view: Adw.OverlaySplitView
-    lexcion_split_view: Adw.NavigationSplitView
+    lexicon_split_view: Adw.NavigationSplitView
     search_bar: Gtk.SearchBar
     search_entry: Gtk.SearchEntry
 

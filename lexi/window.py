@@ -17,6 +17,7 @@ class LexiWindow(Adw.ApplicationWindow):
     gtc = Gtk.Template.Child
 
     # Define UI components as class attributes
+    toast_overlay: Adw.ToastOverlay = gtc()
     no_lexicons_yet: Adw.StatusPage = gtc()
     no_words_yet: Adw.StatusPage = gtc()
     lexicon_not_selected: Adw.StatusPage = gtc()
@@ -30,7 +31,7 @@ class LexiWindow(Adw.ApplicationWindow):
     lexicon_list_box: Gtk.ListBox = gtc()
     navigation_view: Adw.NavigationView = gtc()
     overlay_split_view: Adw.OverlaySplitView = gtc()
-    lexcion_split_view: Adw.NavigationSplitView = gtc()
+    lexicon_split_view: Adw.NavigationSplitView = gtc()
     search_bar: Gtk.SearchBar = gtc()
     search_entry: Gtk.SearchEntry = gtc()
 
@@ -48,8 +49,14 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button = gtc()
     delete_selected_words_button_revealer: Gtk.Revealer = gtc()
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
+    references_dialog: Adw.Dialog = gtc()
+    references_dialog_list_box: Gtk.ListBox = gtc()
 
     ipa_charset_flow_box: Gtk.FlowBox = gtc()
+
+    translations_list_box: Gtk.ListBox
+    examples_list_box: Gtk.ListBox
+    references_list_box: Gtk.ListBox
 
     sort_method: str = shared.state_schema.get_string("sort-method")
     sort_type: str = shared.state_schema.get_string("sort-type")
@@ -61,7 +68,6 @@ class LexiWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-
         # Add a CSS class for development mode
         if shared.APP_ID.endswith("Devel"):
             self.add_css_class("devel")
@@ -94,7 +100,6 @@ class LexiWindow(Adw.ApplicationWindow):
         # Extracts ListBoxes from expander rows
         for epxander_row in (
             (self.translations_expander_row, "translations"),
-            (self.word_type_expander_row, "word_type"),
             (self.examples_expander_row, "examples"),
             (self.references_expander_row, "references"),
         ):
@@ -142,17 +147,17 @@ class LexiWindow(Adw.ApplicationWindow):
         shared.state_schema.set_string("sort-type", self.sort_type)
 
     # pylint: disable=no-else-return
-    def sort_words(self, row1: Gtk.ListBoxRow, row2: Gtk.ListBoxRow) -> int:
+    def sort_words(self, row1: widgets.WordRow, row2: widgets.WordRow) -> int:
         """Sorts words in the list box based on the selected method and type"""
         sortable1: str | int
         sortable2: str | int
 
         if self.sort_type == "word":
-            sortable1 = row1.word
-            sortable2 = row2.word
+            sortable1 = row1.word.lower()
+            sortable2 = row2.word.lower()
         elif self.sort_type == "first_trnslt":
-            sortable1 = row1.translation
-            sortable2 = row2.translation
+            sortable1 = row1.translation.lower()
+            sortable2 = row2.translation.lower()
         else:
             sortable1 = row1.ref_count
             sortable2 = row2.ref_count
@@ -265,8 +270,14 @@ class LexiWindow(Adw.ApplicationWindow):
             # Show a placeholder if no words are available
             self.lexicon_scrolled_window.set_child(self.no_words_yet)
             self.words_bottom_bar_revealer.set_reveal_child(False)
+        self.update_refs_count()
         self.lexicon_nav_page.set_title(row.get_child().name)
         self.loaded_lexicon = row.get_child()
+
+    def update_refs_count(self) -> None:
+        """Update the reference count for all words in the lexicon list box"""
+        for word_row in self.lexicon_list_box:  # pylint: disable=not-an-iterable
+            word_row.get_ref_count()
 
     @Gtk.Template.Callback()
     def on_word_entry_changed(self, row: Adw.EntryRow) -> None:
@@ -300,6 +311,27 @@ class LexiWindow(Adw.ApplicationWindow):
             Gtk.Button emitted this method
         """
         self.loaded_word.add_list_prop(button)
+
+    @Gtk.Template.Callback()
+    def on_references_add_button_pressed(self, *_args) -> None:
+        """When the references add button is pressed"""
+        if self.loaded_lexicon.data["words"] == [] or len(
+            self.loaded_lexicon.data["words"]
+        ) - 1 == len(self.loaded_word.word_dict["references"]):
+            self.toast_overlay.add_toast(
+                Adw.Toast.new(
+                    _("You have already referenced all words"),
+                )
+            )
+            return
+
+        self.references_dialog_list_box.remove_all()
+        for word_row in self.lexicon_list_box:  # pylint: disable=not-an-iterable
+            if (word_row.word_dict["id"] != self.loaded_word.word_dict["id"]) and (
+                word_row.word_dict["id"] not in self.loaded_word.word_dict["references"]
+            ):
+                self.references_dialog_list_box.append(widgets.ReferenceRow(word_row))
+        self.references_dialog.present(self)
 
     @Gtk.Template.Callback()
     def on_add_word_action(self, *_args) -> None:

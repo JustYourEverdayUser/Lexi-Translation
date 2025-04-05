@@ -27,6 +27,7 @@ class Icon(str, Enum):
     LEXICON: str = "lexicon-symbolic"
     NO_FOUND: str = "no-found-symbolic"
     DELETE: str = "delete-symbolic"
+    TIMES_REFERENCED: str = "times-referenced-symbolic"
 
     def __str__(self) -> str:
         return self.value

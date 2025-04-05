@@ -187,6 +187,7 @@ class LexiconRow(Gtk.Box):
 class WordRow(Adw.ActionRow):
     # pylint: disable=line-too-long
     """Word row widget
+
     Parameters
     ----------
     word : dict
@@ -197,6 +198,8 @@ class WordRow(Adw.ActionRow):
 
     check_button: Gtk.CheckButton = gtc()
     check_button_revealer: Gtk.Revealer = gtc()
+    refs_count_label_box: Gtk.Box = gtc()
+    refs_count_label: Gtk.Label = gtc()
 
     def __init__(self, word: dict, lexicon: LexiconRow) -> None:
         super().__init__()
@@ -239,14 +242,20 @@ class WordRow(Adw.ActionRow):
                             )
                             break
                 expander_row[0].add_row(row)
+
         if self.word != "":
             shared.win.word_nav_page.set_title(self.word)
         else:
-            shared.win.word_nav_page.set_title(_(_msg="Word"))
+            shared.win.word_nav_page.set_title(_("Word"))
             self.set_title(_("Word"))
 
-        if shared.win.lexcion_split_view.get_collapsed():
-            shared.win.lexcion_split_view.set_show_content(True)
+        shared.win.references_list_box.remove_all()
+        for word_row in shared.win.lexicon_list_box:
+            if word_row.word_dict["id"] in self.word_dict["references"]:
+                shared.win.references_list_box.append(ReferenceRow(word_row, True))
+
+        if shared.win.lexicon_split_view.get_collapsed():
+            shared.win.lexicon_split_view.set_show_content(True)
 
         shared.win.set_word_rows_sensetiveness(True)
 
@@ -305,8 +314,14 @@ class WordRow(Adw.ActionRow):
                 if row_index is not None:
                     self.word_dict[attr_name][row_index] = row.get_text()
                     try:
-                        shared.win.loaded_word.set_subtitle(
-                            self.word_dict["translations"][0]
+                        (
+                            shared.win.loaded_word.set_subtitle(
+                                self.word_dict["translations"][0]
+                            )
+                            if self.word_dict["translations"][0] != ""
+                            else shared.win.loaded_word.set_subtitle(
+                                _("No translation yet")
+                            )
                         )
                     except IndexError:
                         self.set_subtitle(_("No translation yet"))
@@ -386,6 +401,14 @@ class WordRow(Adw.ActionRow):
         else:
             shared.win.selected_words.remove(self)
 
+    def get_ref_count(self) -> None:
+        """Sets the reference count label"""
+        if self.ref_count > 0:
+            self.refs_count_label_box.set_visible(True)
+            self.refs_count_label.set_label(str(self.ref_count))
+        else:
+            self.refs_count_label_box.set_visible(False)
+
     @property
     def word(self) -> str:
         return self.word_dict["word"]
@@ -430,3 +453,61 @@ class WordRow(Adw.ActionRow):
                     count += 1
                     break
         return count
+
+
+@Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/ReferenceRow.ui")
+class ReferenceRow(Adw.ActionRow):
+    __gtype_name__ = "ReferenceRow"
+
+    delete_button_box: Gtk.Box = gtc()
+
+    def __init__(self, word_row: WordRow, show_delete_button: bool = False) -> None:
+        super().__init__()
+        self.delete_button_box.set_visible(show_delete_button)
+        self.word_row: WordRow = word_row
+        self.set_title(self.word_row.word)
+        self.set_subtitle(self.word_row.translation)
+
+    def refer_this_word(self, *_args) -> None:
+        """Adds a reference to the word"""
+        shared.win.loaded_word.word_dict["references"].append(
+            self.word_row.word_dict["id"]
+        )
+        if shared.schema.get_boolean("word-autosave"):
+            shared.win.loaded_lexicon.save_lexicon()
+        shared.win.references_dialog_list_box.remove(self)
+
+        shared.win.references_list_box.remove_all()
+        for word_row in shared.win.lexicon_list_box:
+            if (
+                word_row.word_dict["id"]
+                in shared.win.loaded_word.word_dict["references"]
+            ):
+                shared.win.references_list_box.append(ReferenceRow(word_row, True))
+
+        if shared.win.references_dialog_list_box.get_row_at_index(0) is None:
+            shared.win.references_dialog.close()
+        shared.win.update_refs_count()
+
+    def open_this_word(self, *_args) -> None:
+        shared.win.lexicon_list_box.select_row(self.word_row)
+        self.word_row.load_word()
+
+    @Gtk.Template.Callback()
+    def on_clicked(self, *_args) -> None:
+        if shared.win.references_dialog is shared.win.props.visible_dialog:
+            self.refer_this_word()
+        else:
+            self.open_this_word()
+
+    @Gtk.Template.Callback()
+    def on_delete_button_clicked(self, *_args) -> None:
+        """Removes a reference to the word"""
+        shared.win.loaded_word.word_dict["references"].remove(
+            self.word_row.word_dict["id"]
+        )
+
+        if shared.schema.get_boolean("word-autosave"):
+            shared.win.loaded_lexicon.save_lexicon()
+        shared.win.references_list_box.remove(self)
+        shared.win.update_refs_count()

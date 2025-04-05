@@ -18,4 +18,17 @@ template $WordRow : Adw.ActionRow {
       styles ["selection-mode"]
     }
   }
+
+  [suffix]
+  Box refs_count_label_box {
+    valign: center;
+
+    Image {
+      icon-name: "times-referenced-symbolic";
+    }
+
+    Label refs_count_label {
+      styles ["heading"]
+    }
+  }
 }
