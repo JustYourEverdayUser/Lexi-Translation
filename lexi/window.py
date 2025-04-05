@@ -53,6 +53,20 @@ class LexiWindow(Adw.ApplicationWindow):
     references_dialog_list_box: Gtk.ListBox = gtc()
     lexicon_search_entry: Gtk.Entry = gtc()
 
+    noun_check_button: Gtk.CheckButton = gtc()
+    verb_check_button: Gtk.CheckButton = gtc()
+    adjective_check_button: Gtk.CheckButton = gtc()
+    adverb_check_button: Gtk.CheckButton = gtc()
+    pronoun_check_button: Gtk.CheckButton = gtc()
+    preposition_check_button: Gtk.CheckButton = gtc()
+    conjunction_check_button: Gtk.CheckButton = gtc()
+    interjection_check_button: Gtk.CheckButton = gtc()
+    article_check_button: Gtk.CheckButton = gtc()
+    idiom_check_button: Gtk.CheckButton = gtc()
+    clause_check_button: Gtk.CheckButton = gtc()
+    prefix_check_button: Gtk.CheckButton = gtc()
+    suffix_check_button: Gtk.CheckButton = gtc()
+
     ipa_charset_flow_box: Gtk.FlowBox = gtc()
 
     translations_list_box: Gtk.ListBox
@@ -103,6 +117,7 @@ class LexiWindow(Adw.ApplicationWindow):
         for epxander_row in (
             (self.translations_expander_row, "translations"),
             (self.examples_expander_row, "examples"),
+            (self.word_type_expander_row, "word_types"),
             (self.references_expander_row, "references"),
         ):
             for item in epxander_row[0].get_child():
@@ -414,3 +429,33 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_search_entry_changed(self, *_args) -> None:
         """Emits when the search entry is changed"""
         self.lexicon_list_box.invalidate_filter()
+
+    @Gtk.Template.Callback()
+    def on_word_type_check_button_toggled(self, *_args) -> None:
+        """Emits when the word type check button is checked
+
+        Parameters
+        ----------
+        button : Gtk.CheckButton
+            Gtk.CheckButton emitted this method
+        """
+        for (
+            type_row
+        ) in self.word_types_list_box:  # pylint: disable=not-an-iterable,no-member
+            for item in type_row:
+                for _item in item:
+                    for __item in _item:
+                        if isinstance(__item, Gtk.CheckButton):
+                            button = __item
+                            break
+            for attr in dir(self):
+                if attr.endswith("_check_button"):
+                    if getattr(self, attr) == button:
+                        word_type = attr.replace("_check_button", "")
+                        break
+            if button.get_active():
+                self.loaded_word.word_dict["types"][word_type] = True
+            else:
+                self.loaded_word.word_dict["types"][word_type] = False
+        if shared.schema.get_boolean("word-autosave"):
+            self.loaded_lexicon.save_lexicon()

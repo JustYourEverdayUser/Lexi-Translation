@@ -143,7 +143,21 @@ class LexiconRow(Gtk.Box):
             "word": word,
             "translations": translation if translation == [] else [translation],
             "pronunciation": "",
-            "types": [],
+            "types": {
+                "noun": False,
+                "verb": False,
+                "adjective": False,
+                "adverb": False,
+                "pronoun": False,
+                "preposition": False,
+                "conjunction": False,
+                "interjection": False,
+                "article": False,
+                "idiom": False,
+                "clause": False,
+                "prefix": False,
+                "suffix": False,
+            },
             "examples": example if example == [] else [example],
             "references": [],
         }
@@ -242,6 +256,12 @@ class WordRow(Adw.ActionRow):
                             )
                             break
                 expander_row[0].add_row(row)
+
+        for word_type, word_type_val in self.word_dict["types"].items():
+            if word_type_val:
+                getattr(shared.win, word_type + "_check_button").set_active(True)
+            else:
+                getattr(shared.win, word_type + "_check_button").set_active(False)
 
         if self.word != "":
             shared.win.word_nav_page.set_title(self.word)
@@ -457,6 +477,16 @@ class WordRow(Adw.ActionRow):
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/ReferenceRow.ui")
 class ReferenceRow(Adw.ActionRow):
+    """Reference row widget
+
+    Parameters
+    ----------
+    word_row : WordRow
+        The word row to which this reference belongs.
+    show_delete_button : bool
+        Whether to show the delete button or not.
+    """
+
     __gtype_name__ = "ReferenceRow"
 
     delete_button_box: Gtk.Box = gtc()

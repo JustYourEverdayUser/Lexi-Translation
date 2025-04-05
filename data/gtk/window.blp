@@ -251,91 +251,117 @@ template $LexiWindow : Adw.ApplicationWindow {
                           title: _("Noun");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton noun_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Verb");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton verb_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
                         
                         Adw.ActionRow {
                           title: _("Adjective");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton adjective_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Adverb");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton adverb_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Pronoun");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton pronoun_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Preposition");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton preposition_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Conjunction");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton conjunction_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Interjection");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton interjection_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Article");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton article_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Idiom");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton idiom_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Clause");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton clause_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
-                        Adw.
-                        ActionRow {
+
+                        Adw.ActionRow {
                           title: _("Prefix");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton prefix_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
 
                         Adw.ActionRow {
                           title: _("Suffix");
 
                           [suffix]
-                          CheckButton {}
+                          CheckButton suffix_check_button {
+                            toggled => $on_word_type_check_button_toggled();
+                          }
                         }
                       }
 

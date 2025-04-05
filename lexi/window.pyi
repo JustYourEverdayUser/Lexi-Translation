@@ -1,7 +1,7 @@
 # pylint: disable=all
 from typing import Any, Optional
 
-from gi.repository import Adw, Gtk
+from gi.repository import Adw, Gtk, Gio, GLib
 
 from lexi.ui import widgets
 
@@ -11,6 +11,7 @@ class LexiWindow(Adw.ApplicationWindow):
     __gtype_name__: str
 
     # UI components
+    toast_overlay: Adw.ToastOverlay
     no_lexicons_yet: Adw.StatusPage
     no_words_yet: Adw.StatusPage
     lexicon_not_selected: Adw.StatusPage
@@ -42,8 +43,32 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button
     delete_selected_words_button_revealer: Gtk.Revealer
     words_bottom_bar_revealer: Gtk.Revealer
+    references_dialog: Adw.Dialog
+    references_dialog_list_box: Gtk.ListBox
+    lexicon_search_entry: Gtk.Entry
+
+    noun_check_button: Gtk.CheckButton
+    verb_check_button: Gtk.CheckButton
+    adjective_check_button: Gtk.CheckButton
+    adverb_check_button: Gtk.CheckButton
+    pronoun_check_button: Gtk.CheckButton
+    preposition_check_button: Gtk.CheckButton
+    conjunction_check_button: Gtk.CheckButton
+    interjection_check_button: Gtk.CheckButton
+    article_check_button: Gtk.CheckButton
+    idiom_check_button: Gtk.CheckButton
+    clause_check_button: Gtk.CheckButton
+    prefix_check_button: Gtk.CheckButton
+    suffix_check_button: Gtk.CheckButton
 
     ipa_charset_flow_box: Gtk.FlowBox
+
+    translations_list_box: Gtk.ListBox
+    examples_list_box: Gtk.ListBox
+    references_list_box: Gtk.ListBox
+
+    sort_method: str
+    sort_type: str
 
     # Variables
     loaded_lexicon: Optional[widgets.LexiconRow]
@@ -54,6 +79,14 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_key_pressed(
         self, _controller: Gtk.EventControllerKey, keyval: int, *_args: Any
     ) -> None: ...
+    def on_sorting_method_changed(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None: ...
+    def on_sorting_type_changed(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None: ...
+    def sort_words(self, row1: widgets.WordRow, row2: widgets.WordRow) -> int: ...
+    def filter_words(self, row: Gtk.ListBoxRow) -> bool: ...
     def on_toggle_sidebar_action(self, *_args: Any) -> None: ...
     def on_toggle_search_action(self, *_args: Any) -> None: ...
     def on_add_lexicon_entry_changed(self, row: Adw.EntryRow) -> None: ...
@@ -62,11 +95,15 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_lexicon_selected(
         self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow
     ) -> None: ...
+    def update_refs_count(self) -> None: ...
     def on_word_entry_changed(self, row: Adw.EntryRow) -> None: ...
     def on_pronunciation_entry_changed(self, row: Adw.EntryRow) -> None: ...
     def on_word_list_prop_button_pressed(self, button: Gtk.Button) -> None: ...
+    def on_references_add_button_pressed(self, *_args: Any) -> None: ...
     def on_add_word_action(self, *_args: Any) -> None: ...
     def selection_mode_button_toggled(self, button: Gtk.ToggleButton) -> None: ...
     def set_selection_mode(self, enabled: bool) -> None: ...
     def on_delete_selected_words_action(self, *_args: Any) -> None: ...
     def set_word_rows_sensetiveness(self, active: bool) -> None: ...
+    def on_search_entry_changed(self, *_args: Any) -> None: ...
+    def on_word_type_check_button_toggled(self, *_args: Any) -> None: ...

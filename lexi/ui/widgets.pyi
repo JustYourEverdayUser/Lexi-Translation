@@ -1,5 +1,5 @@
 # pylint: disable=all
-from typing import Any, Dict, TextIO
+from typing import Any, Dict
 
 from gi.repository import Adw, Gtk
 
@@ -39,6 +39,7 @@ class LexiconRow(Gtk.Box):
 
 class WordRow(Adw.ActionRow):
     """Word row widget
+
     Parameters
     ----------
     word : dict
@@ -48,6 +49,8 @@ class WordRow(Adw.ActionRow):
     __gtype_name__: str
     check_button: Gtk.CheckButton
     check_button_revealer: Gtk.Revealer
+    refs_count_label_box: Gtk.Box
+    refs_count_label: Gtk.Label
     lexicon: LexiconRow
     word_dict: Dict[str, Any]
 
@@ -59,6 +62,7 @@ class WordRow(Adw.ActionRow):
     def delete(self) -> None: ...
     def do_check_button(self, *_args) -> None: ...
     def on_check_button_toggled(self, button: Gtk.CheckButton) -> None: ...
+    def get_ref_count(self) -> None: ...
     @property
     def word(self) -> str: ...
     @word.setter
@@ -67,3 +71,27 @@ class WordRow(Adw.ActionRow):
     def pronunciation(self) -> str: ...
     @pronunciation.setter
     def pronunciation(self, pronunciation: str) -> None: ...
+    @property
+    def translation(self) -> str: ...
+    @property
+    def ref_count(self) -> int: ...
+
+class ReferenceRow(Adw.ActionRow):
+    """Reference row widget
+
+    Parameters
+    ----------
+    word_row : WordRow
+        The word row to which this reference belongs.
+    show_delete_button : bool
+        Whether to show the delete button or not.
+    """
+
+    __gtype_name__: str
+    delete_button_box: Gtk.Box
+
+    def __init__(self, word_row: WordRow, show_delete_button: bool = False) -> None: ...
+    def refer_this_word(self, *_args) -> None: ...
+    def open_this_word(self, *_args) -> None: ...
+    def on_clicked(self, *_args) -> None: ...
+    def on_delete_button_clicked(self, *_args) -> None: ...
