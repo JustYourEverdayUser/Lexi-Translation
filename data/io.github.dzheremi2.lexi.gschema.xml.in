@@ -16,5 +16,20 @@
     <key name="window-maximized" type="b">
       <default>false</default>
     </key>
+    <key name="sort-method" type="s">
+      <choices>
+        <choice value="up" />
+        <choice value="down" />
+      </choices>
+      <default>"up"</default>
+    </key>
+    <key name="sort-type" type="s">
+      <choices>
+        <choice value="word" />
+        <choice value="first_trnslt" />
+        <choice value="by_ref" />
+      </choices>
+      <default>"word"</default>
+    </key>
   </schema>
 </schemalist>

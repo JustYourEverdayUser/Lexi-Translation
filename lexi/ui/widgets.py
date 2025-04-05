@@ -153,6 +153,7 @@ class LexiconRow(Gtk.Box):
         shared.win.lexicon_scrolled_window.set_child(shared.win.lexicon_list_box)
         shared.win.words_bottom_bar_revealer.set_reveal_child(True)
         self.add_word_dialog.close()
+        shared.win.lexicon_list_box.invalidate_sort()
 
     @Gtk.Template.Callback()
     def check_if_word_is_empty(self, row: Adw.EntryRow) -> None:
@@ -412,3 +413,20 @@ class WordRow(Adw.ActionRow):
 
         if shared.schema.get_boolean("word-autosave"):
             self.lexicon.save_lexicon()
+
+    @property
+    def translation(self) -> str:
+        try:
+            return self.word_dict["translations"][0]
+        except IndexError:
+            return ""
+
+    @property
+    def ref_count(self) -> int:
+        count: int = 0
+        for row in shared.win.lexicon_list_box:
+            for ref in row.word_dict["references"]:
+                if ref == self.word_dict["id"]:
+                    count += 1
+                    break
+        return count

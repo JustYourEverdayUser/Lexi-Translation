@@ -2,7 +2,7 @@ import os
 import random
 import string
 
-from gi.repository import Adw, Gdk, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
 from lexi.ui import widgets
@@ -51,6 +51,9 @@ class LexiWindow(Adw.ApplicationWindow):
 
     ipa_charset_flow_box: Gtk.FlowBox = gtc()
 
+    sort_method: str = shared.state_schema.get_string("sort-method")
+    sort_type: str = shared.state_schema.get_string("sort-type")
+
     # Variables to store the currently loaded lexicon and word
     loaded_lexicon: widgets.LexiconRow = None
     loaded_word: widgets.WordRow = None
@@ -78,6 +81,7 @@ class LexiWindow(Adw.ApplicationWindow):
         self.add_controller(key_kapture_controller)
 
         # Connections
+        self.lexicon_list_box.set_sort_func(self.sort_words)
         self.search_bar.connect_entry(self.search_entry)
         self.add_lexicon_popover_entry_row.connect(
             "changed", self.on_add_lexicon_entry_changed
@@ -120,6 +124,53 @@ class LexiWindow(Adw.ApplicationWindow):
             # Handle Escape key press
             if self.selection_mode_toggle_button.get_active():
                 self.selection_mode_toggle_button.set_active(False)
+
+    def on_sorting_method_changed(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None:
+        action.set_state(state)
+        self.sort_method = str(state).strip("'")
+        self.lexicon_list_box.invalidate_sort()
+        shared.state_schema.set_string("sort-method", self.sort_method)
+
+    def on_sorting_type_changed(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None:
+        action.set_state(state)
+        self.sort_type = str(state).strip("'")
+        self.lexicon_list_box.invalidate_sort()
+        shared.state_schema.set_string("sort-type", self.sort_type)
+
+    # pylint: disable=no-else-return
+    def sort_words(self, row1: Gtk.ListBoxRow, row2: Gtk.ListBoxRow) -> int:
+        """Sorts words in the list box based on the selected method and type"""
+        sortable1: str | int
+        sortable2: str | int
+
+        if self.sort_type == "word":
+            sortable1 = row1.word
+            sortable2 = row2.word
+        elif self.sort_type == "first_trnslt":
+            sortable1 = row1.translation
+            sortable2 = row2.translation
+        else:
+            sortable1 = row1.ref_count
+            sortable2 = row2.ref_count
+
+        if self.sort_method == "up":
+            if sortable1 > sortable2:
+                return 1
+            elif sortable1 < sortable2:
+                return -1
+            else:
+                return 0
+        else:
+            if sortable1 < sortable2:
+                return 1
+            elif sortable1 > sortable2:
+                return -1
+            else:
+                return 0
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
