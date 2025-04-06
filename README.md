@@ -42,8 +42,6 @@ You can see future plans on Projects page of this repo on [Lexi roadmap.](https:
 
 If you have an idea or you know a bug, please, open an [issue](https://github.com/Dzheremi2/Lexi/issues) with you idea/bug and it will be added to roadmap.
 
-If you want the app to support more file formats, create a feature request about that and attach a sample file.
-
 ### Code of Conduct
 The project follows the [GNOME Code of Conduct](https://conduct.gnome.org)
 
