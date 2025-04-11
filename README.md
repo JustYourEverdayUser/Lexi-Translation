@@ -8,6 +8,7 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/Dzheremi2/Lexi?style=for-the-badge&color=000B3C&logo=github)](https://github.com/Dzheremi2/Lexi/releases/latest)
 <!-- <a href="https://flathub.org/apps/io.github.dzheremi2.lexi"><img alt="Flathub Version" src="https://img.shields.io/flathub/v/io.github.dzheremi2.lexi?style=for-the-badge&logo=flathub&color=lightblue"></a> -->
+[![Weblate project translated](https://img.shields.io/weblate/progress/lexi?style=for-the-badge&logo=weblate&logoColor=white&logoSize=auto&color=magenta&cacheSeconds=600)](https://hosted.weblate.org/projects/lexi/lexi/)
 <a href="https://github.com/Dzheremi2/Lexi/actions"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Dzheremi2/Lexi/.github%2Fworkflows%2Fbundle.yml?style=for-the-badge&logo=github"></a>
 [![GitHub License](https://img.shields.io/github/license/Dzheremi2/Lexi?style=for-the-badge&color=C25D00)](https://github.com/Dzheremi2/Lexi/blob/master/LICENSE)
 
@@ -36,6 +37,14 @@ If you want to download a devel build, you can do it by downloading it from [Git
 
 >[!CAUTION]
 >Devel builds may be unstable or don't even launch. Use it at your own risk
+
+### Translation
+You can help project to be internationalized using [Hosted Weblate](https://hosted.weblate.org/projects/lexi/lexi/)
+
+##### Translation status
+
+[![Состояние перевода](https://hosted.weblate.org/widget/lexi/lexi/287x66-black.png)](https://hosted.weblate.org/engage/lexi/)
+[![Translate state](https://hosted.weblate.org/widget/lexi/lexi/multi-auto.svg)](https://hosted.weblate.org/engage/lexi/)
 
 ### Plans
 You can see future plans on Projects page of this repo on [Lexi roadmap.](https://github.com/users/Dzheremi2/projects/3)
