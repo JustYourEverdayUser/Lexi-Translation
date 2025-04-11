@@ -175,3 +175,6 @@ builddir
 .flatpak
 _build
 subprojects/blueprint-compiler
+
+io.github.dzheremi2.lexi.Devel.flatpak
+io.github.dzheremi2.lexi.flatpak

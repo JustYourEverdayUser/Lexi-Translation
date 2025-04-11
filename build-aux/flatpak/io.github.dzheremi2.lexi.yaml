@@ -9,7 +9,6 @@ finish-args:
   - --device=dri
   - --socket=wayland
   - --filesystem=host
-  - --filesystem=xdg-run/gvfsd
 cleanup:
   - /include
   - /lib/pkgconfig

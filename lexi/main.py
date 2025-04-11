@@ -1,7 +1,13 @@
 import os
 import sys
 
+import gi
 import yaml
+
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
+
+# pylint: disable=wrong-import-position
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared

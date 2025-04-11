@@ -1,5 +1,6 @@
 #!@PYTHON@
 
+# pylint: disable=all
 import os
 import sys
 import signal
@@ -13,6 +14,7 @@ localedir = '@localedir@'
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 locale.bindtextdomain('Lexi', localedir)
+locale.textdomain('Lexi')
 gettext.install('Lexi', localedir)
 
 if __name__ == '__main__':
