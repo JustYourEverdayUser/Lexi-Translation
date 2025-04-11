@@ -1,7 +1,7 @@
 # pylint: disable=all
 from typing import Any, Optional
 
-from gi.repository import Adw, Gtk, Gio, GLib
+from gi.repository import Adw, Gio, GLib, Gtk
 
 from lexi.ui import widgets
 
@@ -10,28 +10,37 @@ class LexiWindow(Adw.ApplicationWindow):
 
     __gtype_name__: str
 
-    # UI components
-    toast_overlay: Adw.ToastOverlay
+    # Status pages
     no_lexicons_yet: Adw.StatusPage
     no_words_yet: Adw.StatusPage
     lexicon_not_selected: Adw.StatusPage
 
-    add_lexicon_popover: Gtk.Popover
-    add_lexicon_popover_entry_row: Adw.EntryRow
+    # UI components
+    toast_overlay: Adw.ToastOverlay
 
-    lexicons_scrolled_window: Gtk.ScrolledWindow
-    lexicons_list_box: Gtk.ListBox
-    lexicon_scrolled_window: Gtk.ScrolledWindow
-    lexicon_list_box: Gtk.ListBox
+    # Navigation view and pages
     navigation_view: Adw.NavigationView
-    overlay_split_view: Adw.OverlaySplitView
-    lexicon_split_view: Adw.NavigationSplitView
-    search_bar: Gtk.SearchBar
-    search_entry: Gtk.SearchEntry
-
     lexicon_nav_page: Adw.NavigationPage
     word_nav_page: Adw.NavigationPage
 
+    # Overlay and split views
+    overlay_split_view: Adw.OverlaySplitView
+    lexicon_split_view: Adw.NavigationSplitView
+
+    # Sidebar components
+    lexicons_scrolled_window: Gtk.ScrolledWindow
+    lexicons_list_box: Gtk.ListBox
+    add_lexicon_popover: Gtk.Popover
+    add_lexicon_popover_entry_row: Adw.EntryRow
+    search_bar: Gtk.SearchBar
+    search_entry: Gtk.SearchEntry
+
+    # Lexicon-related components
+    lexicon_scrolled_window: Gtk.ScrolledWindow
+    lexicon_list_box: Gtk.ListBox
+    lexicon_search_entry: Gtk.Entry
+
+    # Word-related components
     word_entry_row: Adw.EntryRow
     pronunciation_entry_row: Adw.EntryRow
     translations_expander_row: Adw.ExpanderRow
@@ -43,10 +52,12 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button
     delete_selected_words_button_revealer: Gtk.Revealer
     words_bottom_bar_revealer: Gtk.Revealer
+
+    # References dialog
     references_dialog: Adw.Dialog
     references_dialog_list_box: Gtk.ListBox
-    lexicon_search_entry: Gtk.Entry
 
+    # Word type check buttons
     noun_check_button: Gtk.CheckButton
     verb_check_button: Gtk.CheckButton
     adjective_check_button: Gtk.CheckButton
@@ -61,6 +72,7 @@ class LexiWindow(Adw.ApplicationWindow):
     prefix_check_button: Gtk.CheckButton
     suffix_check_button: Gtk.CheckButton
 
+    # IPA charset flow box
     ipa_charset_flow_box: Gtk.FlowBox
 
     translations_list_box: Gtk.ListBox

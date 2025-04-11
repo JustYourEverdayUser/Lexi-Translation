@@ -16,28 +16,37 @@ class LexiWindow(Adw.ApplicationWindow):
 
     gtc = Gtk.Template.Child
 
-    # Define UI components as class attributes
-    toast_overlay: Adw.ToastOverlay = gtc()
+    # Status pages
     no_lexicons_yet: Adw.StatusPage = gtc()
     no_words_yet: Adw.StatusPage = gtc()
     lexicon_not_selected: Adw.StatusPage = gtc()
 
-    add_lexicon_popover: Gtk.Popover = gtc()
-    add_lexicon_popover_entry_row: Adw.EntryRow = gtc()
+    # Toast overlay
+    toast_overlay: Adw.ToastOverlay = gtc()
 
-    lexicons_scrolled_window: Gtk.ScrolledWindow = gtc()
-    lexicons_list_box: Gtk.ListBox = gtc()
-    lexicon_scrolled_window: Gtk.ScrolledWindow = gtc()
-    lexicon_list_box: Gtk.ListBox = gtc()
+    # Navigation view and pages
     navigation_view: Adw.NavigationView = gtc()
-    overlay_split_view: Adw.OverlaySplitView = gtc()
-    lexicon_split_view: Adw.NavigationSplitView = gtc()
-    search_bar: Gtk.SearchBar = gtc()
-    search_entry: Gtk.SearchEntry = gtc()
-
     lexicon_nav_page: Adw.NavigationPage = gtc()
     word_nav_page: Adw.NavigationPage = gtc()
 
+    # Overlay and split views
+    overlay_split_view: Adw.OverlaySplitView = gtc()
+    lexicon_split_view: Adw.NavigationSplitView = gtc()
+
+    # Sidebar components
+    lexicons_scrolled_window: Gtk.ScrolledWindow = gtc()
+    lexicons_list_box: Gtk.ListBox = gtc()
+    add_lexicon_popover: Gtk.Popover = gtc()
+    add_lexicon_popover_entry_row: Adw.EntryRow = gtc()
+    search_bar: Gtk.SearchBar = gtc()
+    search_entry: Gtk.SearchEntry = gtc()
+
+    # Lexicon-related components
+    lexicon_scrolled_window: Gtk.ScrolledWindow = gtc()
+    lexicon_list_box: Gtk.ListBox = gtc()
+    lexicon_search_entry: Gtk.Entry = gtc()
+
+    # Word-related components
     word_entry_row: Adw.EntryRow = gtc()
     pronunciation_entry_row: Adw.EntryRow = gtc()
     translations_expander_row: Adw.ExpanderRow = gtc()
@@ -49,10 +58,12 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button = gtc()
     delete_selected_words_button_revealer: Gtk.Revealer = gtc()
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
+
+    # References dialog
     references_dialog: Adw.Dialog = gtc()
     references_dialog_list_box: Gtk.ListBox = gtc()
-    lexicon_search_entry: Gtk.Entry = gtc()
 
+    # Word type check buttons
     noun_check_button: Gtk.CheckButton = gtc()
     verb_check_button: Gtk.CheckButton = gtc()
     adjective_check_button: Gtk.CheckButton = gtc()
@@ -67,6 +78,7 @@ class LexiWindow(Adw.ApplicationWindow):
     prefix_check_button: Gtk.CheckButton = gtc()
     suffix_check_button: Gtk.CheckButton = gtc()
 
+    # IPA charset flow box
     ipa_charset_flow_box: Gtk.FlowBox = gtc()
 
     translations_list_box: Gtk.ListBox
