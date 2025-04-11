@@ -362,7 +362,7 @@ class WordRow(Adw.ActionRow):
                 if row_index is not None:
                     expander_row.remove(row)
                     del self.word_dict[attr_name][row_index]
-                    if shared.schema.get_boolean("word-autosave"):
+                    if enums.Schema.WORD_AUTOSAVE():
                         self.lexicon.save_lexicon()
                 return
 
@@ -401,7 +401,7 @@ class WordRow(Adw.ActionRow):
                         )
                     except IndexError:
                         self.set_subtitle(_("No translation yet"))
-                    if shared.schema.get_boolean("word-autosave"):
+                    if enums.Schema.WORD_AUTOSAVE():
                         self.lexicon.save_lexicon()
                 return
 
@@ -437,7 +437,7 @@ class WordRow(Adw.ActionRow):
                 self.word_dict[attr_name].append("")
                 text.connect("changed", self.update_word)
                 text.connect("backspace", self.remove_list_prop_on_backspace)
-                if shared.schema.get_boolean("word-autosave"):
+                if enums.Schema.WORD_AUTOSAVE():
                     self.lexicon.save_lexicon()
                 return
 
@@ -499,7 +499,7 @@ class WordRow(Adw.ActionRow):
             shared.win.word_nav_page.set_title(_("Word"))
             self.set_title(_("Word"))
 
-        if shared.schema.get_boolean("word-autosave"):
+        if enums.Schema.WORD_AUTOSAVE():
             self.lexicon.save_lexicon()
 
     @property
@@ -510,7 +510,7 @@ class WordRow(Adw.ActionRow):
     def pronunciation(self, pronunciation: str) -> None:
         self.word_dict["pronunciation"] = pronunciation
 
-        if shared.schema.get_boolean("word-autosave"):
+        if enums.Schema.WORD_AUTOSAVE():
             self.lexicon.save_lexicon()
 
     @property
@@ -570,7 +570,7 @@ class ReferenceRow(Adw.ActionRow):
         shared.win.loaded_word.word_dict["references"].append(
             self.word_row.word_dict["id"]
         )
-        if shared.schema.get_boolean("word-autosave"):
+        if enums.Schema.WORD_AUTOSAVE():
             shared.win.loaded_lexicon.save_lexicon()
         shared.win.references_dialog_list_box.remove(self)
 
@@ -606,7 +606,7 @@ class ReferenceRow(Adw.ActionRow):
             self.word_row.word_dict["id"]
         )
 
-        if shared.schema.get_boolean("word-autosave"):
+        if enums.Schema.WORD_AUTOSAVE():
             shared.win.loaded_lexicon.save_lexicon()
         shared.win.references_list_box.remove(self)
         shared.win.update_refs_count()

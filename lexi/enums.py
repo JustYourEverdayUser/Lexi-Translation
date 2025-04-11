@@ -1,5 +1,8 @@
 from enum import Enum
 
+from lexi import shared
+
+
 class Icon(str, Enum):
     """Enum class with all app icons
 
@@ -32,6 +35,7 @@ class Icon(str, Enum):
 
     def __str__(self) -> str:
         return self.value
+
 
 class WordType(str, Enum):
     """Enum class with all word types in i18n format
@@ -69,3 +73,16 @@ class WordType(str, Enum):
 
     def __str__(self) -> str:
         return self.value
+
+# pylint: disable=invalid-name
+class Schema:
+    """Enum for all Lexi gschema values
+
+    ::
+
+        WORD_AUTOSAVE() : bool
+    """
+
+    @staticmethod
+    def WORD_AUTOSAVE() -> bool:
+        return shared.schema.get_boolean("word-autosave")

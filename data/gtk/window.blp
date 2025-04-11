@@ -207,6 +207,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                   [start]
                   Button save_word_button {
                     label: _("Save");
+                    clicked => $on_save_word_button_clicked();
 
                     styles ["suggested-action"]
                   }

@@ -4,8 +4,9 @@ import string
 
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
-from lexi import shared
+from lexi import enums, shared
 from lexi.ui import widgets
+from lexi.ui.Preferences import LexiPreferences
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/window.ui")
@@ -117,7 +118,7 @@ class LexiWindow(Adw.ApplicationWindow):
         if shared.APP_ID.endswith("Devel"):
             self.add_css_class("devel")
 
-        if shared.schema.get_boolean("word-autosave"):
+        if enums.Schema.WORD_AUTOSAVE():
             self.save_word_button.remove_css_class("suggested-action")
             self.save_word_button.set_tooltip_text(_("Word autosave is enabled"))
             self.save_word_button.set_sensitive(False)
@@ -622,7 +623,7 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.loaded_word.word_dict["types"][word_type] = True
             else:
                 self.loaded_word.word_dict["types"][word_type] = False
-        if shared.schema.get_boolean("word-autosave"):
+        if enums.Schema.WORD_AUTOSAVE():
             self.loaded_lexicon.save_lexicon()
 
         self.loaded_word.generate_word_type()
@@ -680,3 +681,16 @@ class LexiWindow(Adw.ApplicationWindow):
         for attr in dir(self):
             if attr.endswith("_check_button_filter_dialog"):
                 getattr(self, attr).set_active(False)
+
+    def on_show_preferences_action(self, *_args) -> None:
+        """Presents Preferences dialog to user"""
+        if LexiPreferences.opened:
+            return
+        preferences = LexiPreferences()
+        preferences.present(self)
+
+    @Gtk.Template.Callback()
+    def on_save_word_button_clicked(self, *_args) -> None:
+        """Perform loaded lexicon save and inform user"""
+        self.loaded_word.lexicon.save_lexicon()
+        self.toast_overlay.add_toast(Adw.Toast(title=_("Word saved"), timeout=2))

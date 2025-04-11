@@ -34,6 +34,7 @@ class LexiApplication(Adw.Application):
                 # fmt: off
                 ("quit",("<primary>q","<primary>w",),),
                 ("toggle_sidebar",("F9",), shared.win),
+                ("show_preferences", ("<primary>comma",), shared.win),
                 ("about", )
                 # fmt: on
             }
@@ -118,6 +119,9 @@ class LexiApplication(Adw.Application):
         # Translators: Add Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog. PLEASE, DON'T DELETE PREVIOUS TRANSLATORS CREDITS AND SEPARATE YOURSELF BY NEWLINE `\n` METASYMBOL
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_copyright("© 2025 Dzheremi")
+        dialog.add_acknowledgement_section(
+            None, ["heliguy4599 (Warehouse) https://github.com/flattool/warehouse"]
+        )
         if shared.PREFIX.endswith("Devel"):
             dialog.set_version("Devel")
 
