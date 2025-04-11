@@ -457,6 +457,8 @@ class LexiWindow(Adw.ApplicationWindow):
         self.update_refs_count()
         self.lexicon_nav_page.set_title(row.get_child().name)
         self.loaded_lexicon = row.get_child()
+        if self.overlay_split_view.get_collapsed():
+            self.overlay_split_view.set_show_sidebar(False)
 
     def update_refs_count(self) -> None:
         """
@@ -634,7 +636,7 @@ class LexiWindow(Adw.ApplicationWindow):
         self.lexicons_list_box.invalidate_filter()
 
     @Gtk.Template.Callback()
-    def on_filter_button_clicked(self, *_args) -> None:
+    def on_filter_button_clicked_action(self, *_args) -> None:
         """
         Handle the click of the filter button.
         """
@@ -692,3 +694,8 @@ class LexiWindow(Adw.ApplicationWindow):
         """Perform loaded lexicon save and inform user"""
         self.loaded_word.lexicon.save_lexicon()
         self.toast_overlay.add_toast(Adw.Toast(title=_("Word saved"), timeout=2))
+
+    def on_search_action(self, *_args) -> None:
+        """Focus words search entry on `Ctrl+F` press"""
+        if self.words_bottom_bar_revealer.get_reveal_child():
+            self.lexicon_search_entry.grab_focus()

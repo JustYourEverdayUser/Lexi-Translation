@@ -132,7 +132,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button {
                     icon-name: "filter-words-symbolic";
                     tooltip-text: _("Filter words by their type");
-                    clicked => $on_filter_button_clicked();
+                    clicked => $on_filter_button_clicked_action();
                   }
                 }
 
@@ -735,6 +735,16 @@ ShortcutsWindow help_overlay {
       ShortcutsShortcut {
         title: _("Quit");
         action-name: "app.quit";
+      }
+
+      ShortcutsShortcut {
+        title: _("Search words");
+        action-name: "win.search";
+      }
+
+      ShortcutsShortcut {
+        title: _("Show filter dialog");
+        action-name: "win.filter_button_clicked";
       }
 
       ShortcutsShortcut {
