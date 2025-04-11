@@ -563,10 +563,8 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_delete_selected_words_action(self, *_args) -> None:
-        """
-        Delete selected words.
-        """
-        for row in self.selected_words:
+        """Delete selected words."""
+        for row in self.selected_words.copy():
             self.selected_words.remove(row)
             row.delete()
         self.set_selection_mode(False)
