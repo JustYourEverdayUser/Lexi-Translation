@@ -48,40 +48,9 @@
     <display_length compare="ge">360</display_length>
   </requires>
 
-  <screenshots>
-    <screenshot type="default" xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/libW.png</image>
-      <caption>Library</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/syncW.png</image>
-      <caption>Lyrics syncing page</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/syncCW.png</image>
-      <caption>Lyrics syncing page on smaller display</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/lrclibW.png</image>
-      <caption>LRClib import dialog</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/libB.png</image>
-      <caption>Library</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/syncB.png</image>
-      <caption>Lyrics syncing page</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/syncCB.png</image>
-      <caption>Lyrics syncing page on smaller display</caption>
-    </screenshot>
-    <screenshot xml:lang="en">
-      <image>https://raw.githubusercontent.com/Dzheremi2/Chronograph/refs/heads/master/docs/screenshots/lrclibB.png</image>
-      <caption>LRClib import dialog</caption>
-    </screenshot>
-  </screenshots>
+  <!-- <screenshots>
+    
+  </screenshots> -->
 
   <releases>
     <release version="0.1" date="2024-11-15">
