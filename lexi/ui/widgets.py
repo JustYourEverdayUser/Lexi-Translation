@@ -323,7 +323,7 @@ class WordRow(Adw.ActionRow):
     def generate_word_type(self) -> None:
         """Generate the word type subtitle and toggle check buttons."""
         word_type_subtitle: str = ""
-        for word_type, word_type_val in self.word_dict["types"].items():
+        for word_type, word_type_val in self.word_dict["types"].copy().items():
             if word_type_val:
                 getattr(shared.win, word_type + "_check_button").set_active(True)
                 word_type_subtitle += enums.WordType[word_type.upper()] + ", "

@@ -66,6 +66,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     icon-name: "app-menu-symbolic";
                     tooltip-text: _("App menu");
                     menu-model: app_menu;
+                    primary: true;
                   }
                 }
               }
@@ -412,41 +413,41 @@ template $LexiWindow : Adw.ApplicationWindow {
                   }
                 }
 
-                [bottom]
-                Adw.BottomSheet ipa_bottom_sheet {
-                  modal: false;
-                  sheet: Adw.ToolbarView {
-                    [top]
-                    Adw.HeaderBar {
-                      decoration-layout: ":close";
-                    }
+                // [bottom]
+                // Adw.BottomSheet ipa_bottom_sheet {
+                //   modal: false;
+                //   sheet: Adw.ToolbarView {
+                //     [top]
+                //     Adw.HeaderBar {
+                //       decoration-layout: ":close";
+                //     }
 
-                    ScrolledWindow {
-                      propagate-natural-height: true;
-                      propagate-natural-width: true;
+                //     ScrolledWindow {
+                //       propagate-natural-height: true;
+                //       propagate-natural-width: true;
 
-                      FlowBox ipa_charset_flow_box {
-                        homogeneous: true;
-                        valign: start;
-                        max-children-per-line: 1000;
-                        halign: center;
-                        row-spacing: 6;
-                        column-spacing: 4;
-                        margin-bottom: 8;
-                        margin-end: 8;
-                        margin-start: 8;
-                        margin-top: 8;
-                      }
-                    }
-                  };
-                  bottom-bar: Adw.Bin {
-                    height-request: 40;
+                //       FlowBox ipa_charset_flow_box {
+                //         homogeneous: true;
+                //         valign: start;
+                //         max-children-per-line: 1000;
+                //         halign: center;
+                //         row-spacing: 6;
+                //         column-spacing: 4;
+                //         margin-bottom: 8;
+                //         margin-end: 8;
+                //         margin-start: 8;
+                //         margin-top: 8;
+                //       }
+                //     }
+                //   };
+                //   bottom-bar: Adw.Bin {
+                //     height-request: 40;
 
-                    Label {
-                      label: _("IPA Characters");
-                    }
-                  };
-                }
+                //     Label {
+                //       label: _("IPA Characters");
+                //     }
+                //   };
+                // }
               }
             }
           }
@@ -717,6 +718,48 @@ Popover add_lexicon_popover {
     Adw.EntryRow add_lexicon_popover_entry_row {
       title: _("Lexicon name");
       show-apply-button: true;
+    }
+  }
+}
+
+ShortcutsWindow help_overlay {
+  modal: true;
+
+  ShortcutsSection {
+    section-name: "Shortcuts";
+    max-height: 10;
+
+    ShortcutsGroup {
+      title: _("General");
+
+      ShortcutsShortcut {
+        title: _("Quit");
+        action-name: "app.quit";
+      }
+
+      ShortcutsShortcut {
+        title: _("Show preferences");
+        action-name: "win.show_preferences";
+      }
+
+      ShortcutsShortcut {
+        title: _("Keybindings");
+        action-name: "win.show-help-overlay";
+      }
+
+      ShortcutsShortcut {
+        title: _("Toggle sidebar");
+        action-name: "win.toggle_sidebar";
+      }
+    }
+
+    ShortcutsGroup {
+      title: _("Editing");
+
+      ShortcutsShortcut {
+        title: _("Add new word");
+        action-name: "win.add_word";
+      }
     }
   }
 }

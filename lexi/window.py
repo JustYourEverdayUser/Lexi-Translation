@@ -97,7 +97,10 @@ class LexiWindow(Adw.ApplicationWindow):
     suffix_check_button: Gtk.CheckButton = gtc()
 
     # IPA charset flow box
-    ipa_charset_flow_box: Gtk.FlowBox = gtc()
+    # ipa_charset_flow_box: Gtk.FlowBox = gtc()
+
+    # Keybindings overlay
+    help_overlay: Gtk.ShortcutsWindow = gtc()
 
     translations_list_box: Gtk.ListBox
     examples_list_box: Gtk.ListBox
@@ -117,6 +120,8 @@ class LexiWindow(Adw.ApplicationWindow):
         # Add a CSS class for development mode
         if shared.APP_ID.endswith("Devel"):
             self.add_css_class("devel")
+
+        self.set_help_overlay(self.help_overlay)
 
         if enums.Schema.WORD_AUTOSAVE():
             self.save_word_button.remove_css_class("suggested-action")
@@ -522,7 +527,8 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         Show the add word dialog.
         """
-        self.loaded_lexicon.show_add_word_dialog()
+        if self.loaded_lexicon is not None:
+            self.loaded_lexicon.show_add_word_dialog()
 
     @Gtk.Template.Callback()
     def selection_mode_button_toggled(self, button: Gtk.ToggleButton) -> None:
@@ -601,26 +607,20 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_word_type_check_button_toggled(self, *_args) -> None:
         """
-        Handle toggling of word type check buttons.
+        Handle toggling of word type check buttons for the currently loaded word.
         """
-        for (
-            type_row
-        ) in self.word_types_list_box:  # pylint: disable=not-an-iterable,no-member
-            for item in type_row:
-                for _item in item:
-                    for __item in _item:
-                        if isinstance(__item, Gtk.CheckButton):
-                            button = __item
-                            break
-            for attr in dir(self):
-                if attr.endswith("_check_button"):
-                    if getattr(self, attr) == button:
-                        word_type = attr.replace("_check_button", "")
-                        break
-            if button.get_active():
-                self.loaded_word.word_dict["types"][word_type] = True
-            else:
-                self.loaded_word.word_dict["types"][word_type] = False
+        if not self.loaded_word:
+            return  # Ensure a word is loaded before proceeding
+
+        for attr in dir(self):
+            if attr.endswith("_check_button"):
+                button = getattr(self, attr)
+                word_type = attr.replace("_check_button", "")
+                if button.get_active():
+                    self.loaded_word.word_dict["types"][word_type] = True
+                else:
+                    self.loaded_word.word_dict["types"][word_type] = False
+
         if enums.Schema.WORD_AUTOSAVE():
             self.loaded_lexicon.save_lexicon()
 

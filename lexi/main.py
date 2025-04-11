@@ -5,7 +5,6 @@ import yaml
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
-from lexi.ui.IPA import generate_table
 from lexi.window import LexiWindow
 
 
@@ -27,7 +26,7 @@ class LexiApplication(Adw.Application):
         win = self.props.active_window  # pylint: disable=no-member
         if not win:
             shared.win = LexiWindow(application=self)
-            generate_table()
+            # generate_table()
 
         self.create_actions(
             {
@@ -35,10 +34,12 @@ class LexiApplication(Adw.Application):
                 ("quit",("<primary>q","<primary>w",),),
                 ("toggle_sidebar",("F9",), shared.win),
                 ("show_preferences", ("<primary>comma",), shared.win),
+                ("add_word", ("<primary>n",), shared.win),
                 ("about", )
                 # fmt: on
             }
         )
+        self.set_accels_for_action("win.show-help-overlay", ("<primary>question",))
 
         sort_method = Gio.SimpleAction.new_stateful(
             "sort_method",
