@@ -1,6 +1,7 @@
 import os
 import sys
 
+import yaml
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
@@ -22,6 +23,7 @@ class LexiApplication(Adw.Application):
 
     # pylint: disable=unused-variable
     def do_activate(self) -> None:  # pylint: disable=arguments-differ
+        """Action emitted on app launch"""
         win = self.props.active_window  # pylint: disable=no-member
         if not win:
             shared.win = LexiWindow(application=self)
@@ -72,6 +74,18 @@ class LexiApplication(Adw.Application):
     def on_quit_action(self, *_args) -> None:
         self.quit()
 
+    def do_shutdown(self):  # pylint: disable=arguments-differ
+        """Action emitted on app close"""
+        shared.config_file.seek(0)
+        shared.config_file.truncate(0)
+        yaml.dump(
+            shared.config,
+            shared.config_file,
+            sort_keys=False,
+            encoding=None,
+            allow_unicode=True,
+        )
+
     def create_actions(self, actions: set) -> None:
         """Creates actions for provided scope with provided accels
 
@@ -95,6 +109,7 @@ class LexiApplication(Adw.Application):
 
     # pylint: disable=line-too-long
     def on_about_action(self, *_args) -> None:
+        """Generates an app about dialog"""
         dialog = Adw.AboutDialog.new_from_appdata(
             shared.PREFIX + "/" + shared.APP_ID + ".metainfo.xml", shared.VERSION
         )
@@ -111,8 +126,43 @@ class LexiApplication(Adw.Application):
 
 def main(_version):
     """App entrypint"""
+    # Check if lexicons dir exists, create it if not
     if not os.path.exists(os.path.join(shared.data_dir, "lexicons")):
         os.mkdir(os.path.join(shared.data_dir, "lexicons"))
+
+    # Check if config.yaml exists, create it if not
+    if not os.path.exists(os.path.join(shared.data_dir, "config.yaml")):
+        with open(os.path.join(shared.data_dir, "config.yaml"), "x+") as f:
+            yaml.dump(
+                {
+                    "filter-types": {
+                        "noun": False,
+                        "verb": False,
+                        "adjective": False,
+                        "adverb": False,
+                        "pronoun": False,
+                        "preposition": False,
+                        "conjunction": False,
+                        "interjection": False,
+                        "article": False,
+                        "idiom": False,
+                        "clause": False,
+                        "prefix": False,
+                        "suffix": False,
+                    },
+                    "version": shared.CACHEV,
+                },
+                f,
+                sort_keys=False,
+                encoding=None,
+                allow_unicode=True,
+            )
+
+    # Load config file and config dict to the shared data
+    shared.config_file = open(
+        os.path.join(shared.data_dir, "config.yaml"), "r+", encoding="utf-8"
+    )
+    shared.config = yaml.safe_load(shared.config_file)
 
     shared.app = app = LexiApplication()
 

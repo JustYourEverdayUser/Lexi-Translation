@@ -20,5 +20,6 @@
     <file alias="no-found-symbolic.svg">icons/icons/symbolic/no-found-symbolic.svg</file>
     <file alias="delete-symbolic.svg">icons/icons/symbolic/delete-symbolic.svg</file>
     <file alias="times-referenced-symbolic.svg">icons/icons/symbolic/times-referenced-symbolic.svg</file>
+    <file alias="filter-words-symbolic.svg">icons/icons/symbolic/filter-words-symbolic.svg</file>
   </gresource>
 </gresources>

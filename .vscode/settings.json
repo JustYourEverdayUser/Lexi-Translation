@@ -6,6 +6,9 @@
         ".flatpak/**": true,
         "_build/**": true
     },
+    "files.associations": {
+        "*.py.in": "python",
+    },
     "search.followSymlinks": false,
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
@@ -23,5 +26,7 @@
     "pylint.enabled": true,
     "mesonbuild.mesonPath": "${workspaceFolder}/.flatpak/meson.sh",
     "mesonbuild.configureOnOpen": false,
-    "mesonbuild.buildFolder": "_build"
+    "mesonbuild.buildFolder": "_build",
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.autoImportCompletions": true
 }

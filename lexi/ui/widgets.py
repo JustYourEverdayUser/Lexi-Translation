@@ -11,7 +11,9 @@ gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/LexiconRow.ui")
 class LexiconRow(Gtk.Box):
-    """Lexicon row widget
+    """Lexicon row widget.
+
+    Represents a single lexicon in the sidebar.
 
     Parameters
     ----------
@@ -33,6 +35,13 @@ class LexiconRow(Gtk.Box):
     title: Gtk.Label = gtc()
 
     def __init__(self, file: str) -> None:
+        """Initialize the LexiconRow widget.
+
+        Parameters
+        ----------
+        file : str
+            Path to the lexicon file.
+        """
         super().__init__()
         self.file: TextIO = open(file, "r+")
         self.data: dict = yaml.safe_load(self.file)
@@ -70,6 +79,15 @@ class LexiconRow(Gtk.Box):
 
     @Gtk.Template.Callback()
     def delete_lexicon(self, _alert_dialog: Adw.AlertDialog, response: str) -> None:
+        """Delete the lexicon if the user confirms.
+
+        Parameters
+        ----------
+        _alert_dialog : Adw.AlertDialog
+            The alert dialog prompting the user.
+        response : str
+            The user's response to the dialog.
+        """
         if response == "delete":
             if shared.win.loaded_lexicon == self:
                 shared.win.set_word_rows_sensetiveness(False)
@@ -89,11 +107,19 @@ class LexiconRow(Gtk.Box):
             shared.win.build_sidebar()
 
     def rename_lexicon(self, *_args) -> None:
+        """Show the rename popover for the lexicon."""
         self.rename_popover.popup()
         self.rename_entry.set_text(self.name)
 
     @Gtk.Template.Callback()
     def on_rename_entry_changed(self, text: Gtk.Text) -> None:
+        """Handle changes to the rename entry field.
+
+        Parameters
+        ----------
+        text : Gtk.Text
+            The text entry field being edited.
+        """
         if text.get_text_length() == 0:
             self.rename_entry.add_css_class("error")
         else:
@@ -102,13 +128,20 @@ class LexiconRow(Gtk.Box):
 
     @Gtk.Template.Callback()
     def do_rename(self, entry_row: Adw.EntryRow) -> None:
+        """Rename the lexicon.
+
+        Parameters
+        ----------
+        entry_row : Adw.EntryRow
+            The entry row containing the new name.
+        """
         if entry_row.get_text() != "":
             self.name = entry_row.get_text()
         self.rename_popover.popdown()
         shared.win.build_sidebar()
 
     def show_add_word_dialog(self) -> None:
-        """Shows the add word dialog"""
+        """Show the dialog for adding a new word."""
         self.word_entry_row.set_text("")
         self.word_entry_row.remove_css_class("error")
         self.translation_entry_row.set_text("")
@@ -118,12 +151,12 @@ class LexiconRow(Gtk.Box):
 
     @Gtk.Template.Callback()
     def add_word(self, *_args) -> None:
-        """Adds a new word to the lexicon
+        """Add a new word to the lexicon.
 
         Raises
         ------
         AttributeError
-            Raised if the `Word` field is empty
+            If the word field is empty.
         """
         word = self.word_entry_row.get_text()
         translation = self.translation_entry_row.get_text()
@@ -171,12 +204,12 @@ class LexiconRow(Gtk.Box):
 
     @Gtk.Template.Callback()
     def check_if_word_is_empty(self, row: Adw.EntryRow) -> None:
-        """Applies `error` CSS class to the `Word` row if the field is empty
+        """Check if the word entry is empty and apply error styling.
 
         Parameters
         ----------
         row : Adw.EntryRow
-            Adw.EntryRow to set CSS to
+            The entry row to check.
         """
         if len(row.get_text()) == 0:
             row.add_css_class("error")
@@ -199,13 +232,16 @@ class LexiconRow(Gtk.Box):
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/WordRow.ui")
 class WordRow(Adw.ActionRow):
-    # pylint: disable=line-too-long
-    """Word row widget
+    """Word row widget.
+
+    Represents a single word in the lexicon.
 
     Parameters
     ----------
     word : dict
-        a dict with the word [id, word, pronunciation, translations, types, examples, references]
+        A dictionary containing word details.
+    lexicon : LexiconRow
+        The parent lexicon row.
     """
 
     __gtype_name__ = "WordRow"
@@ -216,6 +252,15 @@ class WordRow(Adw.ActionRow):
     refs_count_label: Gtk.Label = gtc()
 
     def __init__(self, word: dict, lexicon: LexiconRow) -> None:
+        """Initialize the WordRow widget.
+
+        Parameters
+        ----------
+        word : dict
+            The word data.
+        lexicon : LexiconRow
+            The parent lexicon row.
+        """
         super().__init__()
         self.lexicon: LexiconRow = lexicon
         self.word_dict: dict = word
@@ -235,7 +280,7 @@ class WordRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def load_word(self, *_args) -> None:
-        """Loads word to the window"""
+        """Load the word into the main window."""
         shared.win.loaded_word = self
         shared.win.translations_list_box.remove_all()
         shared.win.examples_list_box.remove_all()
@@ -276,7 +321,7 @@ class WordRow(Adw.ActionRow):
         shared.win.set_word_rows_sensetiveness(True)
 
     def generate_word_type(self) -> None:
-        """Toggles Word Type check buttons and sets subtitle for the Word Type expander row"""
+        """Generate the word type subtitle and toggle check buttons."""
         word_type_subtitle: str = ""
         for word_type, word_type_val in self.word_dict["types"].items():
             if word_type_val:
@@ -291,12 +336,12 @@ class WordRow(Adw.ActionRow):
             shared.win.word_type_expander_row.set_subtitle("")
 
     def remove_list_prop_on_backspace(self, text: Gtk.Text) -> None:
-        """Removes one line from any expandable row
+        """Remove a list property row on backspace.
 
         Parameters
         ----------
         text : Gtk.Text
-            A Gtk.Text to get text from and to get all necessary widgets from
+            The text widget triggering the action.
         """
         if text.get_text_length() > 0:
             return
@@ -322,12 +367,12 @@ class WordRow(Adw.ActionRow):
                 return
 
     def update_word(self, text: Gtk.Text) -> None:
-        """Updates `self.word_dict` on change in any line from expandable rows
+        """Update the word dictionary when a property changes.
 
         Parameters
         ----------
         text : Gtk.Text
-            A Gtk.Text to get text from and to get all necessary widgets from
+            The text widget triggering the update.
         """
         row = text.get_ancestor(Adw.EntryRow)
         expander_row = row.get_ancestor(Adw.ExpanderRow)
@@ -361,12 +406,12 @@ class WordRow(Adw.ActionRow):
                 return
 
     def add_list_prop(self, button: Gtk.Button) -> None:
-        """Adds a new line to any expandable row
+        """Add a new list property row.
 
         Parameters
         ----------
         button : Gtk.Button
-            A Gtk.Button to get all necessery widgets from
+            The button triggering the action.
         """
         expander_row: Adw.ExpanderRow = button.get_ancestor(Adw.ExpanderRow)
 
@@ -397,7 +442,7 @@ class WordRow(Adw.ActionRow):
                 return
 
     def delete(self) -> None:
-        """Deletes a word from the lexicon"""
+        """Delete the word from the lexicon."""
         self.lexicon.data["words"].remove(self.word_dict)
         shared.win.lexicon_list_box.remove(self)
         if shared.win.loaded_word is self:
@@ -411,7 +456,7 @@ class WordRow(Adw.ActionRow):
         self.lexicon.save_lexicon()
 
     def do_check_button(self, *_args) -> None:
-        """Toggle `self.check_button` visibility on RMB click or long press"""
+        """Toggle the visibility of the check button."""
         if not self.check_button_revealer.get_reveal_child():
             shared.win.selection_mode_toggle_button.set_active(True)
             self.check_button.set_active(True)
@@ -420,12 +465,12 @@ class WordRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_check_button_toggled(self, button: Gtk.CheckButton) -> None:
-        """Adds `self` to the `shared.win.selected_rows` for future deletion
+        """Handle toggling of the check button.
 
         Parameters
         ----------
         button : Gtk.CheckButton
-            A Gtk.CheckButton to decide to remove or add
+            The check button being toggled.
         """
         if button.get_active():
             shared.win.selected_words.append(self)
@@ -433,7 +478,7 @@ class WordRow(Adw.ActionRow):
             shared.win.selected_words.remove(self)
 
     def get_ref_count(self) -> None:
-        """Sets the reference count label"""
+        """Update the reference count label."""
         if self.ref_count > 0:
             self.refs_count_label_box.set_visible(True)
             self.refs_count_label.set_label(str(self.ref_count))
@@ -488,14 +533,16 @@ class WordRow(Adw.ActionRow):
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/ReferenceRow.ui")
 class ReferenceRow(Adw.ActionRow):
-    """Reference row widget
+    """Reference row widget.
+
+    Represents a reference to another word.
 
     Parameters
     ----------
     word_row : WordRow
-        The word row to which this reference belongs.
+        The word row being referenced.
     show_delete_button : bool
-        Whether to show the delete button or not.
+        Whether to show the delete button.
     """
 
     __gtype_name__ = "ReferenceRow"
@@ -503,6 +550,15 @@ class ReferenceRow(Adw.ActionRow):
     delete_button_box: Gtk.Box = gtc()
 
     def __init__(self, word_row: WordRow, show_delete_button: bool = False) -> None:
+        """Initialize the ReferenceRow widget.
+
+        Parameters
+        ----------
+        word_row : WordRow
+            The word row being referenced.
+        show_delete_button : bool, optional
+            Whether to show the delete button, by default False.
+        """
         super().__init__()
         self.delete_button_box.set_visible(show_delete_button)
         self.word_row: WordRow = word_row
@@ -510,7 +566,7 @@ class ReferenceRow(Adw.ActionRow):
         self.set_subtitle(self.word_row.translation)
 
     def refer_this_word(self, *_args) -> None:
-        """Adds a reference to the word"""
+        """Add a reference to the word."""
         shared.win.loaded_word.word_dict["references"].append(
             self.word_row.word_dict["id"]
         )
@@ -531,11 +587,13 @@ class ReferenceRow(Adw.ActionRow):
         shared.win.update_refs_count()
 
     def open_this_word(self, *_args) -> None:
+        """Open the referenced word."""
         shared.win.lexicon_list_box.select_row(self.word_row)
         self.word_row.load_word()
 
     @Gtk.Template.Callback()
     def on_clicked(self, *_args) -> None:
+        """Handle click events."""
         if shared.win.references_dialog is shared.win.props.visible_dialog:
             self.refer_this_word()
         else:
@@ -543,7 +601,7 @@ class ReferenceRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_delete_button_clicked(self, *_args) -> None:
-        """Removes a reference to the word"""
+        """Remove the reference to the word."""
         shared.win.loaded_word.word_dict["references"].remove(
             self.word_row.word_dict["id"]
         )

@@ -57,6 +57,23 @@ class LexiWindow(Adw.ApplicationWindow):
     references_dialog: Adw.Dialog
     references_dialog_list_box: Gtk.ListBox
 
+    # Word Type filter dialog
+    word_types_filter_dialog: Adw.Dialog
+    filter_dialog_list_box: Gtk.ListBox
+    noun_check_button_filter_dialog: Gtk.CheckButton
+    verb_check_button_filter_dialog: Gtk.CheckButton
+    adjective_check_button_filter_dialog: Gtk.CheckButton
+    adverb_check_button_filter_dialog: Gtk.CheckButton
+    pronoun_check_button_filter_dialog: Gtk.CheckButton
+    preposition_check_button_filter_dialog: Gtk.CheckButton
+    conjunction_check_button_filter_dialog: Gtk.CheckButton
+    interjection_check_button_filter_dialog: Gtk.CheckButton
+    article_check_button_filter_dialog: Gtk.CheckButton
+    idiom_check_button_filter_dialog: Gtk.CheckButton
+    clause_check_button_filter_dialog: Gtk.CheckButton
+    prefix_check_button_filter_dialog: Gtk.CheckButton
+    suffix_check_button_filter_dialog: Gtk.CheckButton
+
     # Word type check buttons
     noun_check_button: Gtk.CheckButton
     verb_check_button: Gtk.CheckButton
@@ -100,7 +117,7 @@ class LexiWindow(Adw.ApplicationWindow):
     ) -> None: ...
     def filter_lexicons(self, row: Gtk.ListBoxRow) -> bool: ...
     def sort_words(self, row1: widgets.WordRow, row2: widgets.WordRow) -> int: ...
-    def filter_words(self, row: Gtk.ListBoxRow) -> bool: ...
+    def filter_words(self, row: widgets.WordRow) -> bool: ...
     def on_toggle_sidebar_action(self, *_args: Any) -> None: ...
     def on_toggle_search_action(self, *_args: Any) -> None: ...
     def on_add_lexicon_entry_changed(self, row: Adw.EntryRow) -> None: ...

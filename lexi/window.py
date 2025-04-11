@@ -63,6 +63,23 @@ class LexiWindow(Adw.ApplicationWindow):
     references_dialog: Adw.Dialog = gtc()
     references_dialog_list_box: Gtk.ListBox = gtc()
 
+    # Word Type filter dialog
+    word_types_filter_dialog: Adw.Dialog = gtc()
+    filter_dialog_list_box: Gtk.ListBox = gtc()
+    noun_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    verb_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    adjective_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    adverb_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    pronoun_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    preposition_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    conjunction_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    interjection_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    article_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    idiom_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    clause_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    prefix_check_button_filter_dialog: Gtk.CheckButton = gtc()
+    suffix_check_button_filter_dialog: Gtk.CheckButton = gtc()
+
     # Word type check buttons
     noun_check_button: Gtk.CheckButton = gtc()
     verb_check_button: Gtk.CheckButton = gtc()
@@ -147,14 +164,15 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_key_pressed(
         self, _controller: Gtk.EventControllerKey, keyval: int, *_args
     ) -> None:
-        """Emits on any key press
+        """
+        Handle key press events.
 
         Parameters
         ----------
         _controller : Gtk.EventControllerKey
-            Gtk.EventControllerKey emitted this method
+            The key event controller that emitted this method.
         keyval : int
-            pressed key value
+            The value of the pressed key.
         """
         if keyval == Gdk.KEY_Escape:
             # Handle Escape key press
@@ -164,6 +182,16 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_sorting_method_changed(
         self, action: Gio.SimpleAction, state: GLib.Variant
     ) -> None:
+        """
+        Handle changes to the sorting method.
+
+        Parameters
+        ----------
+        action : Gio.SimpleAction
+            The action that triggered the change.
+        state : GLib.Variant
+            The new state of the sorting method.
+        """
         action.set_state(state)
         self.sort_method = str(state).strip("'")
         self.lexicon_list_box.invalidate_sort()
@@ -172,6 +200,16 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_sorting_type_changed(
         self, action: Gio.SimpleAction, state: GLib.Variant
     ) -> None:
+        """
+        Handle changes to the sorting type.
+
+        Parameters
+        ----------
+        action : Gio.SimpleAction
+            The action that triggered the change.
+        state : GLib.Variant
+            The new state of the sorting type.
+        """
         action.set_state(state)
         self.sort_type = str(state).strip("'")
         self.lexicon_list_box.invalidate_sort()
@@ -179,7 +217,21 @@ class LexiWindow(Adw.ApplicationWindow):
 
     # pylint: disable=no-else-return
     def sort_words(self, row1: widgets.WordRow, row2: widgets.WordRow) -> int:
-        """Sorts words in the list box based on the selected method and type"""
+        """
+        Sort words in the list box based on the selected method and type.
+
+        Parameters
+        ----------
+        row1 : widgets.WordRow
+            The first word row to compare.
+        row2 : widgets.WordRow
+            The second word row to compare.
+
+        Returns
+        -------
+        int
+            -1 if row1 < row2, 1 if row1 > row2, 0 if they are equal.
+        """
         sortable1: str | int
         sortable2: str | int
 
@@ -209,27 +261,72 @@ class LexiWindow(Adw.ApplicationWindow):
                 return 0
 
     def filter_lexicons(self, row: Gtk.ListBoxRow) -> bool:
-        """Sorts lexicons in the list box based on their names"""
+        """
+        Filter lexicons in the list box based on their names.
+
+        Parameters
+        ----------
+        row : Gtk.ListBoxRow
+            The row to filter.
+
+        Returns
+        -------
+        bool
+            True if the row matches the filter, False otherwise.
+        """
         try:
             text: str = self.search_entry.get_text().lower()
             filtered: bool = text != "" and not (
                 text in row.get_child().name.lower()
             )  # pylint: disable=superfluous-parens
             return not filtered
-        except AttributeError as e:
-            print(e)
-
-    def filter_words(self, row: Gtk.ListBoxRow) -> bool:
-        """Filter words in the list box based on the search entry text"""
-        try:
-            text: str = self.lexicon_search_entry.get_text().lower()
-            filtered: bool = text != "" and not (
-                text in row.word.lower()
-                or (row.translation and text in row.translation.lower())
-            )
-            return not filtered
         except AttributeError:
-            pass
+            return True
+
+    # pylint: disable=line-too-long
+    def filter_words(self, row: widgets.WordRow) -> bool:
+        """
+        Filter words in the list box based on the search entry text and strict type filters.
+
+        Parameters
+        ----------
+        row : widgets.WordRow
+            a sortable WordRow
+
+        Returns
+        -------
+        bool
+            True if the word matches both the text and type filters, False otherwise.
+        """
+        try:
+            # Get the search text
+            text: str = self.lexicon_search_entry.get_text().lower()
+
+            # Check if the search text matches the word or its translation
+            matches_text = (
+                text == ""
+                or text in row.word.lower()
+                or text in row.translation.lower()
+            )
+
+            # Get the filter types and check if any are enabled
+            filter_types: dict = shared.config.get("filter-types", {})
+            enabled_filters = {key for key, value in filter_types.items() if value}
+            any_type_enabled = bool(enabled_filters)
+
+            # Get the word's types
+            word_types = {
+                key for key, value in row.word_dict.get("types", {}).items() if value
+            }
+
+            # Check if the word's types strictly match the enabled filters
+            matches_type = word_types == enabled_filters if any_type_enabled else True
+
+            # Return True if the word matches both the text and type filters
+            return matches_text and matches_type
+
+        except (AttributeError, KeyError):
+            return True  # Default to showing the word if there's an error
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
@@ -239,7 +336,9 @@ class LexiWindow(Adw.ApplicationWindow):
         )
 
     def on_toggle_search_action(self, *_args) -> None:
-        """Toggle the search bar visibility."""
+        """
+        Toggle the visibility of the search bar.
+        """
         if self.overlay_split_view.get_show_sidebar():
             search_bar = self.search_bar
             search_entry = self.search_entry
@@ -255,7 +354,14 @@ class LexiWindow(Adw.ApplicationWindow):
         search_entry.set_text("")
 
     def on_add_lexicon_entry_changed(self, row: Adw.EntryRow) -> None:
-        """Handle changes in the add lexicon entry row."""
+        """
+        Handle changes in the add lexicon entry row.
+
+        Parameters
+        ----------
+        row : Adw.EntryRow
+            The entry row that emitted this method.
+        """
         if row.get_text() == "":
             row.add_css_class("error")
         else:
@@ -263,7 +369,14 @@ class LexiWindow(Adw.ApplicationWindow):
                 row.remove_css_class("error")
 
     def on_add_lexicon_entry_activated(self, row: Adw.EntryRow) -> None:
-        """Handle activation of the add lexicon entry row."""
+        """
+        Handle activation of the add lexicon entry row.
+
+        Parameters
+        ----------
+        row : Adw.EntryRow
+            The entry row that emitted this method.
+        """
         if row.get_text() == "":
             self.add_lexicon_popover.popdown()
             return
@@ -293,7 +406,9 @@ class LexiWindow(Adw.ApplicationWindow):
         self.build_sidebar()
 
     def build_sidebar(self) -> None:
-        """Build the sidebar with a list of lexicons."""
+        """
+        Build the sidebar with a list of lexicons.
+        """
         if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
             # Clear the list box and populate it with lexicons
             self.lexicons_list_box.remove_all()
@@ -312,7 +427,16 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_lexicon_selected(self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
-        """Handle selection of a lexicon."""
+        """
+        Handle selection of a lexicon.
+
+        Parameters
+        ----------
+        _listbox : Gtk.ListBox
+            The list box that emitted this method.
+        row : Gtk.ListBoxRow
+            The selected row.
+        """
         self.lexicon_list_box.remove_all()
         if len(row.get_child().data["words"]) != 0:
             # Populate the list box with words from the selected lexicon
@@ -329,7 +453,9 @@ class LexiWindow(Adw.ApplicationWindow):
         self.loaded_lexicon = row.get_child()
 
     def update_refs_count(self) -> None:
-        """Update the reference count for all words in the lexicon list box"""
+        """
+        Update the reference count for all words in the lexicon list box.
+        """
         for word_row in self.lexicon_list_box:  # pylint: disable=not-an-iterable
             word_row.get_ref_count()
 
@@ -357,18 +483,21 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_word_list_prop_button_pressed(self, button: Gtk.Button) -> None:
-        """When any of expandable rows "add" buttons pressed
+        """
+        Handle the press of expandable rows' "add" buttons.
 
         Parameters
         ----------
         button : Gtk.Button
-            Gtk.Button emitted this method
+            The button that emitted this method.
         """
         self.loaded_word.add_list_prop(button)
 
     @Gtk.Template.Callback()
     def on_references_add_button_pressed(self, *_args) -> None:
-        """When the references add button is pressed"""
+        """
+        Handle the press of the references add button.
+        """
         if self.loaded_lexicon.data["words"] == [] or len(
             self.loaded_lexicon.data["words"]
         ) - 1 == len(self.loaded_word.word_dict["references"]):
@@ -389,22 +518,32 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_add_word_action(self, *_args) -> None:
-        """Shows the add word dialog"""
+        """
+        Show the add word dialog.
+        """
         self.loaded_lexicon.show_add_word_dialog()
 
     @Gtk.Template.Callback()
     def selection_mode_button_toggled(self, button: Gtk.ToggleButton) -> None:
-        """Toggled selection mode
+        """
+        Toggle selection mode.
 
         Parameters
         ----------
         button : Gtk.ToggleButton
-            Gtk.ToggleButton emitted this method
+            The toggle button that emitted this method.
         """
         self.set_selection_mode(button.get_active())
 
     def set_selection_mode(self, enabled: bool) -> None:
-        """Set the selection mode of the words list box."""
+        """
+        Set the selection mode of the words list box.
+
+        Parameters
+        ----------
+        enabled : bool
+            Whether to enable or disable selection mode.
+        """
         # Gratefully "stolen" from
         # https://github.com/flattool/warehouse/blob/0a18e5d81b8b06e45bf493b3ff31c12edbd36869/src/packages_page/packages_page.py#L226
         if enabled:
@@ -423,7 +562,9 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_delete_selected_words_action(self, *_args) -> None:
-        """Delete selected words"""
+        """
+        Delete selected words.
+        """
         for row in self.selected_words:
             self.selected_words.remove(row)
             row.delete()
@@ -434,12 +575,13 @@ class LexiWindow(Adw.ApplicationWindow):
             self.set_word_rows_sensetiveness(False)
 
     def set_word_rows_sensetiveness(self, active: bool) -> None:
-        """Set the sensitivity of word entry rows
+        """
+        Set the sensitivity of word entry rows.
 
         Parameters
         ----------
         active : bool
-            should the rows be sensetive or not
+            Whether the rows should be sensitive or not.
         """
         self.word_entry_row.set_sensitive(active)
         self.pronunciation_entry_row.set_sensitive(active)
@@ -452,17 +594,15 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_search_entry_changed(self, *_args) -> None:
-        """Emits when the search entry is changed"""
+        """
+        Handle changes in the search entry.
+        """
         self.lexicon_list_box.invalidate_filter()
 
     @Gtk.Template.Callback()
     def on_word_type_check_button_toggled(self, *_args) -> None:
-        """Emits when the word type check button is checked
-
-        Parameters
-        ----------
-        button : Gtk.CheckButton
-            Gtk.CheckButton emitted this method
+        """
+        Handle toggling of word type check buttons.
         """
         for (
             type_row
@@ -489,5 +629,54 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_lexicon_search_entry_changed(self, *_args) -> None:
-        """Emits when the lexicon search entry is changed"""
+        """
+        Handle changes in the lexicon search entry.
+        """
         self.lexicons_list_box.invalidate_filter()
+
+    @Gtk.Template.Callback()
+    def on_filter_button_clicked(self, *_args) -> None:
+        """
+        Handle the click of the filter button.
+        """
+        for word_type, value in shared.config["filter-types"].items():
+            getattr(self, word_type + "_check_button_filter_dialog").set_active(value)
+
+        self.word_types_filter_dialog.present(self)
+
+    # pylint: disable=no-member
+    @Gtk.Template.Callback()
+    def on_filter_check_button_toggled(self, *_args) -> None:
+        """
+        Handle toggling of filter check buttons.
+        """
+        if self.props.visible_dialog == self.word_types_filter_dialog:
+            for (
+                type_row
+            ) in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
+                for item in type_row:
+                    for _item in item:
+                        for __item in _item:
+                            if isinstance(__item, Gtk.CheckButton):
+                                button = __item
+                                break
+                for attr in dir(self):
+                    if attr.endswith("_check_button_filter_dialog"):
+                        if getattr(self, attr) == button:
+                            word_type = attr.replace("_check_button_filter_dialog", "")
+                            break
+                if button.get_active():
+                    shared.config["filter-types"][word_type] = True
+                else:
+                    shared.config["filter-types"][word_type] = False
+
+            self.lexicon_list_box.invalidate_filter()
+
+    @Gtk.Template.Callback()
+    def on_reset_filter_button_clicked(self, *_args) -> None:
+        """
+        Handle the click of the reset filter button.
+        """
+        for attr in dir(self):
+            if attr.endswith("_check_button_filter_dialog"):
+                getattr(self, attr).set_active(False)

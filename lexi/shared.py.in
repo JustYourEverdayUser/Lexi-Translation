@@ -1,9 +1,12 @@
+from typing import TextIO
+
 from gi.repository import Adw, Gio, GLib
 
+# pylint: disable=invalid-name
 APP_ID = "@APP_ID@"
 VERSION = "@VERSION@"
 PREFIX = "@PREFIX@"
-CACHEV = "@CACHEV@"
+CACHEV = @CACHEV@
 
 data_dir = GLib.get_user_data_dir()
 
@@ -12,3 +15,5 @@ state_schema = Gio.Settings.new(APP_ID + ".State")
 
 app: Adw.Application = None
 win = None
+config_file: TextIO = None
+config: dict = None

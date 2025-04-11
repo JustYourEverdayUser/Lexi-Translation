@@ -1,7 +1,7 @@
 from enum import Enum
 
 class Icon(str, Enum):
-    """Enum class with all app's icons
+    """Enum class with all app icons
 
     ::
 
@@ -15,6 +15,7 @@ class Icon(str, Enum):
         LEXICON
         NO_FOUND
         DELETE
+        FILTER_WORDS
     """
 
     TOGGLE_SIDEBAR: str = "toggle-sidebar-symbolic"
@@ -27,6 +28,7 @@ class Icon(str, Enum):
     NO_FOUND: str = "no-found-symbolic"
     DELETE: str = "delete-symbolic"
     TIMES_REFERENCED: str = "times-referenced-symbolic"
+    FILTER_WORDS: str = "filter-words-symbolic"
 
     def __str__(self) -> str:
         return self.value
