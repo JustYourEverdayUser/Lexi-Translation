@@ -4,7 +4,7 @@ from typing import TextIO
 import yaml
 from gi.repository import Adw, Gio, Gtk
 
-from lexi import shared
+from lexi import enums, shared
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
@@ -257,11 +257,7 @@ class WordRow(Adw.ActionRow):
                             break
                 expander_row[0].add_row(row)
 
-        for word_type, word_type_val in self.word_dict["types"].items():
-            if word_type_val:
-                getattr(shared.win, word_type + "_check_button").set_active(True)
-            else:
-                getattr(shared.win, word_type + "_check_button").set_active(False)
+        self.generate_word_type()
 
         if self.word != "":
             shared.win.word_nav_page.set_title(self.word)
@@ -278,6 +274,21 @@ class WordRow(Adw.ActionRow):
             shared.win.lexicon_split_view.set_show_content(True)
 
         shared.win.set_word_rows_sensetiveness(True)
+
+    def generate_word_type(self) -> None:
+        """Toggles Word Type check buttons and sets subtitle for the Word Type expander row"""
+        word_type_subtitle: str = ""
+        for word_type, word_type_val in self.word_dict["types"].items():
+            if word_type_val:
+                getattr(shared.win, word_type + "_check_button").set_active(True)
+                word_type_subtitle += enums.WordType[word_type.upper()] + ", "
+            else:
+                getattr(shared.win, word_type + "_check_button").set_active(False)
+
+        if word_type_subtitle.endswith(", "):
+            shared.win.word_type_expander_row.set_subtitle(word_type_subtitle[:-2])
+        else:
+            shared.win.word_type_expander_row.set_subtitle("")
 
     def remove_list_prop_on_backspace(self, text: Gtk.Text) -> None:
         """Removes one line from any expandable row

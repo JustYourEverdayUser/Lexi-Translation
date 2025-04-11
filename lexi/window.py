@@ -83,6 +83,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
     translations_list_box: Gtk.ListBox
     examples_list_box: Gtk.ListBox
+    word_types_list_box: Gtk.ListBox
     references_list_box: Gtk.ListBox
 
     sort_method: str = shared.state_schema.get_string("sort-method")
@@ -483,6 +484,8 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.loaded_word.word_dict["types"][word_type] = False
         if shared.schema.get_boolean("word-autosave"):
             self.loaded_lexicon.save_lexicon()
+
+        self.loaded_word.generate_word_type()
 
     @Gtk.Template.Callback()
     def on_lexicon_search_entry_changed(self, *_args) -> None:

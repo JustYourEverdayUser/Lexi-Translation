@@ -19,6 +19,7 @@ install_data(
   [
     'main.py',
     'window.py',
+    'enums.py',
     configure_file(input: 'shared.py.in', output: 'shared.py', configuration: conf),
   ],
   install_dir: moduledir,

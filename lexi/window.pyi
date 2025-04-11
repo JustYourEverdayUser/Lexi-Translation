@@ -77,6 +77,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
     translations_list_box: Gtk.ListBox
     examples_list_box: Gtk.ListBox
+    word_types_list_box: Gtk.ListBox
     references_list_box: Gtk.ListBox
 
     sort_method: str
