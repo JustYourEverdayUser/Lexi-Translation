@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-12 01:13+0300\n"
+"POT-Creation-Date: 2025-04-12 12:59+0300\n"
 "PO-Revision-Date: 2025-01-07 23:55+0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -337,6 +337,26 @@ msgstr ""
 msgid "References to other words"
 msgstr ""
 
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:54
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
+msgid "Main window"
+msgstr ""
+
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:58
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
+msgid "Word type filter dialog"
+msgstr ""
+
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:62
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:78
+msgid "Main window with words sorted by reference count"
+msgstr ""
+
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:82
+msgid "Main window on smaller display"
+msgstr ""
+
 #. Translators: Search terms to find this application. Please, do NOT delete original english keywords, just add yuor language translations to them. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.github.dzheremi2.lexi.desktop.in:12
 msgid "dict;dictionary;word;words;lexi;lexicon;lexicons;"
@@ -345,6 +365,14 @@ msgstr ""
 #. Translators: Add Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog. PLEASE, DON'T DELETE PREVIOUS TRANSLATORS CREDITS AND SEPARATE YOURSELF BY NEWLINE `\n` METASYMBOL
 #: lexi/main.py:129
 msgid "translator-credits"
+msgstr ""
+
+#: lexi/main.py:136
+msgid "Chronograph"
+msgstr ""
+
+#: lexi/main.py:137
+msgid "Sync lyrics of your loved songs"
 msgstr ""
 
 #: lexi/window.py:128

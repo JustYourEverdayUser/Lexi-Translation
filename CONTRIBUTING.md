@@ -19,6 +19,11 @@ To directly contribute to the app, [fork](https://github.com/Dzheremi2/Lexi/fork
 >[!IMPORTANT]
 >Code in pull requests should respect the [Project's Code Style](#code-style).
 
+#### Internationalization
+Another way to contribute to the app is internationalization. The app's using the [Hosted Weblate](https://hosted.weblate.org/projects/lexi/lexi/) for this purpose. If you're a translator, you could mention yourself by adding `Your Name`, `Your Name <your@e.mail>` or `Your Name https://your.site` to the `translator-credits` [string](https://hosted.weblate.org/translate/lexi/lexi/ru/?checksum=deecda9491124d4f&sort_by=-priority,position). This will add you to the `Translators` section in the `About App` for your language.
+
+![](docs/screenshots/translator-credits.png)
+
 ## Build
 In VSCode you can install [Flatpak](https://marketplace.visualstudio.com/items?itemName=bilelmoussaoui.flatpak-vscode) extension, select needed manifest (should be `build-aux/flatpak/io.github.dzheremi2.lexi.Devel.yaml`) and then use `Flatpak: Build` command from VSCode command palette.
 

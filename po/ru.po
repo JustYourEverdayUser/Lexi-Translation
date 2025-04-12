@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-12 01:13+0300\n"
-"PO-Revision-Date: 2025-04-11 23:50+0300\n"
+"POT-Creation-Date: 2025-04-12 12:59+0300\n"
+"PO-Revision-Date: 2025-04-12 13:01+0300\n"
 "Last-Translator: Артём Чичваров <chichvarov1315@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -341,6 +341,26 @@ msgstr "Несколько примеров"
 msgid "References to other words"
 msgstr "Ссылки на другие слова"
 
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:54
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
+msgid "Main window"
+msgstr "Основное окно"
+
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:58
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
+msgid "Word type filter dialog"
+msgstr "Диалог сортировки по типу слова"
+
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:62
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:78
+msgid "Main window with words sorted by reference count"
+msgstr "Основное окно со словами, отсортированными по количеству ссылок"
+
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:82
+msgid "Main window on smaller display"
+msgstr "Основное окно на малом дисплее"
+
 #. Translators: Search terms to find this application. Please, do NOT delete original english keywords, just add yuor language translations to them. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.github.dzheremi2.lexi.desktop.in:12
 msgid "dict;dictionary;word;words;lexi;lexicon;lexicons;"
@@ -352,6 +372,14 @@ msgstr ""
 #: lexi/main.py:129
 msgid "translator-credits"
 msgstr "Артём Чичваров <chichvarov1315@gmail.com>"
+
+#: lexi/main.py:136
+msgid "Chronograph"
+msgstr "Хронограф"
+
+#: lexi/main.py:137
+msgid "Sync lyrics of your loved songs"
+msgstr "Синхронизируйте тексты своих любимых песен"
 
 #: lexi/window.py:128
 msgid "Word autosave is enabled"

@@ -131,6 +131,11 @@ class LexiApplication(Adw.Application):
         dialog.add_acknowledgement_section(
             None, ["heliguy4599 (Warehouse) https://github.com/flattool/warehouse"]
         )
+        dialog.add_other_app(
+            "io.github.dzheremi2.lrcmake-gtk",
+            _("Chronograph"),
+            _("Sync lyrics of your loved songs"),
+        )
         if shared.PREFIX.endswith("Devel"):
             dialog.set_version("Devel")
 

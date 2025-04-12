@@ -12,7 +12,7 @@
 <a href="https://github.com/Dzheremi2/Lexi/actions"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Dzheremi2/Lexi/.github%2Fworkflows%2Fbundle.yml?style=for-the-badge&logo=github"></a>
 [![GitHub License](https://img.shields.io/github/license/Dzheremi2/Lexi?style=for-the-badge&color=C25D00)](https://github.com/Dzheremi2/Lexi/blob/master/LICENSE)
 
-<!-- ![Screenshot](docs/screenshots/libB.png) -->
+![Screenshot](docs/screenshots/winB.png)
 
 </div>
 
@@ -43,7 +43,7 @@ You can help project to be internationalized using [Hosted Weblate](https://host
 
 ##### Translation status
 
-[![Состояние перевода](https://hosted.weblate.org/widget/lexi/lexi/287x66-black.png)](https://hosted.weblate.org/engage/lexi/)
+[![Translate state](https://hosted.weblate.org/widget/lexi/lexi/287x66-black.png)](https://hosted.weblate.org/engage/lexi/)
 [![Translate state](https://hosted.weblate.org/widget/lexi/lexi/multi-auto.svg)](https://hosted.weblate.org/engage/lexi/)
 
 ### Plans
@@ -56,3 +56,16 @@ The project follows the [GNOME Code of Conduct](https://conduct.gnome.org)
 
 ### Contributing
 All contribution instructions are described in [CONTRIBUTING.md](https://github.com/Dzheremi2/Lexi/blob/master/CONTRIBUTING.md) file.
+
+### Screenshots
+<div align="center">
+
+![](docs/screenshots/winW.png)
+![](docs/screenshots/filterB.png)
+![](docs/screenshots/filterW.png)
+![](docs/screenshots/refsortB.png)
+![](docs/screenshots/refsortW.png)
+![](docs/screenshots/winCB.png)
+![](docs/screenshots/winCW.png)
+
+</div>

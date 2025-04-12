@@ -26,18 +26,18 @@
   <url type="homepage">https://github.com/Dzheremi2/Lexi/</url>
   <url type="vcs-browser">https://github.com/Dzheremi2/Lexi/</url>
   <url type="bugtracker">https://github.com/Dzheremi2/Lexi/issues</url>
-  <!-- <url type="translate">https://hosted.weblate.org/projects/lrcmake/chronograph/</url> -->
+  <url type="translate">https://hosted.weblate.org/projects/lexi/lexi/</url>
   <url type="help">https://github.com/Dzheremi2/Lexi/discussions</url>
   <url type="contact">https://github.com/Dzheremi2/Lexi/discussions</url>
-  <url type="contribute">https://github.com/Dzheremi2/Lexi/pulls</url>
+  <url type="contribute">https://github.com/Dzheremi2/Lexi/blob/master/CONTRIBUTING.md</url>
 
   <translation type="gettext">Lexi</translation>
   <launchable type="desktop-id">@APP_ID@.desktop</launchable>
   <content_rating type="oars-1.1" />
 
   <branding>
-    <color type="primary" scheme_preference="light">#74c69d</color>
-    <color type="primary" scheme_preference="dark">#1b4332</color>
+    <color type="primary" scheme_preference="light">#f8e45c</color>
+    <color type="primary" scheme_preference="dark">#63452c</color>
   </branding>
   <supports>
     <control>keyboard</control>
@@ -48,17 +48,45 @@
     <display_length compare="ge">360</display_length>
   </requires>
 
-  <!-- <screenshots>
-    
-  </screenshots> -->
+  <screenshots>
+    <screenshot type="default" xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/winW.png</image>
+      <caption>Main window</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/filterW.png</image>
+      <caption>Word type filter dialog</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/refsortW.png</image>
+      <caption>Main window with words sorted by reference count</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/winCW.png</image>
+      <caption>Main window on smaller display</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/winB.png</image>
+      <caption>Main window</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/filterB.png</image>
+      <caption>Word type filter dialog</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/refsortB.png</image>
+      <caption>Main window with words sorted by reference count</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/Dzheremi2/Lexi/refs/heads/master/docs/screenshots/winCB.png</image>
+      <caption>Main window on smaller display</caption>
+    </screenshot>
+  </screenshots>
 
   <releases>
-    <release version="0.1" date="2024-11-15">
+    <release version="1.0" date="2025-04-12">
       <description translate="no">
         <p>Initial release</p>
-        <ul>
-          <li>Initial release.</li>
-        </ul>
       </description>
     </release>
   </releases>
