@@ -31,6 +31,11 @@ Lexi is a self-driven dictionary app for those who want to make their language l
 </ul>
 
 ### Installation
+<a href='https://flathub.org/apps/io.github.dzheremi2.lexi'>
+    <img width='240' alt='Get it on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/>
+</a>
+
+You can download app either on [Flathub](https://flathub.org/apps/io.github.dzheremi2.lexi) or by downloading and installing bundle from [latest release](https://github.com/Dzheremi2/lexi/releases/latest)
 
 ##### *Devel builds*
 
