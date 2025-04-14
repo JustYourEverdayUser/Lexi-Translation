@@ -181,6 +181,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     }
 
                     Entry lexicon_search_entry {
+                      margin-top: 4;
                       hexpand: true;
                       placeholder-text: _("Find a word");
                       changed => $on_search_entry_changed();
