@@ -1,6 +1,7 @@
 from gi.repository import Adw, Gio, Gtk
 
 from lexi import shared
+from lexi.utils import backup
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
@@ -50,3 +51,13 @@ class LexiPreferences(Adw.PreferencesDialog):
             state for the __class__.opened variable
         """
         self.__class__.opened = opened
+
+    @Gtk.Template.Callback()
+    def on_export_button_clicked(self, *_args) -> None:
+        dialog = Gtk.FileDialog(initial_name="lexi_backup.zip")
+        dialog.save(shared.win, None, self.on_export_database)
+
+    def on_export_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
+        path = file_dialog.save_finish(result).get_path()
+        backup.export_database(path)
+        self.close()

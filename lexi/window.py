@@ -699,3 +699,6 @@ class LexiWindow(Adw.ApplicationWindow):
         """Focus words search entry on `Ctrl+F` press"""
         if self.words_bottom_bar_revealer.get_reveal_child():
             self.lexicon_search_entry.grab_focus()
+
+    def open_dir(self, _toast: Adw.Toast, path: str) -> None:
+        Gio.AppInfo.launch_default_for_uri(f"file://{path}")

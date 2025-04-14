@@ -14,7 +14,7 @@ install_subdir('ui', install_dir: moduledir, exclude_files: [
   'widgets.pyi',
   'Preferences.pyi'
 ])
-# install_subdir('utils', install_dir: moduledir)
+install_subdir('utils', install_dir: moduledir)
 
 install_data(
   [

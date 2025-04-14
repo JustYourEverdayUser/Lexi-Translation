@@ -4,12 +4,35 @@ using Adw 1;
 template $LexiPreferences : Adw.PreferencesDialog {
   Adw.PreferencesPage {
     title: _("General");
+    icon-name: "general-symbolic";
 
     Adw.PreferencesGroup {
       title: _("Editing");
 
       Adw.SwitchRow word_autosave_switch_row {
         title: _("Automatically save word on change");
+      }
+    }
+  }
+
+  Adw.PreferencesPage {
+    title: _("Backup");
+    icon-name: "backup-symbolic";
+
+    Adw.PreferencesGroup {
+      separate-rows: true;
+
+      Adw.ButtonRow {
+        start-icon-name: "export-symbolic";
+        title: _("Export Database");
+        activated => $on_export_button_clicked();
+      }
+
+      Adw.ButtonRow {
+        start-icon-name: "import-symbolic";
+        title: _("Import Database");
+
+        styles ["destructive-action"]
       }
     }
   }

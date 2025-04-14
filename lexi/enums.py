@@ -19,6 +19,10 @@ class Icon(str, Enum):
         NO_FOUND
         DELETE
         FILTER_WORDS
+        GENERAL
+        BACKUP
+        EXPORT
+        IMPORT
     """
 
     TOGGLE_SIDEBAR: str = "toggle-sidebar-symbolic"
@@ -32,6 +36,10 @@ class Icon(str, Enum):
     DELETE: str = "delete-symbolic"
     TIMES_REFERENCED: str = "times-referenced-symbolic"
     FILTER_WORDS: str = "filter-words-symbolic"
+    GENERAL: str = "general-symbolic"
+    BACKUP: str = "backup-symbolic"
+    EXPORT: str = "export-symbolic"
+    IMPORT: str = "import-symbolic"
 
     def __str__(self) -> str:
         return self.value
