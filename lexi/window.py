@@ -415,21 +415,28 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         Build the sidebar with a list of lexicons.
         """
-        if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
-            # Clear the list box and populate it with lexicons
-            self.lexicons_list_box.remove_all()
-            lexicon_rows: list = []
-            for file in os.listdir(os.path.join(shared.data_dir, "lexicons")):
-                lexicon_rows.append(
-                    widgets.LexiconRow(os.path.join(shared.data_dir, "lexicons", file))
-                )
-            lexicon_rows.sort(key=lambda row: row.name)
-            for row in lexicon_rows:
-                self.lexicons_list_box.append(row)
-            self.lexicons_scrolled_window.set_child(self.lexicons_list_box)
-        else:
-            # Show a placeholder if no lexicons are available
-            self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
+        try:
+            if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
+                # Clear the list box and populate it with lexicons
+                self.lexicons_list_box.remove_all()
+                lexicon_rows: list = []
+                for file in os.listdir(os.path.join(shared.data_dir, "lexicons")):
+                    lexicon_rows.append(
+                        widgets.LexiconRow(
+                            os.path.join(shared.data_dir, "lexicons", file)
+                        )
+                    )
+                lexicon_rows.sort(key=lambda row: row.name)
+                for row in lexicon_rows:
+                    self.lexicons_list_box.append(row)
+                self.lexicons_scrolled_window.set_child(self.lexicons_list_box)
+            else:
+                # Show a placeholder if no lexicons are available
+                self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
+        except FileNotFoundError:
+            if not os.path.exists(os.path.join(shared.data_dir, "lexicons")):
+                os.mkdir(os.path.join(shared.data_dir, "lexicons"))
+                self.build_sidebar()
 
     @Gtk.Template.Callback()
     def on_lexicon_selected(self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:

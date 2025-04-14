@@ -13,6 +13,7 @@ class LexiPreferences(Adw.PreferencesDialog):
     __gtype_name__ = "LexiPreferences"
 
     word_autosave_switch_row: Adw.SwitchRow = gtc()
+    import_confirmation_dialog: Adw.AlertDialog = gtc()
 
     opened: bool = False
 
@@ -60,4 +61,23 @@ class LexiPreferences(Adw.PreferencesDialog):
     def on_export_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
         path = file_dialog.save_finish(result).get_path()
         backup.export_database(path)
+        self.close()
+
+    @Gtk.Template.Callback()
+    def on_import_button_clicked(self, *_args) -> None:
+        self.import_confirmation_dialog.present(shared.win)
+
+    @Gtk.Template.Callback()
+    def on_import_confirmation_dialog_response(
+        self, _alert_dialog: Adw.AlertDialog, response: str
+    ) -> None:
+        if response == "import":
+            dialog = Gtk.FileDialog(
+                default_filter=Gtk.FileFilter(mime_types=["application/zip"])
+            )
+            dialog.open(shared.win, None, self.on_import_database)
+
+    def on_import_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
+        path = file_dialog.open_finish(result).get_path()
+        backup.import_database(path)
         self.close()

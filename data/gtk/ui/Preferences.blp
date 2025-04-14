@@ -31,9 +31,23 @@ template $LexiPreferences : Adw.PreferencesDialog {
       Adw.ButtonRow {
         start-icon-name: "import-symbolic";
         title: _("Import Database");
+        activated => $on_import_button_clicked();
 
         styles ["destructive-action"]
       }
     }
   }
+}
+
+Adw.AlertDialog import_confirmation_dialog {
+  heading: _("Import Database?");
+  body: _("Importing database will ERASE the existing one!");
+  default-response: "cancel";
+  close-response: "cancel";
+  response => $on_import_confirmation_dialog_response();
+
+  responses [
+    cancel: _("Cancel"),
+    import: _("Import") destructive,
+  ]
 }
