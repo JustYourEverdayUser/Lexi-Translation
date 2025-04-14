@@ -264,7 +264,7 @@ class WordRow(Adw.ActionRow):
         super().__init__()
         self.lexicon: LexiconRow = lexicon
         self.word_dict: dict = word
-        self.set_title(self.word_dict["word"])
+        self.set_title(self.word_dict["word"].replace("&rtl", ""))
         try:
             self.set_subtitle(word["translations"][0])
         except IndexError:
@@ -284,28 +284,47 @@ class WordRow(Adw.ActionRow):
         shared.win.loaded_word = self
         shared.win.translations_list_box.remove_all()
         shared.win.examples_list_box.remove_all()
-        shared.win.word_entry_row.set_text(self.word)
+        for child in shared.win.word_entry_row.get_child():
+            for _item in child:
+                if isinstance(_item, Gtk.Text):
+                    _item.set_buffer(
+                        Gtk.EntryBuffer.new(self.word.replace("&rtl", ""), -1)
+                    )
+                    if self.word.startswith("&rtl"):
+                        _item.set_direction(Gtk.TextDirection.RTL)
+                    else:
+                        _item.set_direction(Gtk.TextDirection.LTR)
+                    _item.connect(
+                        "direction-changed",
+                        shared.win.on_word_direction_changed,
+                    )
+                    break
         shared.win.pronunciation_entry_row.set_text(self.pronunciation)
         for expander_row in (
             (shared.win.translations_expander_row, "translations", _("Translation")),
             (shared.win.examples_expander_row, "examples", _("Example")),
         ):
             for item in self.word_dict[expander_row[1]]:
-                row: Adw.EntryRow = Adw.EntryRow(text=item, title=expander_row[2])
+                row: Adw.EntryRow = Adw.EntryRow(
+                    text=item.replace("&rtl", ""), title=expander_row[2]
+                )
                 for child in row.get_child():
                     for _item in child:
                         if isinstance(_item, Gtk.Text):
+                            if item.startswith("&rtl"):
+                                _item.set_direction(Gtk.TextDirection.RTL)
                             _item.connect("changed", self.update_word)
                             _item.connect(
                                 "backspace", self.remove_list_prop_on_backspace
                             )
+                            _item.connect("direction-changed", self.set_word_direction)
                             break
                 expander_row[0].add_row(row)
 
         self.generate_word_type()
 
         if self.word != "":
-            shared.win.word_nav_page.set_title(self.word)
+            shared.win.word_nav_page.set_title(self.word.replace("&rtl", ""))
         else:
             shared.win.word_nav_page.set_title(_("Word"))
             self.set_title(_("Word"))
@@ -319,6 +338,38 @@ class WordRow(Adw.ActionRow):
             shared.win.lexicon_split_view.set_show_content(True)
 
         shared.win.set_word_rows_sensetiveness(True)
+
+    def set_word_direction(
+        self, text: Gtk.Text, prev_direction: Gtk.TextDirection
+    ) -> None:
+        directionable_row = text.get_ancestor(Adw.EntryRow)
+        expander_row = directionable_row.get_ancestor(Adw.ExpanderRow)
+
+        for attr in dir(shared.win):
+            if (
+                attr.endswith("_expander_row")
+                and getattr(shared.win, attr) == expander_row
+            ):
+                list_box = getattr(
+                    shared.win, attr.replace("_expander_row", "") + "_list_box"
+                )
+                for index, row in enumerate(list_box):
+                    if row == directionable_row:
+                        if prev_direction in (
+                            Gtk.TextDirection.LTR,
+                            Gtk.TextDirection.NONE,
+                        ):
+                            self.word_dict[attr.replace("_expander_row", "")][index] = (
+                                "&rtl" + text.get_text()
+                            )
+                            break
+                        self.word_dict[attr.replace("_expander_row", "")][
+                            index
+                        ] = text.get_text().replace("&rtl", "")
+                        break
+                break
+        if enums.Schema.WORD_AUTOSAVE():
+            self.lexicon.save_lexicon()
 
     def generate_word_type(self) -> None:
         """Generate the word type subtitle and toggle check buttons."""
