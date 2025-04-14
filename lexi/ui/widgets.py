@@ -439,7 +439,10 @@ class WordRow(Adw.ActionRow):
                     (i for i, _row in enumerate(list_box) if row == _row), None
                 )
                 if row_index is not None:
-                    self.word_dict[attr_name][row_index] = row.get_text()
+                    if self.word_dict[attr_name][row_index].startswith("&rtl"):
+                        self.word_dict[attr_name][row_index] = "&rtl" + row.get_text()
+                    else:
+                        self.word_dict[attr_name][row_index] = row.get_text()
                     try:
                         (
                             shared.win.loaded_word.set_subtitle(
