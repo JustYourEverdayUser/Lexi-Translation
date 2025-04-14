@@ -610,3 +610,13 @@ class ReferenceRow(Adw.ActionRow):
             shared.win.loaded_lexicon.save_lexicon()
         shared.win.references_list_box.remove(self)
         shared.win.update_refs_count()
+
+
+class InfoAlert(Adw.AlertDialog):
+    __gtype_name__ = "InfoAlert"
+
+    def __init__(self, heading: str, body: str) -> None:
+        super().__init__(
+            heading=heading, body=body, default_response="close", close_response="close"
+        )
+        self.add_response("close", label=_("Close"))
