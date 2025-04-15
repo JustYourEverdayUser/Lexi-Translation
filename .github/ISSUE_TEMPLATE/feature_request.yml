@@ -15,6 +15,8 @@ body:
           required: true
         - label: I declare that this issue is not a question. If you want to ask something, go to the Discussions
           required: true
+        - label: Please stay tuned for messages from the contributors to your feature request. Don't keep them waiting too long
+          required: true
   - type: textarea
     attributes:
       label: Feature description

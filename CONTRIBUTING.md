@@ -3,6 +3,10 @@
 ## Indirect Contributing
 >[!TIP]
 >Any issue that's already resolved but not published yet is marked with `fix-available` label. If the issue is closed, then it was already published.
+
+>[!TIP]
+>Please stay tuned for messages from the contributors to your issue. Don't keep them waiting too long.
+
 #### Feature Requests
 If you want some feature to be implemented within the app, [create](https://github.com/Dzheremi2/Lexi/issues) an issue with `Feature Request` template and describe what you want to be implemented. The more information about the feature you provide, the faster, and precisely, it would be implemented.
 
