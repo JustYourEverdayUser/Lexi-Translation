@@ -45,7 +45,7 @@ def import_database(zip_path: str) -> None:
             if os.path.exists(zip_path) and zipfile.is_zipfile(zip_path):
                 zipf.extractall(path)
                 toast = Adw.Toast(
-                    title=_("Database Imported. ALL PREVIOUS FILES WERE DELETED!"),
+                    title=_("Database imported successfully"),
                     timeout=10,
                 )
                 shared.win.loaded_lexicon = None
@@ -90,6 +90,6 @@ def incorrect_archive_panic(*_args) -> None:
     # pylint: disable=line-too-long
     alert = widgets.InfoAlert(
         heading=_("Incorrect Archive!"),
-        body="This archive seems to be incorrect, since it wasn't passed proof of content challenge: no config.yaml file and/or lexicons folder inside",
+        body=_("This archive seems to be incorrect, since it wasn't passed proof of content challenge: no config.yaml file and/or lexicons folder inside"),
     )
     alert.present(shared.win)
