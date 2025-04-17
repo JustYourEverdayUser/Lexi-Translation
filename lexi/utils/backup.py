@@ -6,7 +6,6 @@ import zipfile
 from gi.repository import Adw
 
 from lexi import shared
-from lexi.ui import widgets
 
 
 def export_database(path: str) -> None:
@@ -78,9 +77,8 @@ def proof_of_content(zip_path: str) -> bool:
             if "config.yaml" not in archive_files:
                 return False
 
-            for file in archive_files:
-                if file != "config.yaml" and not file.startswith("lexicons/"):
-                    return False
+            if not any(file.startswith("lexicons/") for file in archive_files):
+                return False
 
             return True
     return False
@@ -88,8 +86,9 @@ def proof_of_content(zip_path: str) -> bool:
 
 def incorrect_archive_panic(*_args) -> None:
     # pylint: disable=line-too-long
-    alert = widgets.InfoAlert(
+    alert = Adw.AlertDialog(
         heading=_("Incorrect Archive!"),
         body=_("This archive seems to be incorrect, since it wasn't passed proof of content challenge: no config.yaml file and/or lexicons folder inside"),
     )
+    alert.add_response("close", label=_("Close"))
     alert.present(shared.win)
