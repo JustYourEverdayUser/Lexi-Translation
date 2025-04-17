@@ -163,6 +163,7 @@ class LexiconRow(Gtk.Box):
         example = self.example_entry_row.get_text()
 
         if len(word) == 0:
+            self.word_entry_row.add_css_class("error")
             raise AttributeError("Word cannot be empty")
 
         if len(translation) == 0:
@@ -215,6 +216,10 @@ class LexiconRow(Gtk.Box):
             row.add_css_class("error")
         else:
             row.remove_css_class("error")
+
+    @Gtk.Template.Callback()
+    def on_add_word_dialog_enter_press(self, *_args) -> None:
+        self.add_word()
 
     @property
     def name(self) -> str:
