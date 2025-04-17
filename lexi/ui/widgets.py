@@ -28,8 +28,8 @@ class LexiconRow(Gtk.Box):
     translation_entry_row: Adw.EntryRow = gtc()
     example_entry_row: Adw.EntryRow = gtc()
     actions_popover: Gtk.PopoverMenu = gtc()
-    rename_popover: Gtk.Popover = gtc()
-    rename_entry: Adw.EntryRow = gtc()
+    rename_alert_dialog: Adw.AlertDialog = gtc()
+    rename_entry: Gtk.Entry = gtc()
     deletion_alert_dialog: Adw.AlertDialog = gtc()
 
     title: Gtk.Label = gtc()
@@ -47,7 +47,6 @@ class LexiconRow(Gtk.Box):
         self.data: dict = yaml.safe_load(self.file)
         self.title.set_label(self.data["name"])
         self.actions_popover.set_parent(self)
-        self.rename_popover.set_parent(self)
 
         self.rmb_gesture = Gtk.GestureClick(button=3)
         self.long_press_gesture = Gtk.GestureLongPress()
@@ -108,8 +107,9 @@ class LexiconRow(Gtk.Box):
 
     def rename_lexicon(self, *_args) -> None:
         """Show the rename popover for the lexicon."""
-        self.rename_popover.popup()
-        self.rename_entry.set_text(self.name)
+        self.rename_alert_dialog.present(shared.win)
+        self.rename_entry.set_buffer(Gtk.EntryBuffer.new(self.name, -1))
+        self.rename_entry.grab_focus()
 
     @Gtk.Template.Callback()
     def on_rename_entry_changed(self, text: Gtk.Text) -> None:
@@ -127,7 +127,7 @@ class LexiconRow(Gtk.Box):
                 self.rename_entry.remove_css_class("error")
 
     @Gtk.Template.Callback()
-    def do_rename(self, entry_row: Adw.EntryRow) -> None:
+    def do_rename(self, alert_dialog: Adw.AlertDialog, response: str) -> None:
         """Rename the lexicon.
 
         Parameters
@@ -135,10 +135,10 @@ class LexiconRow(Gtk.Box):
         entry_row : Adw.EntryRow
             The entry row containing the new name.
         """
-        if entry_row.get_text() != "":
-            self.name = entry_row.get_text()
-        self.rename_popover.popdown()
-        shared.win.build_sidebar()
+        if response == "rename":
+            if alert_dialog.get_extra_child().get_text_length() != 0:
+                self.name = alert_dialog.get_extra_child().get_buffer().get_text()
+            shared.win.build_sidebar()
 
     def show_add_word_dialog(self) -> None:
         """Show the dialog for adding a new word."""

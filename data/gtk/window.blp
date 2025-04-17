@@ -57,10 +57,10 @@ template $LexiWindow : Adw.ApplicationWindow {
                 Box {
                   orientation: horizontal;
 
-                  MenuButton {
+                  Button {
                     icon-name: "add-symbolic";
                     tooltip-text: _("Add Lexicon");
-                    popover: add_lexicon_popover;
+                    clicked => $on_add_lexicon_button_clicked();
                   }
                   MenuButton {
                     icon-name: "app-menu-symbolic";
@@ -706,21 +706,20 @@ Adw.StatusPage lexicon_not_selected {
   icon-name: "lexicon-symbolic";
 }
 
-Popover add_lexicon_popover {
-  position: bottom;
+Adw.AlertDialog add_lexicon_alert_dialog {
+  default-response: "add";
+  heading: _("Add new Lexicon");
+  close-response: "cancel";
+  extra-child: Gtk.Entry add_lexicon_entry {
+    placeholder-text: _("Name");
+    changed => $on_add_lexicon_entry_changed();
+  };
+  response => $on_add_lexicon();
 
-  Box {
-    orientation: horizontal;
-    margin-bottom: 4;
-    margin-end: 4;
-    margin-start: 4;
-    margin-top: 4;
-
-    Adw.EntryRow add_lexicon_popover_entry_row {
-      title: _("Lexicon name");
-      show-apply-button: true;
-    }
-  }
+  responses [
+    cancel: _("Cancel"),
+    add: _("Add") suggested
+  ]
 }
 
 ShortcutsWindow help_overlay {

@@ -37,8 +37,8 @@ class LexiWindow(Adw.ApplicationWindow):
     # Sidebar components
     lexicons_scrolled_window: Gtk.ScrolledWindow = gtc()
     lexicons_list_box: Gtk.ListBox = gtc()
-    add_lexicon_popover: Gtk.Popover = gtc()
-    add_lexicon_popover_entry_row: Adw.EntryRow = gtc()
+    add_lexicon_alert_dialog: Adw.AlertDialog = gtc()
+    add_lexicon_entry: Gtk.Entry = gtc()
     search_bar: Gtk.SearchBar = gtc()
     search_entry: Gtk.SearchEntry = gtc()
 
@@ -142,12 +142,6 @@ class LexiWindow(Adw.ApplicationWindow):
         self.lexicon_list_box.set_sort_func(self.sort_words)
         self.lexicon_list_box.set_filter_func(self.filter_words)
         self.search_bar.connect_entry(self.search_entry)
-        self.add_lexicon_popover_entry_row.connect(
-            "changed", self.on_add_lexicon_entry_changed
-        )
-        self.add_lexicon_popover_entry_row.connect(
-            "apply", self.on_add_lexicon_entry_activated
-        )
         key_kapture_controller.connect("key-pressed", self.on_key_pressed)
 
         # Extracts ListBoxes from expander rows
@@ -359,62 +353,70 @@ class LexiWindow(Adw.ApplicationWindow):
 
         search_entry.set_text("")
 
-    def on_add_lexicon_entry_changed(self, row: Adw.EntryRow) -> None:
+    @Gtk.Template.Callback()
+    def on_add_lexicon_button_clicked(self, *_args) -> None:
+        """Present an Add Lexicon alert dialog"""
+        self.add_lexicon_alert_dialog.present(self)
+        self.add_lexicon_entry.set_buffer(Gtk.EntryBuffer())
+        self.add_lexicon_entry.grab_focus()
+
+    @Gtk.Template.Callback()
+    def on_add_lexicon_entry_changed(self, text: Gtk.Text) -> None:
         """
         Handle changes in the add lexicon entry row.
 
         Parameters
         ----------
-        row : Adw.EntryRow
-            The entry row that emitted this method.
+        text : Gtk.Text
+            The text widget that emitted this method.
         """
-        if row.get_text() == "":
-            row.add_css_class("error")
+        if text.get_text() == "":
+            self.add_lexicon_alert_dialog.add_css_class("error")
         else:
-            if "error" in row.get_css_classes():
-                row.remove_css_class("error")
+            if "error" in self.add_lexicon_alert_dialog.get_css_classes():
+                self.add_lexicon_alert_dialog.remove_css_class("error")
 
-    def on_add_lexicon_entry_activated(self, row: Adw.EntryRow) -> None:
-        """
-        Handle activation of the add lexicon entry row.
+    @Gtk.Template.Callback()
+    def on_add_lexicon(self, alert_dialog: Adw.AlertDialog, response: str) -> None:
+        """Adds new Lexicon on Add button press in alert dialog
 
         Parameters
         ----------
-        row : Adw.EntryRow
-            The entry row that emitted this method.
+        alert_dialog : Adw.AlertDialog
+            alert dialog which respinse emitted this method
+        response : str
+            response ID from alert dialog
         """
-        if row.get_text() == "":
-            self.add_lexicon_popover.popdown()
-            return
+        if response == "add":
+            if alert_dialog.get_extra_child().get_text_length() == 0:
+                return
 
-        # Generate a unique random ID for the new lexicon
-        while True:
-            random_id: str = "".join(
-                random.choices(string.ascii_lowercase + string.digits, k=16)
+            # Generate a unique random ID for the new lexicon
+            while True:
+                random_id: str = "".join(
+                    random.choices(string.ascii_lowercase + string.digits, k=16)
+                )
+                if not os.path.exists(
+                    os.path.join(shared.data_dir, "lexicons", random_id) + ".yaml"
+                ):
+                    break
+
+            # Create a new lexicon file with the generated ID
+            file = open(
+                os.path.join(shared.data_dir, "lexicons", random_id) + ".yaml",
+                "x+",
+                encoding="utf-8",
             )
-            if not os.path.exists(
-                os.path.join(shared.data_dir, "lexicons", random_id) + ".yaml"
-            ):
-                break
+            file.write(
+                f"name: {alert_dialog.get_extra_child().get_buffer().get_text()}\nid: {random_id}\nwords: []"
+            )
+            file.flush()
 
-        # Create a new lexicon file with the generated ID
-        file = open(
-            os.path.join(shared.data_dir, "lexicons", random_id) + ".yaml",
-            "x+",
-            encoding="utf-8",
-        )
-        file.write(f"name: {row.get_text()}\nid: {random_id}\nwords: []")
-        file.flush()
-
-        # Reset the popover and rebuild the sidebar
-        self.add_lexicon_popover.popdown()
-        self.add_lexicon_popover_entry_row.set_text("")
-        self.build_sidebar()
+            # Reset the popover and rebuild the sidebar
+            self.build_sidebar()
 
     def build_sidebar(self) -> None:
-        """
-        Build the sidebar with a list of lexicons.
-        """
+        """Build the sidebar with a list of lexicons."""
         if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
             # Clear the list box and populate it with lexicons
             self.lexicons_list_box.remove_all()
