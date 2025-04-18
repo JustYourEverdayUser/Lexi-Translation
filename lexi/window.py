@@ -701,3 +701,13 @@ class LexiWindow(Adw.ApplicationWindow):
         """Focus words search entry on `Ctrl+F` press"""
         if self.words_bottom_bar_revealer.get_reveal_child():
             self.lexicon_search_entry.grab_focus()
+
+    def on_word_direction_changed(
+        self, text: Gtk.Text, pre_direction: Gtk.TextDirection
+    ) -> None:
+        if pre_direction in (Gtk.TextDirection.LTR, Gtk.TextDirection.NONE):
+            self.loaded_word.word_dict["word"] = "&rtl" + text.get_text()
+        else:
+            self.loaded_word.word_dict["word"] = text.get_text().replace("&rtl", "")
+        if enums.Schema.WORD_AUTOSAVE():
+            self.loaded_lexicon.save_lexicon()
