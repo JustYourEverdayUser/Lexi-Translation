@@ -416,22 +416,33 @@ class LexiWindow(Adw.ApplicationWindow):
             self.build_sidebar()
 
     def build_sidebar(self) -> None:
-        """Build the sidebar with a list of lexicons."""
-        if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
-            # Clear the list box and populate it with lexicons
-            self.lexicons_list_box.remove_all()
-            lexicon_rows: list = []
-            for file in os.listdir(os.path.join(shared.data_dir, "lexicons")):
-                lexicon_rows.append(
-                    widgets.LexiconRow(os.path.join(shared.data_dir, "lexicons", file))
-                )
-            lexicon_rows.sort(key=lambda row: row.name)
-            for row in lexicon_rows:
-                self.lexicons_list_box.append(row)
-            self.lexicons_scrolled_window.set_child(self.lexicons_list_box)
-        else:
-            # Show a placeholder if no lexicons are available
-            self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
+
+        """
+        Build the sidebar with a list of lexicons.
+        """
+        try:
+            if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
+                # Clear the list box and populate it with lexicons
+                self.lexicons_list_box.remove_all()
+                lexicon_rows: list = []
+                for file in os.listdir(os.path.join(shared.data_dir, "lexicons")):
+                    lexicon_rows.append(
+                        widgets.LexiconRow(
+                            os.path.join(shared.data_dir, "lexicons", file)
+                        )
+                    )
+                lexicon_rows.sort(key=lambda row: row.name)
+                for row in lexicon_rows:
+                    self.lexicons_list_box.append(row)
+                self.lexicons_scrolled_window.set_child(self.lexicons_list_box)
+            else:
+                # Show a placeholder if no lexicons are available
+                self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
+        except FileNotFoundError:
+            if not os.path.exists(os.path.join(shared.data_dir, "lexicons")):
+                os.mkdir(os.path.join(shared.data_dir, "lexicons"))
+                self.build_sidebar()
+
 
     @Gtk.Template.Callback()
     def on_lexicon_selected(self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
@@ -702,6 +713,10 @@ class LexiWindow(Adw.ApplicationWindow):
         if self.words_bottom_bar_revealer.get_reveal_child():
             self.lexicon_search_entry.grab_focus()
 
+
+    def open_dir(self, _toast: Adw.Toast, path: str) -> None:
+        Gio.AppInfo.launch_default_for_uri(f"file://{path}")
+
     def on_word_direction_changed(
         self, text: Gtk.Text, pre_direction: Gtk.TextDirection
     ) -> None:
@@ -711,3 +726,4 @@ class LexiWindow(Adw.ApplicationWindow):
             self.loaded_word.word_dict["word"] = text.get_text().replace("&rtl", "")
         if enums.Schema.WORD_AUTOSAVE():
             self.loaded_lexicon.save_lexicon()
+
