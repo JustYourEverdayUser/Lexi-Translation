@@ -137,7 +137,9 @@ class LexiApplication(Adw.Application):
         )
         dialog.add_other_app(
             "io.github.dzheremi2.lrcmake-gtk",
+            # Translators: This is the name of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
             _("Chronograph"),
+            # Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
             _("Sync lyrics of your loved songs"),
         )
         if shared.PREFIX.endswith("Devel"):

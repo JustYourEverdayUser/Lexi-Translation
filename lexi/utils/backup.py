@@ -88,7 +88,9 @@ def incorrect_archive_panic(*_args) -> None:
     # pylint: disable=line-too-long
     alert = Adw.AlertDialog(
         heading=_("Incorrect Archive!"),
-        body=_("This archive seems to be incorrect, since it wasn't passed proof of content challenge: no config.yaml file and/or lexicons folder inside"),
+        body=_(
+            "This archive seems to be incorrect, since it wasn't passed proof of content challenge: no config.yaml file and/or lexicons folder inside"
+        ),
     )
     alert.add_response("close", label=_("Close"))
     alert.present(shared.win)

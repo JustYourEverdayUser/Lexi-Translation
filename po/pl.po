@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-12 12:59+0300\n"
+"POT-Creation-Date: 2025-04-19 01:22+0300\n"
 "PO-Revision-Date: 2025-01-07 23:55+0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -58,154 +58,167 @@ msgstr ""
 msgid "Delete selected words"
 msgstr ""
 
-#: data/gtk/window.blp:185
+#: data/gtk/window.blp:186
 msgid "Find a word"
 msgstr ""
 
-#: data/gtk/window.blp:191 data/gtk/ui/LexiconRow.blp:75
+#: data/gtk/window.blp:192 data/gtk/ui/LexiconRow.blp:79
 msgid "Add word"
 msgstr ""
 
-#: data/gtk/window.blp:203 data/gtk/window.blp:229 data/gtk/window.blp:802
-#: data/gtk/ui/LexiconRow.blp:56 lexi/ui/widgets.py:310 lexi/ui/widgets.py:311
-#: lexi/ui/widgets.py:449 lexi/ui/widgets.py:499 lexi/ui/widgets.py:500
+#: data/gtk/window.blp:204 data/gtk/window.blp:230 data/gtk/window.blp:802
+#: data/gtk/ui/LexiconRow.blp:57 lexi/ui/widgets.py:334 lexi/ui/widgets.py:335
+#: lexi/ui/widgets.py:508 lexi/ui/widgets.py:558 lexi/ui/widgets.py:559
 msgid "Word"
 msgstr ""
 
-#: data/gtk/window.blp:210
+#: data/gtk/window.blp:211
 msgid "Save"
 msgstr ""
 
-#: data/gtk/window.blp:235 data/io.github.dzheremi2.lexi.metainfo.xml.in:14
+#: data/gtk/window.blp:236 data/io.github.dzheremi2.lexi.metainfo.xml.in:14
 msgid "Pronunciation"
 msgstr ""
 
-#: data/gtk/window.blp:241
+#: data/gtk/window.blp:242
 msgid "Translations"
 msgstr ""
 
-#: data/gtk/window.blp:249
+#: data/gtk/window.blp:250
 msgid "Add translation"
 msgstr ""
 
-#: data/gtk/window.blp:258
+#: data/gtk/window.blp:259
 msgid "Word Type"
 msgstr ""
 
-#: data/gtk/window.blp:262 data/gtk/window.blp:524 lexi/enums.py:60
+#: data/gtk/window.blp:263 data/gtk/window.blp:525 lexi/enums.py:68
 msgid "Noun"
 msgstr ""
 
-#: data/gtk/window.blp:271 data/gtk/window.blp:533 lexi/enums.py:61
+#: data/gtk/window.blp:272 data/gtk/window.blp:534 lexi/enums.py:69
 msgid "Verb"
 msgstr ""
 
-#: data/gtk/window.blp:280 data/gtk/window.blp:542 lexi/enums.py:62
+#: data/gtk/window.blp:281 data/gtk/window.blp:543 lexi/enums.py:70
 msgid "Adjective"
 msgstr ""
 
-#: data/gtk/window.blp:289 data/gtk/window.blp:551 lexi/enums.py:63
+#: data/gtk/window.blp:290 data/gtk/window.blp:552 lexi/enums.py:71
 msgid "Adverb"
 msgstr ""
 
-#: data/gtk/window.blp:298 data/gtk/window.blp:560 lexi/enums.py:64
+#: data/gtk/window.blp:299 data/gtk/window.blp:561 lexi/enums.py:72
 msgid "Pronoun"
 msgstr ""
 
-#: data/gtk/window.blp:307 data/gtk/window.blp:569 lexi/enums.py:65
+#: data/gtk/window.blp:308 data/gtk/window.blp:570 lexi/enums.py:73
 msgid "Preposition"
 msgstr ""
 
-#: data/gtk/window.blp:316 data/gtk/window.blp:578 lexi/enums.py:66
+#: data/gtk/window.blp:317 data/gtk/window.blp:579 lexi/enums.py:74
 msgid "Conjunction"
 msgstr ""
 
-#: data/gtk/window.blp:325 data/gtk/window.blp:587 lexi/enums.py:67
+#: data/gtk/window.blp:326 data/gtk/window.blp:588 lexi/enums.py:75
 msgid "Interjection"
 msgstr ""
 
-#: data/gtk/window.blp:334 data/gtk/window.blp:596 lexi/enums.py:68
+#: data/gtk/window.blp:335 data/gtk/window.blp:597 lexi/enums.py:76
 msgid "Article"
 msgstr ""
 
-#: data/gtk/window.blp:343 data/gtk/window.blp:605 lexi/enums.py:69
+#: data/gtk/window.blp:344 data/gtk/window.blp:606 lexi/enums.py:77
 msgid "Idiom"
 msgstr ""
 
-#: data/gtk/window.blp:352 data/gtk/window.blp:614 lexi/enums.py:70
+#: data/gtk/window.blp:353 data/gtk/window.blp:615 lexi/enums.py:78
 msgid "Clause"
 msgstr ""
 
-#: data/gtk/window.blp:361 data/gtk/window.blp:623 lexi/enums.py:71
+#: data/gtk/window.blp:362 data/gtk/window.blp:624 lexi/enums.py:79
 msgid "Prefix"
 msgstr ""
 
-#: data/gtk/window.blp:370 data/gtk/window.blp:632 lexi/enums.py:72
+#: data/gtk/window.blp:371 data/gtk/window.blp:633 lexi/enums.py:80
 msgid "Suffix"
 msgstr ""
 
-#: data/gtk/window.blp:380
+#: data/gtk/window.blp:381
 msgid "Examples"
 msgstr ""
 
-#: data/gtk/window.blp:388 data/gtk/window.blp:405
+#: data/gtk/window.blp:389 data/gtk/window.blp:406
 msgid "Add example"
 msgstr ""
 
-#: data/gtk/window.blp:397 data/gtk/window.blp:814
+#: data/gtk/window.blp:398 data/gtk/window.blp:814
 msgid "References"
 msgstr ""
 
-#: data/gtk/window.blp:461
+#: data/gtk/window.blp:462
 msgid "Refer a Word"
 msgstr ""
 
-#: data/gtk/window.blp:492
+#: data/gtk/window.blp:493
 msgid "Filter by Word Type"
 msgstr ""
 
-#: data/gtk/window.blp:651
+#: data/gtk/window.blp:652
 msgid "Reset"
 msgstr ""
 
-#: data/gtk/window.blp:664
+#: data/gtk/window.blp:665
 msgid "No Lexicons found yet"
 msgstr ""
 
-#: data/gtk/window.blp:671
+#: data/gtk/window.blp:672
 msgid "No Lexicons found"
 msgstr ""
 
-#: data/gtk/window.blp:672
+#: data/gtk/window.blp:673
 msgid "No Lexicons found for this search request"
 msgstr ""
 
-#: data/gtk/window.blp:679
+#: data/gtk/window.blp:680
 msgid "No Words found yet"
 msgstr ""
 
-#: data/gtk/window.blp:686
+#: data/gtk/window.blp:687 data/gtk/ui/LexiconRow.blp:32
 msgid "Add Word"
 msgstr ""
 
-#: data/gtk/window.blp:697
+#: data/gtk/window.blp:698
 msgid "No Words found"
 msgstr ""
 
-#: data/gtk/window.blp:698
+#: data/gtk/window.blp:699
 msgid "No Words found for this search request"
 msgstr ""
 
-#: data/gtk/window.blp:703
+#: data/gtk/window.blp:704
 msgid "No Lexicon selected"
 msgstr ""
 
-#: data/gtk/window.blp:704
+#: data/gtk/window.blp:705
 msgid "Please select a Lexicon to view its words"
 msgstr ""
 
-#: data/gtk/window.blp:719
-msgid "Lexicon name"
+#: data/gtk/window.blp:711
+msgid "Add new Lexicon"
+msgstr ""
+
+#: data/gtk/window.blp:714 data/gtk/ui/LexiconRow.blp:102
+msgid "Name"
+msgstr ""
+
+#: data/gtk/window.blp:720 data/gtk/ui/LexiconRow.blp:107
+#: data/gtk/ui/LexiconRow.blp:119 data/gtk/ui/Preferences.blp:50
+msgid "Cancel"
+msgstr ""
+
+#: data/gtk/window.blp:721
+msgid "Add"
 msgstr ""
 
 #: data/gtk/window.blp:733 data/gtk/ui/Preferences.blp:6
@@ -232,7 +245,7 @@ msgstr ""
 msgid "Keybindings"
 msgstr ""
 
-#: data/gtk/window.blp:767 data/gtk/ui/Preferences.blp:9
+#: data/gtk/window.blp:767 data/gtk/ui/Preferences.blp:10
 msgid "Editing"
 msgstr ""
 
@@ -260,32 +273,56 @@ msgstr ""
 msgid "First Translation"
 msgstr ""
 
-#: data/gtk/ui/LexiconRow.blp:61 lexi/ui/widgets.py:290 lexi/ui/widgets.py:426
+#: data/gtk/ui/LexiconRow.blp:63 lexi/ui/widgets.py:309 lexi/ui/widgets.py:485
 msgid "Translation"
 msgstr ""
 
-#: data/gtk/ui/LexiconRow.blp:65 lexi/ui/widgets.py:291 lexi/ui/widgets.py:428
+#: data/gtk/ui/LexiconRow.blp:68 lexi/ui/widgets.py:310 lexi/ui/widgets.py:487
 msgid "Example"
 msgstr ""
 
-#: data/gtk/ui/LexiconRow.blp:112
-msgid "Delete this Lexicon?"
+#: data/gtk/ui/LexiconRow.blp:98
+msgid "Rename this Lexicon"
 msgstr ""
 
-#: data/gtk/ui/LexiconRow.blp:117
-msgid "Cancel"
-msgstr ""
-
-#: data/gtk/ui/LexiconRow.blp:118 data/gtk/ui/LexiconRow.blp:125
-msgid "Delete"
-msgstr ""
-
-#: data/gtk/ui/LexiconRow.blp:124
+#: data/gtk/ui/LexiconRow.blp:108 data/gtk/ui/LexiconRow.blp:126
 msgid "Rename"
 msgstr ""
 
-#: data/gtk/ui/Preferences.blp:12
+#: data/gtk/ui/LexiconRow.blp:114
+msgid "Delete this Lexicon?"
+msgstr ""
+
+#: data/gtk/ui/LexiconRow.blp:120 data/gtk/ui/LexiconRow.blp:127
+msgid "Delete"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:13
 msgid "Automatically save word on change"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:19
+msgid "Backup"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:27
+msgid "Export Database"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:33
+msgid "Import Database"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:43
+msgid "Import Database?"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:44
+msgid "Importing database will ERASE the existing one!"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:51
+msgid "Import"
 msgstr ""
 
 #: data/gtk/ui/ReferenceRow.blp:14
@@ -367,11 +404,21 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 
+#: lexi/main.py:132
+msgid "Inspiration"
+msgstr ""
+
 #: lexi/main.py:136
+msgid "Bug Reporters"
+msgstr ""
+
+#. Translators: This is the name of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
+#: lexi/main.py:141
 msgid "Chronograph"
 msgstr ""
 
-#: lexi/main.py:137
+#. Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
+#: lexi/main.py:143
 msgid "Sync lyrics of your loved songs"
 msgstr ""
 
@@ -379,14 +426,14 @@ msgstr ""
 msgid "Word autosave is enabled"
 msgstr ""
 
-#: lexi/window.py:514
+#: lexi/window.py:525
 msgid "You have already referenced all words"
 msgstr ""
 
-#: lexi/window.py:696
+#: lexi/window.py:707
 msgid "Word saved"
 msgstr ""
 
-#: lexi/ui/widgets.py:271 lexi/ui/widgets.py:399 lexi/ui/widgets.py:403
+#: lexi/ui/widgets.py:276 lexi/ui/widgets.py:458 lexi/ui/widgets.py:462
 msgid "No translation yet"
 msgstr ""
