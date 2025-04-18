@@ -129,7 +129,11 @@ class LexiApplication(Adw.Application):
         dialog.set_translator_credits(_("translator-credits"))
         dialog.set_copyright("© 2025 Dzheremi")
         dialog.add_acknowledgement_section(
-            None, ["heliguy4599 (Warehouse) https://github.com/flattool/warehouse"]
+            _("Inspiration"),
+            ("heliguy4599 (Warehouse) https://github.com/flattool/warehouse",),
+        )
+        dialog.add_acknowledgement_section(
+            _("Bug Reporters"), ("rezatester94 https://github.com/rezatester94",)
         )
         dialog.add_other_app(
             "io.github.dzheremi2.lrcmake-gtk",

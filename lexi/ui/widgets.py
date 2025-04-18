@@ -28,8 +28,8 @@ class LexiconRow(Gtk.Box):
     translation_entry_row: Adw.EntryRow = gtc()
     example_entry_row: Adw.EntryRow = gtc()
     actions_popover: Gtk.PopoverMenu = gtc()
-    rename_popover: Gtk.Popover = gtc()
-    rename_entry: Adw.EntryRow = gtc()
+    rename_alert_dialog: Adw.AlertDialog = gtc()
+    rename_entry: Gtk.Entry = gtc()
     deletion_alert_dialog: Adw.AlertDialog = gtc()
 
     title: Gtk.Label = gtc()
@@ -47,7 +47,6 @@ class LexiconRow(Gtk.Box):
         self.data: dict = yaml.safe_load(self.file)
         self.title.set_label(self.data["name"])
         self.actions_popover.set_parent(self)
-        self.rename_popover.set_parent(self)
 
         self.rmb_gesture = Gtk.GestureClick(button=3)
         self.long_press_gesture = Gtk.GestureLongPress()
@@ -108,8 +107,9 @@ class LexiconRow(Gtk.Box):
 
     def rename_lexicon(self, *_args) -> None:
         """Show the rename popover for the lexicon."""
-        self.rename_popover.popup()
-        self.rename_entry.set_text(self.name)
+        self.rename_alert_dialog.present(shared.win)
+        self.rename_entry.set_buffer(Gtk.EntryBuffer.new(self.name, -1))
+        self.rename_entry.grab_focus()
 
     @Gtk.Template.Callback()
     def on_rename_entry_changed(self, text: Gtk.Text) -> None:
@@ -127,7 +127,7 @@ class LexiconRow(Gtk.Box):
                 self.rename_entry.remove_css_class("error")
 
     @Gtk.Template.Callback()
-    def do_rename(self, entry_row: Adw.EntryRow) -> None:
+    def do_rename(self, alert_dialog: Adw.AlertDialog, response: str) -> None:
         """Rename the lexicon.
 
         Parameters
@@ -135,10 +135,10 @@ class LexiconRow(Gtk.Box):
         entry_row : Adw.EntryRow
             The entry row containing the new name.
         """
-        if entry_row.get_text() != "":
-            self.name = entry_row.get_text()
-        self.rename_popover.popdown()
-        shared.win.build_sidebar()
+        if response == "rename":
+            if alert_dialog.get_extra_child().get_text_length() != 0:
+                self.name = alert_dialog.get_extra_child().get_buffer().get_text()
+            shared.win.build_sidebar()
 
     def show_add_word_dialog(self) -> None:
         """Show the dialog for adding a new word."""
@@ -163,6 +163,7 @@ class LexiconRow(Gtk.Box):
         example = self.example_entry_row.get_text()
 
         if len(word) == 0:
+            self.word_entry_row.add_css_class("error")
             raise AttributeError("Word cannot be empty")
 
         if len(translation) == 0:
@@ -216,6 +217,10 @@ class LexiconRow(Gtk.Box):
         else:
             row.remove_css_class("error")
 
+    @Gtk.Template.Callback()
+    def on_add_word_dialog_enter_press(self, *_args) -> None:
+        self.add_word()
+
     @property
     def name(self) -> str:
         return self.data["name"]
@@ -264,7 +269,7 @@ class WordRow(Adw.ActionRow):
         super().__init__()
         self.lexicon: LexiconRow = lexicon
         self.word_dict: dict = word
-        self.set_title(self.word_dict["word"])
+        self.set_title(self.word_dict["word"].replace("&rtl", ""))
         try:
             self.set_subtitle(word["translations"][0])
         except IndexError:
@@ -284,28 +289,47 @@ class WordRow(Adw.ActionRow):
         shared.win.loaded_word = self
         shared.win.translations_list_box.remove_all()
         shared.win.examples_list_box.remove_all()
-        shared.win.word_entry_row.set_text(self.word)
+        for child in shared.win.word_entry_row.get_child():
+            for _item in child:
+                if isinstance(_item, Gtk.Text):
+                    _item.set_buffer(
+                        Gtk.EntryBuffer.new(self.word.replace("&rtl", ""), -1)
+                    )
+                    if self.word.startswith("&rtl"):
+                        _item.set_direction(Gtk.TextDirection.RTL)
+                    else:
+                        _item.set_direction(Gtk.TextDirection.LTR)
+                    _item.connect(
+                        "direction-changed",
+                        shared.win.on_word_direction_changed,
+                    )
+                    break
         shared.win.pronunciation_entry_row.set_text(self.pronunciation)
         for expander_row in (
             (shared.win.translations_expander_row, "translations", _("Translation")),
             (shared.win.examples_expander_row, "examples", _("Example")),
         ):
             for item in self.word_dict[expander_row[1]]:
-                row: Adw.EntryRow = Adw.EntryRow(text=item, title=expander_row[2])
+                row: Adw.EntryRow = Adw.EntryRow(
+                    text=item.replace("&rtl", ""), title=expander_row[2]
+                )
                 for child in row.get_child():
                     for _item in child:
                         if isinstance(_item, Gtk.Text):
+                            if item.startswith("&rtl"):
+                                _item.set_direction(Gtk.TextDirection.RTL)
                             _item.connect("changed", self.update_word)
                             _item.connect(
                                 "backspace", self.remove_list_prop_on_backspace
                             )
+                            _item.connect("direction-changed", self.set_word_direction)
                             break
                 expander_row[0].add_row(row)
 
         self.generate_word_type()
 
         if self.word != "":
-            shared.win.word_nav_page.set_title(self.word)
+            shared.win.word_nav_page.set_title(self.word.replace("&rtl", ""))
         else:
             shared.win.word_nav_page.set_title(_("Word"))
             self.set_title(_("Word"))
@@ -319,6 +343,38 @@ class WordRow(Adw.ActionRow):
             shared.win.lexicon_split_view.set_show_content(True)
 
         shared.win.set_word_rows_sensetiveness(True)
+
+    def set_word_direction(
+        self, text: Gtk.Text, prev_direction: Gtk.TextDirection
+    ) -> None:
+        directionable_row = text.get_ancestor(Adw.EntryRow)
+        expander_row = directionable_row.get_ancestor(Adw.ExpanderRow)
+
+        for attr in dir(shared.win):
+            if (
+                attr.endswith("_expander_row")
+                and getattr(shared.win, attr) == expander_row
+            ):
+                list_box = getattr(
+                    shared.win, attr.replace("_expander_row", "") + "_list_box"
+                )
+                for index, row in enumerate(list_box):
+                    if row == directionable_row:
+                        if prev_direction in (
+                            Gtk.TextDirection.LTR,
+                            Gtk.TextDirection.NONE,
+                        ):
+                            self.word_dict[attr.replace("_expander_row", "")][index] = (
+                                "&rtl" + text.get_text()
+                            )
+                            break
+                        self.word_dict[attr.replace("_expander_row", "")][
+                            index
+                        ] = text.get_text().replace("&rtl", "")
+                        break
+                break
+        if enums.Schema.WORD_AUTOSAVE():
+            self.lexicon.save_lexicon()
 
     def generate_word_type(self) -> None:
         """Generate the word type subtitle and toggle check buttons."""
@@ -388,7 +444,10 @@ class WordRow(Adw.ActionRow):
                     (i for i, _row in enumerate(list_box) if row == _row), None
                 )
                 if row_index is not None:
-                    self.word_dict[attr_name][row_index] = row.get_text()
+                    if self.word_dict[attr_name][row_index].startswith("&rtl"):
+                        self.word_dict[attr_name][row_index] = "&rtl" + row.get_text()
+                    else:
+                        self.word_dict[attr_name][row_index] = row.get_text()
                     try:
                         (
                             shared.win.loaded_word.set_subtitle(

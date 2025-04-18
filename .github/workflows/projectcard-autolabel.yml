@@ -1,0 +1,17 @@
+name: Project Autolabel
+
+on:
+  project_card:
+    types: [moved]
+
+jobs:
+  projectcardautolabel_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run ProjectCard Autolabel
+        id: runprojectcardautolabel
+        uses: Matticusau/projectcard-autolabel@v1.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          autolabel-config: '[{"column":"Done", "add_labels":["fix-available"], "remove_labels":[]}]'
+          projectfilter-config: '{"include":["3"]}'
