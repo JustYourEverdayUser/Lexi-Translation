@@ -310,20 +310,15 @@ class WordRow(Adw.ActionRow):
             (shared.win.examples_expander_row, "examples", _("Example")),
         ):
             for item in self.word_dict[expander_row[1]]:
-                row: Adw.EntryRow = Adw.EntryRow(
+                row: EntryRow = EntryRow(
                     text=item.replace("&rtl", ""), title=expander_row[2]
                 )
-                for child in row.get_child():
-                    for _item in child:
-                        if isinstance(_item, Gtk.Text):
-                            if item.startswith("&rtl"):
-                                _item.set_direction(Gtk.TextDirection.RTL)
-                            _item.connect("changed", self.update_word)
-                            _item.connect(
-                                "backspace", self.remove_list_prop_on_backspace
-                            )
-                            _item.connect("direction-changed", self.set_word_direction)
-                            break
+                _item = row.get_gtk_text()
+                if item.startswith("&rtl"):
+                    _item.set_direction(Gtk.TextDirection.RTL)
+                _item.connect("changed", self.update_word)
+                _item.connect("backspace", self.remove_list_prop_on_backspace)
+                _item.connect("direction-changed", self.set_word_direction)
                 expander_row[0].add_row(row)
 
         self.generate_word_type()
@@ -347,7 +342,7 @@ class WordRow(Adw.ActionRow):
     def set_word_direction(
         self, text: Gtk.Text, prev_direction: Gtk.TextDirection
     ) -> None:
-        directionable_row = text.get_ancestor(Adw.EntryRow)
+        directionable_row = text.get_ancestor(EntryRow)
         expander_row = directionable_row.get_ancestor(Adw.ExpanderRow)
 
         for attr in dir(shared.win):
@@ -402,7 +397,7 @@ class WordRow(Adw.ActionRow):
         if text.get_text_length() > 0:
             return
 
-        row = text.get_ancestor(Adw.EntryRow)
+        row = text.get_ancestor(EntryRow)
         expander_row = row.get_ancestor(Adw.ExpanderRow)
 
         for attr_name, expander in (
@@ -430,7 +425,7 @@ class WordRow(Adw.ActionRow):
         text : Gtk.Text
             The text widget triggering the update.
         """
-        row = text.get_ancestor(Adw.EntryRow)
+        row = text.get_ancestor(EntryRow)
         expander_row = row.get_ancestor(Adw.ExpanderRow)
 
         for attr_name, expander in (
@@ -480,18 +475,14 @@ class WordRow(Adw.ActionRow):
             if attr.endswith("_expander_row")
         ):
             if expander is expander_row:
-                new_row: Adw.EntryRow = Adw.EntryRow(
+                new_row: EntryRow = EntryRow(
                     title=(
                         _("Translation")
                         if attr_name == "translations"
                         else _("Example")
                     )
                 )
-                for child in new_row.get_child():
-                    for _item in child:
-                        if isinstance(_item, Gtk.Text):
-                            text = _item
-                            break
+                text = new_row.get_gtk_text()
                 expander_row.add_row(new_row)
                 self.word_dict[attr_name].append("")
                 text.connect("changed", self.update_word)
@@ -669,3 +660,16 @@ class ReferenceRow(Adw.ActionRow):
             shared.win.loaded_lexicon.save_lexicon()
         shared.win.references_list_box.remove(self)
         shared.win.update_refs_count()
+
+
+class EntryRow(Adw.EntryRow):
+    __gtype_name__ = "LexiEntryRow"
+
+    def __init__(self, title: str = "", text: str = "") -> None:
+        super().__init__(title=title, text=text)
+
+    def get_gtk_text(self) -> Gtk.Text:
+        for item in self.get_child():
+            for _item in item:
+                if isinstance(_item, Gtk.Text):
+                    return _item
