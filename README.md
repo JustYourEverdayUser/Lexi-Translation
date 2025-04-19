@@ -48,6 +48,9 @@ If you want to download a devel build, you can do it by downloading it from [Git
 Lexi releases are published here and on [FlatHub](https://flathub.org/apps/io.github.dzheremi2.lexi) every Sunday (except for hotfixes). All pull requests must be merged by Friday 23:59 UTC+3; otherwise, they will be postponed until the following Friday.
 Merging pull requests on Friday also initiates a string freeze — `.po` files are updated according to the changes made in the repository and are then ready for translation ahead of the Sunday release.
 
+### Changelog
+You can see full changelog for all versions [here](docs/CHANGELOG.md)
+
 ### Translation
 You can help project to be internationalized using [Hosted Weblate](https://hosted.weblate.org/projects/lexi/lexi/)
 
