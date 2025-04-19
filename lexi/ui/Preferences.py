@@ -55,22 +55,52 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     @Gtk.Template.Callback()
     def on_export_button_clicked(self, *_args) -> None:
+        """
+        Handle the export button click event.
+
+        Opens a file dialog to save the database backup.
+        """
         dialog = Gtk.FileDialog(initial_name="lexi_backup.zip")
         dialog.save(shared.win, None, self.on_export_database)
 
     def on_export_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
+        """
+        Export the database to the selected file path.
+
+        Parameters
+        ----------
+        file_dialog : Gtk.FileDialog
+            The file dialog used for selecting the export location.
+        result : Gio.Task
+            The result of the file dialog operation.
+        """
         path = file_dialog.save_finish(result).get_path()
         backup.export_database(path)
         self.close()
 
     @Gtk.Template.Callback()
     def on_import_button_clicked(self, *_args) -> None:
+        """
+        Handle the import button click event.
+
+        Presents a confirmation dialog before importing a database.
+        """
         self.import_confirmation_dialog.present(shared.win)
 
     @Gtk.Template.Callback()
     def on_import_confirmation_dialog_response(
         self, _alert_dialog: Adw.AlertDialog, response: str
     ) -> None:
+        """
+        Handle the response from the import confirmation dialog.
+
+        Parameters
+        ----------
+        _alert_dialog : Adw.AlertDialog
+            The alert dialog that emitted this method.
+        response : str
+            The response ID from the dialog.
+        """
         if response == "import":
             dialog = Gtk.FileDialog(
                 default_filter=Gtk.FileFilter(mime_types=["application/zip"])
@@ -78,6 +108,16 @@ class LexiPreferences(Adw.PreferencesDialog):
             dialog.open(shared.win, None, self.on_import_database)
 
     def on_import_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
+        """
+        Import the database from the selected file path.
+
+        Parameters
+        ----------
+        file_dialog : Gtk.FileDialog
+            The file dialog used for selecting the import file.
+        result : Gio.Task
+            The result of the file dialog operation.
+        """
         path = file_dialog.open_finish(result).get_path()
         backup.import_database(path)
         self.close()

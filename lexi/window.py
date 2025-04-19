@@ -557,7 +557,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
     def set_selection_mode(self, enabled: bool) -> None:
         """
-        Set the selection mode of the words list box.
+        Enable or disable selection mode for the words list box.
 
         Parameters
         ----------
@@ -594,7 +594,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
     def set_word_rows_sensetiveness(self, active: bool) -> None:
         """
-        Set the sensitivity of word entry rows.
+        Enable or disable sensitivity for word entry rows.
 
         Parameters
         ----------
@@ -613,14 +613,14 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_search_entry_changed(self, *_args) -> None:
         """
-        Handle changes in the search entry.
+        Invalidate the filter for the lexicon list box when the search entry changes.
         """
         self.lexicon_list_box.invalidate_filter()
 
     @Gtk.Template.Callback()
     def on_word_type_check_button_toggled(self, *_args) -> None:
         """
-        Handle toggling of word type check buttons for the currently loaded word.
+        Update the word type dictionary for the currently loaded word when a check button is toggled.
         """
         if not self.loaded_word:
             return  # Ensure a word is loaded before proceeding
@@ -642,14 +642,14 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_lexicon_search_entry_changed(self, *_args) -> None:
         """
-        Handle changes in the lexicon search entry.
+        Invalidate the filter for the lexicons list box when the lexicon search entry changes.
         """
         self.lexicons_list_box.invalidate_filter()
 
     @Gtk.Template.Callback()
     def on_filter_button_clicked_action(self, *_args) -> None:
         """
-        Handle the click of the filter button.
+        Present the word types filter dialog and initialize its check buttons.
         """
         for word_type, value in shared.config["filter-types"].items():
             getattr(self, word_type + "_check_button_filter_dialog").set_active(value)
@@ -660,7 +660,7 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_filter_check_button_toggled(self, *_args) -> None:
         """
-        Handle toggling of filter check buttons.
+        Update the filter types configuration when a filter check button is toggled.
         """
         if self.props.visible_dialog == self.word_types_filter_dialog:
             for (
@@ -687,14 +687,16 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_reset_filter_button_clicked(self, *_args) -> None:
         """
-        Handle the click of the reset filter button.
+        Reset all filter check buttons in the word types filter dialog.
         """
         for attr in dir(self):
             if attr.endswith("_check_button_filter_dialog"):
                 getattr(self, attr).set_active(False)
 
     def on_show_preferences_action(self, *_args) -> None:
-        """Presents Preferences dialog to user"""
+        """
+        Present the Preferences dialog to the user.
+        """
         if LexiPreferences.opened:
             return
         preferences = LexiPreferences()
@@ -712,11 +714,29 @@ class LexiWindow(Adw.ApplicationWindow):
             self.lexicon_search_entry.grab_focus()
 
     def open_dir(self, _toast: Adw.Toast, path: str) -> None:
+        """Opens the given path in the file manager.
+
+        Parameters
+        ----------
+        _toast : Adw.Toast
+            toast which emitted this method
+        path : str
+            path to open
+        """
         Gio.AppInfo.launch_default_for_uri(f"file://{path}")
 
     def on_word_direction_changed(
         self, text: Gtk.Text, pre_direction: Gtk.TextDirection
     ) -> None:
+        """Change the word direction based on the text direction.
+
+        Parameters
+        ----------
+        text : Gtk.Text
+            The text widget that emitted this method.
+        pre_direction : Gtk.TextDirection
+            The previous text direction.
+        """
         if pre_direction in (Gtk.TextDirection.LTR, Gtk.TextDirection.NONE):
             self.loaded_word.word_dict["word"] = "&rtl" + text.get_text()
         else:

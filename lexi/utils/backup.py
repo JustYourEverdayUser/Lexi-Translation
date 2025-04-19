@@ -9,6 +9,14 @@ from lexi import shared
 
 
 def export_database(path: str) -> None:
+    """
+    Export the database to a zip file.
+
+    Parameters
+    ----------
+    path : str
+        The file path where the database backup will be saved.
+    """
     with zipfile.ZipFile(path, "w", zipfile.ZIP_STORED) as zipf:
         if os.path.exists(os.path.join(shared.data_dir, "config.yaml")):
             zipf.write(
@@ -34,6 +42,14 @@ def export_database(path: str) -> None:
 
 
 def import_database(zip_path: str) -> None:
+    """
+    Import the database from a zip file.
+
+    Parameters
+    ----------
+    zip_path : str
+        The file path of the zip archive containing the database backup.
+    """
     path = shared.data_dir
     with zipfile.ZipFile(zip_path, "r") as zipf:
         if proof_of_content(zip_path):
@@ -73,6 +89,19 @@ def import_database(zip_path: str) -> None:
 
 
 def proof_of_content(zip_path: str) -> bool:
+    """
+    Verify the contents of the zip archive.
+
+    Parameters
+    ----------
+    zip_path : str
+        The file path of the zip archive to verify.
+
+    Returns
+    -------
+    bool
+        True if the archive contains the required files, False otherwise.
+    """
     if zipfile.is_zipfile(zip_path):
         with zipfile.ZipFile(zip_path, "r") as zipf:
             archive_files = zipf.namelist()
@@ -88,6 +117,7 @@ def proof_of_content(zip_path: str) -> bool:
 
 
 def incorrect_archive_panic(*_args) -> None:
+    """Display an alert dialog for an incorrect archive."""
     # pylint: disable=line-too-long
     alert = Adw.AlertDialog(
         heading=_("Incorrect Archive!"),

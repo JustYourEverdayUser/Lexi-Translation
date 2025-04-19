@@ -663,12 +663,40 @@ class ReferenceRow(Adw.ActionRow):
 
 
 class EntryRow(Adw.EntryRow):
+    """Custom entry row widget.
+
+    Used for displaying and editing text entries with a title.
+
+    Parameters
+    ----------
+    title : str, optional
+        The title of the entry row, by default "".
+    text : str, optional
+        The initial text of the entry row, by default "".
+    """
+
     __gtype_name__ = "LexiEntryRow"
 
     def __init__(self, title: str = "", text: str = "") -> None:
+        """Initialize the EntryRow widget.
+
+        Parameters
+        ----------
+        title : str, optional
+            The title of the entry row, by default "".
+        text : str, optional
+            The initial text of the entry row, by default "".
+        """
         super().__init__(title=title, text=text)
 
     def get_gtk_text(self) -> Gtk.Text:
+        """Retrieve the Gtk.Text widget from the entry row.
+
+        Returns
+        -------
+        Gtk.Text
+            The Gtk.Text widget contained in the entry row.
+        """
         for item in self.get_child():
             for _item in item:
                 if isinstance(_item, Gtk.Text):

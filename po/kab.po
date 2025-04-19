@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-19 14:23+0300\n"
+"POT-Creation-Date: 2025-04-19 15:01+0300\n"
 "PO-Revision-Date: 2025-04-16 22:01+0000\n"
 "Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/lexi/lexi/kab/>\n"
@@ -67,8 +67,8 @@ msgid "Add word"
 msgstr "Rnu awal"
 
 #: data/gtk/window.blp:204 data/gtk/window.blp:230 data/gtk/window.blp:802
-#: data/gtk/ui/LexiconRow.blp:57 lexi/ui/widgets.py:334 lexi/ui/widgets.py:335
-#: lexi/ui/widgets.py:508 lexi/ui/widgets.py:558 lexi/ui/widgets.py:559
+#: data/gtk/ui/LexiconRow.blp:57 lexi/ui/widgets.py:329 lexi/ui/widgets.py:330
+#: lexi/ui/widgets.py:499 lexi/ui/widgets.py:549 lexi/ui/widgets.py:550
 msgid "Word"
 msgstr "Awal"
 
@@ -274,11 +274,11 @@ msgstr "S usider"
 msgid "First Translation"
 msgstr "Tasuqilt tamezwarut"
 
-#: data/gtk/ui/LexiconRow.blp:63 lexi/ui/widgets.py:309 lexi/ui/widgets.py:485
+#: data/gtk/ui/LexiconRow.blp:63 lexi/ui/widgets.py:309 lexi/ui/widgets.py:480
 msgid "Translation"
 msgstr "Tasuqilt"
 
-#: data/gtk/ui/LexiconRow.blp:68 lexi/ui/widgets.py:310 lexi/ui/widgets.py:487
+#: data/gtk/ui/LexiconRow.blp:68 lexi/ui/widgets.py:310 lexi/ui/widgets.py:482
 msgid "Example"
 msgstr "Amedya"
 
@@ -436,43 +436,43 @@ msgstr "Aḥraz awurman n wawalen yettwarmed"
 msgid "You have already referenced all words"
 msgstr ""
 
-#: lexi/window.py:707
+#: lexi/window.py:709
 msgid "Word saved"
 msgstr "Yettwaklas wawal-nni"
 
-#: lexi/ui/widgets.py:276 lexi/ui/widgets.py:458 lexi/ui/widgets.py:462
+#: lexi/ui/widgets.py:276 lexi/ui/widgets.py:453 lexi/ui/widgets.py:457
 msgid "No translation yet"
 msgstr "Ur ɛad tella tsuqilt"
 
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-#: lexi/utils/backup.py:29
+#: lexi/utils/backup.py:37
 #, python-brace-format
 msgid "Backup exported successfully: {path}"
 msgstr ""
 
-#: lexi/utils/backup.py:30
+#: lexi/utils/backup.py:38
 msgid "Open"
 msgstr ""
 
-#: lexi/utils/backup.py:50
+#: lexi/utils/backup.py:66
 msgid "Database imported successfully"
 msgstr ""
 
-#: lexi/utils/backup.py:69 lexi/utils/backup.py:93
+#: lexi/utils/backup.py:85 lexi/utils/backup.py:123
 msgid "Incorrect Archive!"
 msgstr ""
 
-#: lexi/utils/backup.py:69
+#: lexi/utils/backup.py:85
 msgid "Why?"
 msgstr ""
 
-#: lexi/utils/backup.py:95
+#: lexi/utils/backup.py:125
 msgid ""
 "This archive seems to be incorrect, since it wasn't passed proof of content "
 "challenge: no config.yaml file and/or lexicons folder inside"
 msgstr ""
 
-#: lexi/utils/backup.py:98
+#: lexi/utils/backup.py:128
 msgid "Close"
 msgstr ""
 
