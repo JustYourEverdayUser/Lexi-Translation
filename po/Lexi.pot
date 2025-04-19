@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-19 01:22+0300\n"
+"POT-Creation-Date: 2025-04-19 14:23+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -435,4 +435,36 @@ msgstr ""
 
 #: lexi/ui/widgets.py:276 lexi/ui/widgets.py:458 lexi/ui/widgets.py:462
 msgid "No translation yet"
+msgstr ""
+
+#. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
+#: lexi/utils/backup.py:29
+#, python-brace-format
+msgid "Backup exported successfully: {path}"
+msgstr ""
+
+#: lexi/utils/backup.py:30
+msgid "Open"
+msgstr ""
+
+#: lexi/utils/backup.py:50
+msgid "Database imported successfully"
+msgstr ""
+
+#: lexi/utils/backup.py:69 lexi/utils/backup.py:93
+msgid "Incorrect Archive!"
+msgstr ""
+
+#: lexi/utils/backup.py:69
+msgid "Why?"
+msgstr ""
+
+#: lexi/utils/backup.py:95
+msgid ""
+"This archive seems to be incorrect, since it wasn't passed proof of content "
+"challenge: no config.yaml file and/or lexicons folder inside"
+msgstr ""
+
+#: lexi/utils/backup.py:98
+msgid "Close"
 msgstr ""

@@ -8,17 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-19 01:22+0300\n"
-"PO-Revision-Date: 2025-04-19 05:12+0000\n"
+"POT-Creation-Date: 2025-04-19 14:23+0300\n"
+"PO-Revision-Date: 2025-04-19 14:26+0300\n"
 "Last-Translator: Артём Чичваров <chichvarov1315@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/lexi/lexi/ru/>\n"
+"Language-Team: Russian\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Gtranslator 48.0\n"
 
 #: data/gtk/window.blp:36
 msgid "Lexicons"
@@ -443,6 +443,40 @@ msgstr "Слово сохранено"
 #: lexi/ui/widgets.py:276 lexi/ui/widgets.py:458 lexi/ui/widgets.py:462
 msgid "No translation yet"
 msgstr "Пока перевода нет"
+
+#. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
+#: lexi/utils/backup.py:29
+#, python-brace-format
+msgid "Backup exported successfully: {path}"
+msgstr "Резервная копия сохранена успешно: {path}"
+
+#: lexi/utils/backup.py:30
+msgid "Open"
+msgstr "Открыть"
+
+#: lexi/utils/backup.py:50
+msgid "Database imported successfully"
+msgstr "База данных импортирована успешно"
+
+#: lexi/utils/backup.py:69 lexi/utils/backup.py:93
+msgid "Incorrect Archive!"
+msgstr "Некорректный архив!"
+
+#: lexi/utils/backup.py:69
+msgid "Why?"
+msgstr "Почему?"
+
+#: lexi/utils/backup.py:95
+msgid ""
+"This archive seems to be incorrect, since it wasn't passed proof of content "
+"challenge: no config.yaml file and/or lexicons folder inside"
+msgstr ""
+"Похоже этот архив некорректен, т.к он не прошёл тест на содержимое: нет "
+"файла config.yaml и/или папки lexicons внутри архива"
+
+#: lexi/utils/backup.py:98
+msgid "Close"
+msgstr "Закрыть"
 
 #~ msgid "Lexicon name"
 #~ msgstr "Название Лексикона"

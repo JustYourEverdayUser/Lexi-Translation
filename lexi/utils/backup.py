@@ -22,9 +22,12 @@ def export_database(path: str) -> None:
                 arcname = os.path.relpath(filename, shared.data_dir)
                 zipf.write(filename, arcname=arcname)
 
+        # pylint: disable=line-too-long
         if os.path.exists(path):
             toast = Adw.Toast(
-                title=_(f"Backup exported successfully: {path}"), button_label=_("Open")
+                # Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
+                title=_(f"Backup exported successfully: {path}"),
+                button_label=_("Open"),
             )
             toast.connect("button-clicked", shared.win.open_dir, os.path.dirname(path))
             shared.win.toast_overlay.add_toast(toast)
