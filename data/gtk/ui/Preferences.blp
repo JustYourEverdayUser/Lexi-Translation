@@ -17,19 +17,19 @@ template $LexiPreferences : Adw.PreferencesDialog {
 
   Adw.PreferencesPage {
     title: _("Backup");
-    icon-name: "backup-symbolic";
+    icon-name: "lexi-backup-symbolic";
 
     Adw.PreferencesGroup {
       separate-rows: true;
 
       Adw.ButtonRow {
-        start-icon-name: "export-symbolic";
+        start-icon-name: "export-database-symbolic";
         title: _("Export Database");
         activated => $on_export_button_clicked();
       }
 
       Adw.ButtonRow {
-        start-icon-name: "import-symbolic";
+        start-icon-name: "import-database-symbolic";
         title: _("Import Database");
         activated => $on_import_button_clicked();
 

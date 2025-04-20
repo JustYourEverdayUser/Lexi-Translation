@@ -24,9 +24,9 @@
     <file alias="filter-words-symbolic.svg">icons/icons/symbolic/filter-words-symbolic.svg</file>
     <file alias="document-edit-symbolic.svg">icons/icons/symbolic/document-edit-symbolic.svg</file>
     <file alias="general-symbolic.svg">icons/icons/symbolic/general-symbolic.svg</file>
-    <file alias="backup-symbolic.svg">icons/icons/symbolic/backup-symbolic.svg</file>
-    <file alias="export-symbolic.svg">icons/icons/symbolic/export-symbolic.svg</file>
-    <file alias="import-symbolic.svg">icons/icons/symbolic/import-symbolic.svg</file>
+    <file alias="lexi-backup-symbolic.svg">icons/icons/symbolic/lexi-backup-symbolic.svg</file>
+    <file alias="export-database-symbolic.svg">icons/icons/symbolic/export-database-symbolic.svg</file>
+    <file alias="import-database-symbolic.svg">icons/icons/symbolic/import-database-symbolic.svg</file>
     <file alias="io.github.dzheremi2.lrcmake-gtk.svg">icons/hicolor/scalable/apps/io.github.dzheremi2.lrcmake-gtk.svg</file>
   </gresource>
 </gresources>
