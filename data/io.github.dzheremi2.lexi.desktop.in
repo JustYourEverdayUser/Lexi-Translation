@@ -6,7 +6,7 @@ Exec=lexi
 Icon=@APP_ID@
 Terminal=false
 Type=Application
-Categories=GNOME;GTK;Utility;Dictionary;Education;
+Categories=Education;Utility;Dictionary;GNOME;GTK;
 # Translators: Search terms to find this application. Please, do NOT delete original english keywords, just add yuor language translations to them. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 Keywords=dict;dictionary;word;words;lexi;lexicon;lexicons;
 # Translators: Do NOT translate or transliterate this text (these are enum types)!
