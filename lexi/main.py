@@ -11,6 +11,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
+from lexi.utils.migrator import migrator
 from lexi.window import LexiWindow
 
 
@@ -187,6 +188,24 @@ def main(_version):
         os.path.join(shared.data_dir, "config.yaml"), "r+", encoding="utf-8"
     )
     shared.config = yaml.safe_load(shared.config_file)
+
+    # Migrate config file and lexicons to newer versions if their structure has changed
+    if shared.config["version"] < shared.CACHEV:
+        current_version = shared.config["version"]
+        target_version = shared.CACHEV
+
+        while current_version < target_version:
+            next_version = current_version + 1
+            migrator_function_name = f"migrate_v{next_version}"
+
+            if hasattr(migrator, migrator_function_name):
+                migrator_function = getattr(migrator, migrator_function_name)
+                migrator_function()
+                current_version = next_version
+            else:
+                raise ValueError(
+                    f"Migrator function {migrator_function_name} not found"
+                )
 
     shared.app = app = LexiApplication()
 
