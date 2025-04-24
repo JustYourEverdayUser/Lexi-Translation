@@ -176,7 +176,7 @@ def main(_version):
     # Migrate config file and lexicons to newer versions if their structure has changed
     if shared.config["version"] < shared.CACHEV:
         # pylint: disable=import-outside-toplevel
-        from lexi.utils.migrator import migrator
+        from lexi.utils import migrator
 
         current_version = shared.config["version"]
         target_version = shared.CACHEV
