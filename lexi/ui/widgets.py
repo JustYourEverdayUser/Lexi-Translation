@@ -5,6 +5,7 @@ import yaml
 from gi.repository import Adw, Gio, Gtk
 
 from lexi import enums, shared
+from lexi.ui.Preferences import LexiPreferences
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
@@ -373,16 +374,14 @@ class WordRow(Adw.ActionRow):
 
     def generate_word_type(self) -> None:
         """Generate the word type subtitle and toggle check buttons."""
-        word_type_subtitle: str = ""
-        for word_type, word_type_val in self.word_dict["types"].copy().items():
-            if word_type_val:
-                getattr(shared.win, word_type + "_check_button").set_active(True)
-                word_type_subtitle += enums.WordType[word_type.upper()] + ", "
-            else:
-                getattr(shared.win, word_type + "_check_button").set_active(False)
-
-        if word_type_subtitle.endswith(", "):
-            shared.win.word_type_expander_row.set_subtitle(word_type_subtitle[:-2])
+        shared.win.word_types_list_box.remove_all()
+        subtitle = ""
+        for word_type in self.word_type:
+            shared.win.word_types_list_box.append(WordTypeRow(word_type))
+            subtitle += word_type + ", "
+        if len(subtitle) > 0:
+            subtitle = subtitle[:-2]
+            shared.win.word_type_expander_row.set_subtitle(subtitle)
         else:
             shared.win.word_type_expander_row.set_subtitle("")
 
@@ -580,6 +579,10 @@ class WordRow(Adw.ActionRow):
                     break
         return count
 
+    @property
+    def word_type(self) -> list:
+        return self.word_dict["types"]
+
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/ReferenceRow.ui")
 class ReferenceRow(Adw.ActionRow):
@@ -701,3 +704,61 @@ class EntryRow(Adw.EntryRow):
             for _item in item:
                 if isinstance(_item, Gtk.Text):
                     return _item
+
+
+@Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/WordTypeRow.ui")
+class WordTypeRow(Adw.ActionRow):
+    """WordTypeRow widget.
+
+    Parameters
+    ----------
+    word_type : str
+        The type of the word.
+    deactivate : bool, optional
+        Whether to deactivate the row and activate the button, by default True.
+    """
+    __gtype_name__ = "WordTypeRow"
+
+    unassign_button: Gtk.Button = gtc()
+
+    def __init__(self, word_type: str, deactivate: bool = True) -> None:
+        """Initialize the WordTypeRow widget.
+
+        Parameters
+        ----------
+        word_type : str
+            The type of the word.
+        deactivate : bool, optional
+            Whether to deactivate the row and activate the button, by default True.
+        """
+        super().__init__()
+        self.set_title(word_type)
+        self.word_type: str = word_type
+
+        if deactivate:
+            self.set_activatable(False)
+        else:
+            self.unassign_button.set_visible(False)
+
+    @Gtk.Template.Callback()
+    def on_unassign_clicked(self, *_args) -> None:
+        """Unassign the word type from the word."""
+        if not isinstance(dialog := shared.win.props.visible_dialog, LexiPreferences):
+            shared.win.loaded_word.word_dict["types"].remove(self.word_type)
+            shared.win.word_types_list_box.remove(self)
+            shared.win.loaded_word.generate_word_type()
+            if enums.Schema.WORD_AUTOSAVE():
+                shared.win.loaded_lexicon.save_lexicon()
+        else:
+            dialog.available_word_types_list_box.remove(self)
+            shared.config["word-types"].remove(self.word_type)
+            dialog.gen_word_types()
+
+    @Gtk.Template.Callback()
+    def on_clicked(self, *_args) -> None:
+        shared.win.loaded_word.word_type.append(self.word_type)
+        shared.win.loaded_word.generate_word_type()
+        if enums.Schema.WORD_AUTOSAVE():
+            shared.win.loaded_lexicon.save_lexicon()
+        if shared.win.props.visible_dialog == shared.win.assign_word_type_dialog:
+            shared.win.assign_word_type_dialog_list_box.remove(self)

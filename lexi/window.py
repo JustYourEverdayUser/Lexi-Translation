@@ -59,42 +59,12 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button = gtc()
     delete_selected_words_button_revealer: Gtk.Revealer = gtc()
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
+    assign_word_type_dialog: Adw.Dialog = gtc()
+    assign_word_type_dialog_list_box: Gtk.ListBox = gtc()
 
     # References dialog
     references_dialog: Adw.Dialog = gtc()
     references_dialog_list_box: Gtk.ListBox = gtc()
-
-    # Word Type filter dialog
-    word_types_filter_dialog: Adw.Dialog = gtc()
-    filter_dialog_list_box: Gtk.ListBox = gtc()
-    noun_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    verb_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    adjective_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    adverb_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    pronoun_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    preposition_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    conjunction_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    interjection_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    article_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    idiom_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    clause_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    prefix_check_button_filter_dialog: Gtk.CheckButton = gtc()
-    suffix_check_button_filter_dialog: Gtk.CheckButton = gtc()
-
-    # Word type check buttons
-    noun_check_button: Gtk.CheckButton = gtc()
-    verb_check_button: Gtk.CheckButton = gtc()
-    adjective_check_button: Gtk.CheckButton = gtc()
-    adverb_check_button: Gtk.CheckButton = gtc()
-    pronoun_check_button: Gtk.CheckButton = gtc()
-    preposition_check_button: Gtk.CheckButton = gtc()
-    conjunction_check_button: Gtk.CheckButton = gtc()
-    interjection_check_button: Gtk.CheckButton = gtc()
-    article_check_button: Gtk.CheckButton = gtc()
-    idiom_check_button: Gtk.CheckButton = gtc()
-    clause_check_button: Gtk.CheckButton = gtc()
-    prefix_check_button: Gtk.CheckButton = gtc()
-    suffix_check_button: Gtk.CheckButton = gtc()
 
     # IPA charset flow box
     # ipa_charset_flow_box: Gtk.FlowBox = gtc()
@@ -617,23 +587,6 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         self.lexicon_list_box.invalidate_filter()
 
-    @Gtk.Template.Callback()
-    def on_word_type_check_button_toggled(self, *_args) -> None:
-        """
-        Update the word type dictionary for the currently loaded word when a check button is toggled.
-        """
-        if not self.loaded_word:
-            return  # Ensure a word is loaded before proceeding
-
-        for attr in dir(self):
-            if attr.endswith("_check_button"):
-                button = getattr(self, attr)
-                word_type = attr.replace("_check_button", "")
-                if button.get_active():
-                    self.loaded_word.word_dict["types"][word_type] = True
-                else:
-                    self.loaded_word.word_dict["types"][word_type] = False
-
         if enums.Schema.WORD_AUTOSAVE():
             self.loaded_lexicon.save_lexicon()
 
@@ -645,53 +598,6 @@ class LexiWindow(Adw.ApplicationWindow):
         Invalidate the filter for the lexicons list box when the lexicon search entry changes.
         """
         self.lexicons_list_box.invalidate_filter()
-
-    @Gtk.Template.Callback()
-    def on_filter_button_clicked_action(self, *_args) -> None:
-        """
-        Present the word types filter dialog and initialize its check buttons.
-        """
-        for word_type, value in shared.config["filter-types"].items():
-            getattr(self, word_type + "_check_button_filter_dialog").set_active(value)
-
-        self.word_types_filter_dialog.present(self)
-
-    # pylint: disable=no-member
-    @Gtk.Template.Callback()
-    def on_filter_check_button_toggled(self, *_args) -> None:
-        """
-        Update the filter types configuration when a filter check button is toggled.
-        """
-        if self.props.visible_dialog == self.word_types_filter_dialog:
-            for (
-                type_row
-            ) in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
-                for item in type_row:
-                    for _item in item:
-                        for __item in _item:
-                            if isinstance(__item, Gtk.CheckButton):
-                                button = __item
-                                break
-                for attr in dir(self):
-                    if attr.endswith("_check_button_filter_dialog"):
-                        if getattr(self, attr) == button:
-                            word_type = attr.replace("_check_button_filter_dialog", "")
-                            break
-                if button.get_active():
-                    shared.config["filter-types"][word_type] = True
-                else:
-                    shared.config["filter-types"][word_type] = False
-
-            self.lexicon_list_box.invalidate_filter()
-
-    @Gtk.Template.Callback()
-    def on_reset_filter_button_clicked(self, *_args) -> None:
-        """
-        Reset all filter check buttons in the word types filter dialog.
-        """
-        for attr in dir(self):
-            if attr.endswith("_check_button_filter_dialog"):
-                getattr(self, attr).set_active(False)
 
     def on_show_preferences_action(self, *_args) -> None:
         """
@@ -743,3 +649,13 @@ class LexiWindow(Adw.ApplicationWindow):
             self.loaded_word.word_dict["word"] = text.get_text().replace("&rtl", "")
         if enums.Schema.WORD_AUTOSAVE():
             self.loaded_lexicon.save_lexicon()
+
+    @Gtk.Template.Callback()
+    def on_assign_word_type_clicked(self, *_args) -> None:
+        self.assign_word_type_dialog.present(self)
+        self.assign_word_type_dialog_list_box.remove_all()
+        for word_type in shared.config["word-types"]:
+            if word_type not in self.loaded_word.word_type:
+                self.assign_word_type_dialog_list_box.append(
+                    widgets.WordTypeRow(word_type, deactivate=False)
+                )

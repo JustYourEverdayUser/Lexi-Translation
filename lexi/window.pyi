@@ -101,8 +101,8 @@ class LexiWindow(Adw.ApplicationWindow):
     sort_type: str
 
     # Variables
-    loaded_lexicon: Optional[widgets.LexiconRow]
-    loaded_word: Optional[widgets.WordRow]
+    loaded_lexicon: widgets.LexiconRow
+    loaded_word: widgets.WordRow
     selected_words: list[widgets.WordRow]
 
     def __init__(self, **kwargs: Any) -> None: ...

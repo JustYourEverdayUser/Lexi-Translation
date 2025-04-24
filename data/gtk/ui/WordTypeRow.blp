@@ -1,0 +1,20 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WordTypeRow : Adw.ActionRow {
+  activatable: true;
+  activated => $on_clicked();
+
+  [suffix]
+  Box {
+    valign: center;
+
+    Button unassign_button {
+      icon-name: "delete-symbolic";
+      tooltip-text: _("Unassign this word type");
+      clicked => $on_unassign_clicked();
+
+      styles ["destructive-action"]
+    }
+  }
+}

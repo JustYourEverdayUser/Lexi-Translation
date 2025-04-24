@@ -11,7 +11,6 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
-from lexi.utils.migrator import migrator
 from lexi.window import LexiWindow
 
 
@@ -43,7 +42,6 @@ class LexiApplication(Adw.Application):
                 ("show_preferences", ("<primary>comma",), shared.win),
                 ("add_word", ("<primary>n",), shared.win),
                 ("search", ("<primary>f",), shared.win),
-                ("filter_button_clicked", ("<primary>p",), shared.win),
                 ("about", )
                 # fmt: on
             }
@@ -160,21 +158,7 @@ def main(_version):
         with open(os.path.join(shared.data_dir, "config.yaml"), "x+") as f:
             yaml.dump(
                 {
-                    "filter-types": {
-                        "noun": False,
-                        "verb": False,
-                        "adjective": False,
-                        "adverb": False,
-                        "pronoun": False,
-                        "preposition": False,
-                        "conjunction": False,
-                        "interjection": False,
-                        "article": False,
-                        "idiom": False,
-                        "clause": False,
-                        "prefix": False,
-                        "suffix": False,
-                    },
+                    "filter-types": [],
                     "version": shared.CACHEV,
                 },
                 f,
@@ -191,6 +175,9 @@ def main(_version):
 
     # Migrate config file and lexicons to newer versions if their structure has changed
     if shared.config["version"] < shared.CACHEV:
+        # pylint: disable=import-outside-toplevel
+        from lexi.utils.migrator import migrator
+
         current_version = shared.config["version"]
         target_version = shared.CACHEV
 
