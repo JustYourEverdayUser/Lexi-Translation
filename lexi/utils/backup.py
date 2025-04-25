@@ -124,8 +124,8 @@ def proof_of_content(zip_path: str) -> bool:
             zipf.extract("config.yaml", tmp_dir)
             with open(os.path.join(tmp_dir, "config.yaml"), "r", encoding="utf-8") as f:
                 cfg = yaml.safe_load(f)
+                shutil.rmtree(tmp_dir)
                 if cfg["version"] != shared.CACHEV:
-                    shutil.rmtree(tmp_dir)
                     database_version_mismatch_panic()
 
             return True

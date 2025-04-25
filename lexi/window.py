@@ -268,35 +268,39 @@ class LexiWindow(Adw.ApplicationWindow):
         bool
             True if the word matches both the text and type filters, False otherwise.
         """
-        try:
-            # Get the search text
-            text: str = self.lexicon_search_entry.get_text().lower()
+        text: str = self.lexicon_search_entry.get_text().lower()
+        if not text.startswith("#"):
+            try:
+                # Check if the search text matches the word or its translation
+                matches_text = (
+                    text == ""
+                    or text in row.word.lower()
+                    or text in row.translation.lower()
+                )
 
-            # Check if the search text matches the word or its translation
-            matches_text = (
-                text == ""
-                or text in row.word.lower()
-                or text in row.translation.lower()
-            )
+                # # Get the filter types and check if any are enabled
+                # filter_types: dict = shared.config.get("filter-types", {})
+                # enabled_filters = {key for key, value in filter_types.items() if value}
+                # any_type_enabled = bool(enabled_filters)
 
-            # Get the filter types and check if any are enabled
-            filter_types: dict = shared.config.get("filter-types", {})
-            enabled_filters = {key for key, value in filter_types.items() if value}
-            any_type_enabled = bool(enabled_filters)
+                # # Get the word's types
+                # word_types = {
+                #     key for key, value in row.word_dict.get("types", {}).items() if value
+                # }
 
-            # Get the word's types
-            word_types = {
-                key for key, value in row.word_dict.get("types", {}).items() if value
-            }
+                # # Check if the word's types strictly match the enabled filters
+                # matches_type = word_types == enabled_filters if any_type_enabled else True
 
-            # Check if the word's types strictly match the enabled filters
-            matches_type = word_types == enabled_filters if any_type_enabled else True
+                # Return True if the word matches both the text and type filters
+                return matches_text #and matches_type
 
-            # Return True if the word matches both the text and type filters
-            return matches_text and matches_type
-
-        except (AttributeError, KeyError):
-            return True  # Default to showing the word if there's an error
+            except (AttributeError, KeyError):
+                return True  # Default to showing the word if there's an error
+        else:
+            text = text.replace(" ", "")
+            tags = set(text.split("#")[1:])
+            word_tags = set(row.tags)
+            return tags.issubset(word_tags)
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
@@ -587,10 +591,10 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         self.lexicon_list_box.invalidate_filter()
 
-        if enums.Schema.WORD_AUTOSAVE():
-            self.loaded_lexicon.save_lexicon()
-
-        self.loaded_word.generate_word_type()
+        if self.loaded_word:
+            if enums.Schema.WORD_AUTOSAVE():
+                self.loaded_lexicon.save_lexicon()
+            self.loaded_word.generate_word_type()
 
     @Gtk.Template.Callback()
     def on_lexicon_search_entry_changed(self, *_args) -> None:

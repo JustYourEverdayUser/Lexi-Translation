@@ -252,10 +252,15 @@ class WordRow(Adw.ActionRow):
 
     __gtype_name__ = "WordRow"
 
+    title_label: Gtk.Label = gtc()
+    subtitle_label: Gtk.Label = gtc()
+    tags_box: Adw.WrapBox = gtc()
     check_button: Gtk.CheckButton = gtc()
     check_button_revealer: Gtk.Revealer = gtc()
     refs_count_label_box: Gtk.Box = gtc()
     refs_count_label: Gtk.Label = gtc()
+    tag_alert_dialog: Adw.AlertDialog = gtc()
+    tag_alert_dialog_entry: Gtk.Entry = gtc()
 
     def __init__(self, word: dict, lexicon: LexiconRow) -> None:
         """Initialize the WordRow widget.
@@ -270,19 +275,13 @@ class WordRow(Adw.ActionRow):
         super().__init__()
         self.lexicon: LexiconRow = lexicon
         self.word_dict: dict = word
-        self.set_title(self.word_dict["word"].replace("&rtl", ""))
+        self.title = self.word_dict["word"].replace("&rtl", "")
         try:
-            self.set_subtitle(word["translations"][0])
+            self.subtitle = word["translations"][0]
         except IndexError:
-            self.set_subtitle(_("No translation yet"))
+            self.subtitle = _("No translation yet")
 
-        self.rmb_gesture = Gtk.GestureClick(button=3)
-        self.long_press_gesture = Gtk.GestureLongPress()
-        self.add_controller(self.rmb_gesture)
-        self.add_controller(self.long_press_gesture)
-
-        self.rmb_gesture.connect("released", self.do_check_button)
-        self.long_press_gesture.connect("pressed", self.do_check_button)
+        self.generate_tag_chips()
 
     @Gtk.Template.Callback()
     def load_word(self, *_args) -> None:
@@ -328,7 +327,7 @@ class WordRow(Adw.ActionRow):
             shared.win.word_nav_page.set_title(self.word.replace("&rtl", ""))
         else:
             shared.win.word_nav_page.set_title(_("Word"))
-            self.set_title(_("Word"))
+            self.title = _("Word")
 
         shared.win.references_list_box.remove_all()
         for word_row in shared.win.lexicon_list_box:
@@ -443,17 +442,12 @@ class WordRow(Adw.ActionRow):
                     else:
                         self.word_dict[attr_name][row_index] = row.get_text()
                     try:
-                        (
-                            shared.win.loaded_word.set_subtitle(
-                                self.word_dict["translations"][0]
-                            )
-                            if self.word_dict["translations"][0] != ""
-                            else shared.win.loaded_word.set_subtitle(
-                                _("No translation yet")
-                            )
-                        )
+                        if self.word_dict["translations"][0] != "":
+                            self.subtitle = self.word_dict["translations"][0]
+                        else:
+                            self.subtitle = _("No translation yet")
                     except IndexError:
-                        self.set_subtitle(_("No translation yet"))
+                        self.subtitle = _("No translation yet")
                     if enums.Schema.WORD_AUTOSAVE():
                         self.lexicon.save_lexicon()
                 return
@@ -534,6 +528,93 @@ class WordRow(Adw.ActionRow):
         else:
             self.refs_count_label_box.set_visible(False)
 
+    @Gtk.Template.Callback()
+    def on_add_tag_button_clicked(self, *_args) -> None:
+        self.tag_alert_dialog_entry.set_text("")
+        self.tag_alert_dialog.present(shared.win)
+
+    @Gtk.Template.Callback()
+    def on_tag_alert_dialog_entry_changed(self, entry: Gtk.Entry) -> None:
+        if (
+            "#" in entry.get_text()
+            or entry.get_text().lower() in self.tags
+            or " " in entry.get_text().strip()
+        ):
+            entry.add_css_class("error")
+        else:
+            if "error" in entry.get_css_classes():
+                entry.remove_css_class("error")
+
+    @Gtk.Template.Callback()
+    def on_tag_alert_dialog_response(
+        self, _alert_dialog: Adw.AlertDialog, response: str
+    ) -> None:
+        if response == "add":
+            tag = self.tag_alert_dialog_entry.get_text().lower().strip()
+            if "#" in tag or " " in tag:
+                raise AttributeError("Tag cannot contain spaces or '#'")
+
+            if tag in self.tags:
+                raise AttributeError("Tag already exists")
+
+            self.tags.append(tag)
+            self.tags.sort()
+            self.lexicon.save_lexicon()
+            self.generate_tag_chips()
+
+    def generate_tag_chips(self) -> None:
+        for _tag in self.tags_box:  # pylint: disable=not-an-iterable
+            self.tags_box.remove(_tag)
+        if self.tags != []:
+
+            def clicked(_button: Gtk.Button, tag: str) -> None:
+                current_text = shared.win.lexicon_search_entry.get_text()
+                if not current_text.startswith("#") and current_text != "":
+                    return  # Do nothing if the string doesn't start with '#'
+                shared.win.lexicon_search_entry.set_text(current_text + f"#{tag}")
+
+            def rmb_clicked(
+                _button: Gtk.Button,
+                _gesture: Gtk.GestureClick,
+                _x: float,
+                _y: float,
+                tag: str,
+            ) -> None:
+                self.tags.remove(tag)
+                self.lexicon.save_lexicon()
+                for _tag in self.tags_box:  # pylint: disable=not-an-iterable
+                    self.tags_box.remove(_tag)
+                self.generate_tag_chips()
+
+            for tag in self.tags:
+                button = Gtk.Button(
+                    label=f"#{tag}",
+                    valign=Gtk.Align.CENTER,
+                    css_classes=["pill", "small"],
+                )
+                button.connect("clicked", clicked, tag)
+                rmb = Gtk.GestureClick(button=3)
+                rmb.connect("released", rmb_clicked, tag)
+                button.add_controller(rmb)
+                self.tags_box.append(button)
+
+    # UI Props
+    @property
+    def title(self) -> str:
+        return self.title_label.get_label()
+
+    @title.setter
+    def title(self, title: str) -> None:
+        self.title_label.set_label(title)
+
+    @property
+    def subtitle(self) -> str:
+        return self.subtitle_label.get_label()
+
+    @subtitle.setter
+    def subtitle(self, subtitle: str) -> None:
+        self.subtitle_label.set_label(subtitle)
+
     @property
     def word(self) -> str:
         return self.word_dict["word"]
@@ -541,12 +622,12 @@ class WordRow(Adw.ActionRow):
     @word.setter
     def word(self, word: str) -> None:
         self.word_dict["word"] = word
-        self.set_title(word)
+        self.title = word
         if word != "":
             shared.win.word_nav_page.set_title(word)
         else:
             shared.win.word_nav_page.set_title(_("Word"))
-            self.set_title(_("Word"))
+            self.title = _("Word")
 
         if enums.Schema.WORD_AUTOSAVE():
             self.lexicon.save_lexicon()
@@ -582,6 +663,10 @@ class WordRow(Adw.ActionRow):
     @property
     def word_type(self) -> list:
         return self.word_dict["types"]
+
+    @property
+    def tags(self) -> list:
+        return self.word_dict["tags"]
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/ReferenceRow.ui")
@@ -717,6 +802,7 @@ class WordTypeRow(Adw.ActionRow):
     deactivate : bool, optional
         Whether to deactivate the row and activate the button, by default True.
     """
+
     __gtype_name__ = "WordTypeRow"
 
     unassign_button: Gtk.Button = gtc()

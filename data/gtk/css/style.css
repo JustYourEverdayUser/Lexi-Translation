@@ -4,3 +4,11 @@
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px;
 }
+
+button.pill.small {
+    /* From https://github.com/workbenchdev/Workbench/blob/main/src/style.css */
+    font-size: 0.83333em;
+    border-radius: 99px;
+    margin: 0;
+    padding: 1px 12px;
+}
