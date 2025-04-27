@@ -1,6 +1,7 @@
 from gi.repository import Adw, Gio, Gtk
 
-from lexi import shared
+from lexi import enums, shared
+from lexi.ui import widgets
 from lexi.utils import backup
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
@@ -14,6 +15,8 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     word_autosave_switch_row: Adw.SwitchRow = gtc()
     import_confirmation_dialog: Adw.AlertDialog = gtc()
+    available_word_types_scrolled_window: Gtk.ScrolledWindow = gtc()
+    available_word_types_list_box: Gtk.ListBox = gtc()
 
     opened: bool = False
 
@@ -32,6 +35,28 @@ class LexiPreferences(Adw.PreferencesDialog):
         self.word_autosave_switch_row.connect(
             "notify::active", self.set_save_button_sensetive
         )
+
+        self.gen_word_types()
+
+    def gen_word_types(self) -> None:
+        """Generate the word types list and populate the list box"""
+        self.available_word_types_list_box.remove_all()
+        if len(shared.config["word-types"]) != 0:
+            for word_type in shared.config["word-types"]:
+                self.available_word_types_list_box.append(
+                    widgets.WordTypeRow(word_type)
+                )
+            self.available_word_types_scrolled_window.set_child(
+                self.available_word_types_list_box
+            )
+        else:
+            self.available_word_types_scrolled_window.set_child(
+                Adw.StatusPage(
+                    title=_("No word types created yet"),
+                    description=_("Add a new word type to get started"),
+                    icon_name=enums.Icon.NO_FOUND,
+                )
+            )
 
     def set_save_button_sensetive(self, *_args) -> None:
         """Set save word button sensitiveness according to the word-autosave state"""
@@ -121,3 +146,21 @@ class LexiPreferences(Adw.PreferencesDialog):
         path = file_dialog.open_finish(result).get_path()
         backup.import_database(path)
         self.close()
+
+    @Gtk.Template.Callback()
+    def add_new_word_type(self, entry_row: Adw.EntryRow) -> None:
+        """Add a new word type to the list of available word types on Enter press.
+
+        Parameters
+        ----------
+        entry_row : Adw.EntryRow
+            Adw.EntryRow to get new word type from.
+        """
+        if (
+            not entry_row.get_text() in shared.config["word-types"]
+            and entry_row.get_text() != ""
+        ):
+            shared.config["word-types"].append(entry_row.get_text())
+            shared.config["word-types"].sort()
+            self.gen_word_types()
+            entry_row.set_text("")

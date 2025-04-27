@@ -4,7 +4,61 @@ using Adw 1;
 template $WordRow : Adw.ActionRow {
   activatable: true;
   hexpand: true;
+  
   activated => $load_word();
+
+  accessibility {
+    labelled-by: title_label;
+    described-by: subtitle_label;
+  }
+
+  [prefix]
+  Box {
+    Box {
+      margin-top: 6;
+      margin-bottom: 6;
+      spacing: 3;
+      orientation: vertical;
+
+      Label title_label {
+        xalign: 0;
+        wrap: true;
+        wrap-mode: word;
+        ellipsize: end;
+        lines: 2;
+      }
+
+      Label subtitle_label {
+        xalign: 0;
+        wrap: true;
+        wrap-mode: word;
+        ellipsize: end;
+        lines: 2;
+
+        styles ["dimmed"]
+      }
+
+      Adw.WrapBox tags_box {
+        orientation: horizontal;
+        margin-top: 3;
+        child-spacing: 3;
+        line-spacing: 3;
+      }
+    }
+  }
+
+  [prefix]
+  Box {
+    valign: center;
+
+    Button {
+      icon-name: "lexi-tag-outline-add-symbolic";
+      tooltip-text: _("Add new tag");
+      clicked => $on_add_tag_button_clicked();
+
+      styles ["circular"]
+    }
+  }
 
   [suffix]
   Revealer check_button_revealer {
@@ -32,4 +86,21 @@ template $WordRow : Adw.ActionRow {
       styles ["heading"]
     }
   }
+}
+
+Adw.AlertDialog tag_alert_dialog {
+  heading: _("Add Tag");
+  body: _("Type a new tag WITHOUT hashtag prefix and spaces. Existed tag also would be rejected");
+  default-response: "add";
+  close-response: "cancel";
+  response => $on_tag_alert_dialog_response();
+  extra-child: Entry tag_alert_dialog_entry {
+    placeholder-text: _("Tag…");
+    changed => $on_tag_alert_dialog_entry_changed();
+  };
+
+  responses [
+    cancel: _("Cancel"),
+    add: _("Add") suggested
+  ]
 }

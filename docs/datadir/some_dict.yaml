@@ -6,23 +6,11 @@ words:
   translations:
   - Mom
   pronunciation: 'Ma'
-  types:
-    noun: true
-    verb: false
-    adjective: false
-    adverb: false
-    pronoun: false
-    preposition: false
-    conjunction: false
-    interjection: false
-    article: false
-    idiom: false
-    clause: false
-    prefix: false
-    suffix: false
+  types: ['Noun', 'e.t.c']
   examples: 
   - "some example"
   references:
   - 10 # ref by id
+  tags: []
   # ...
 # ...

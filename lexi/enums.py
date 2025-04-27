@@ -40,6 +40,9 @@ class Icon(str, Enum):
     BACKUP: str = "lexi-backup-symbolic"
     EXPORT: str = "export-database-symbolic"
     IMPORT: str = "import-database-symbolic"
+    LIST_LARGE: str = "lexi-list-large-symbolic"
+    TAG_OUTLINE_ADD: str = "lexi-tag-outline-add-symbolic"
+    HELP_ABOUT: str = "lexi-help-about-symbolic"
 
     def __str__(self) -> str:
         return self.value

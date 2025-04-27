@@ -42,7 +42,6 @@ class LexiApplication(Adw.Application):
                 ("show_preferences", ("<primary>comma",), shared.win),
                 ("add_word", ("<primary>n",), shared.win),
                 ("search", ("<primary>f",), shared.win),
-                ("filter_button_clicked", ("<primary>p",), shared.win),
                 ("about", )
                 # fmt: on
             }
@@ -159,21 +158,8 @@ def main(_version):
         with open(os.path.join(shared.data_dir, "config.yaml"), "x+") as f:
             yaml.dump(
                 {
-                    "filter-types": {
-                        "noun": False,
-                        "verb": False,
-                        "adjective": False,
-                        "adverb": False,
-                        "pronoun": False,
-                        "preposition": False,
-                        "conjunction": False,
-                        "interjection": False,
-                        "article": False,
-                        "idiom": False,
-                        "clause": False,
-                        "prefix": False,
-                        "suffix": False,
-                    },
+                    "word-types": [],
+                    "enabled-types": [],
                     "version": shared.CACHEV,
                 },
                 f,
@@ -187,6 +173,27 @@ def main(_version):
         os.path.join(shared.data_dir, "config.yaml"), "r+", encoding="utf-8"
     )
     shared.config = yaml.safe_load(shared.config_file)
+
+    # Migrate config file and lexicons to newer versions if their structure has changed
+    if shared.config["version"] < shared.CACHEV:
+        # pylint: disable=import-outside-toplevel
+        from lexi.utils import migrator
+
+        current_version = shared.config["version"]
+        target_version = shared.CACHEV
+
+        while current_version < target_version:
+            next_version = current_version + 1
+            migrator_function_name = f"migrate_v{next_version}"
+
+            if hasattr(migrator, migrator_function_name):
+                migrator_function = getattr(migrator, migrator_function_name)
+                migrator_function()
+                current_version = next_version
+            else:
+                raise ValueError(
+                    f"Migrator function {migrator_function_name} not found"
+                )
 
     shared.app = app = LexiApplication()
 

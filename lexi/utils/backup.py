@@ -1,8 +1,10 @@
 import glob
 import os
 import shutil
+import tempfile
 import zipfile
 
+import yaml
 from gi.repository import Adw
 
 from lexi import shared
@@ -79,6 +81,12 @@ def import_database(zip_path: str) -> None:
                 shared.win.examples_list_box.remove_all()
                 shared.win.references_list_box.remove_all()
                 shared.win.build_sidebar()
+                shared.config_file = open(
+                    os.path.join(shared.data_dir, "config.yaml"),
+                    "r+",
+                    encoding="utf-8",
+                )
+                shared.config = yaml.safe_load(shared.config_file)
 
         else:
             toast = Adw.Toast(
@@ -112,6 +120,14 @@ def proof_of_content(zip_path: str) -> bool:
             if not any(file.startswith("lexicons/") for file in archive_files):
                 return False
 
+            tmp_dir = tempfile.mkdtemp()
+            zipf.extract("config.yaml", tmp_dir)
+            with open(os.path.join(tmp_dir, "config.yaml"), "r", encoding="utf-8") as f:
+                cfg = yaml.safe_load(f)
+                shutil.rmtree(tmp_dir)
+                if cfg["version"] != shared.CACHEV:
+                    database_version_mismatch_panic()
+
             return True
     return False
 
@@ -126,4 +142,20 @@ def incorrect_archive_panic(*_args) -> None:
         ),
     )
     alert.add_response("close", label=_("Close"))
+    alert.present(shared.win)
+
+
+def database_version_mismatch_panic() -> None:
+    """Display an alert dialog for a database version mismatch."""
+    # pylint: disable=line-too-long
+    alert = Adw.AlertDialog(
+        heading=_("Database Version Mismatch!"),
+        body=_(
+            "The database version in the archive does not match the current version of Lexi. Please, restart Lexi after importing this database."
+        ),
+    )
+    alert.add_response("exit", label=_("Exit Lexi"))
+    alert.set_close_response("exit")
+    alert.set_default_response("exit")
+    alert.connect("response", lambda *_: shared.app.on_quit_action())
     alert.present(shared.win)

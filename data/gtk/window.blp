@@ -7,7 +7,7 @@ template $LexiWindow : Adw.ApplicationWindow {
   height-request: 100;
 
   Adw.Breakpoint {
-    condition ("max-width: 677")
+    condition ("max-width: 690")
 
     setters {
       overlay_split_view.collapsed: true;
@@ -131,8 +131,8 @@ template $LexiWindow : Adw.ApplicationWindow {
                   [end]
                   Button {
                     icon-name: "filter-words-symbolic";
-                    tooltip-text: _("Filter words by their type");
-                    clicked => $on_filter_button_clicked_action();
+                    tooltip-text: _("Filter words by types");
+                    clicked => $open_filer_dialog();
                   }
                 }
 
@@ -185,6 +185,14 @@ template $LexiWindow : Adw.ApplicationWindow {
                       hexpand: true;
                       placeholder-text: _("Find a word");
                       changed => $on_search_entry_changed();
+                      secondary-icon-name: "lexi-help-about-symbolic";
+                      secondary-icon-tooltip-text: _("Query syntax:\
+Word-based: Just word or its tranlsation\
+E.g. “Mom“, “Dad“\
+\
+Tag-based: Query starts with “#”, contains tag name FULLY and doesn't contain word-based query\
+E.g. “#basic#family”, “#basic #suffixes”\
+BUT NOT: “#family mom” or “#famil”");
                     }
 
                     Button {
@@ -259,120 +267,16 @@ template $LexiWindow : Adw.ApplicationWindow {
                         title: _("Word Type");
                         subtitle-lines: 1;
 
-                        Adw.ActionRow {
-                          title: _("Noun");
+                        [suffix]
+                        Box {
+                          valign: center;
 
-                          [suffix]
-                          CheckButton noun_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
+                          Button {
+                            icon-name: "add-symbolic";
+                            tooltip-text: _("Assign word type");
+                            clicked => $on_assign_word_type_clicked();
 
-                        Adw.ActionRow {
-                          title: _("Verb");
-
-                          [suffix]
-                          CheckButton verb_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-                        
-                        Adw.ActionRow {
-                          title: _("Adjective");
-
-                          [suffix]
-                          CheckButton adjective_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Adverb");
-
-                          [suffix]
-                          CheckButton adverb_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Pronoun");
-
-                          [suffix]
-                          CheckButton pronoun_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Preposition");
-
-                          [suffix]
-                          CheckButton preposition_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Conjunction");
-
-                          [suffix]
-                          CheckButton conjunction_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Interjection");
-
-                          [suffix]
-                          CheckButton interjection_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Article");
-
-                          [suffix]
-                          CheckButton article_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Idiom");
-
-                          [suffix]
-                          CheckButton idiom_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Clause");
-
-                          [suffix]
-                          CheckButton clause_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Prefix");
-
-                          [suffix]
-                          CheckButton prefix_check_button {
-                            toggled => $on_word_type_check_button_toggled();
-                          }
-                        }
-
-                        Adw.ActionRow {
-                          title: _("Suffix");
-
-                          [suffix]
-                          CheckButton suffix_check_button {
-                            toggled => $on_word_type_check_button_toggled();
+                            styles ["flat"]
                           }
                         }
                       }
@@ -489,7 +393,38 @@ Adw.Dialog references_dialog {
   }
 }
 
-Adw.Dialog word_types_filter_dialog {
+Adw.Dialog assign_word_type_dialog {
+  title: _("Assign Word Type");
+  content-height: 600;
+  content-width: 450;
+
+  Adw.Clamp {
+    orientation: horizontal;
+    maximum-size: 450;
+    tightening-threshold: 450;
+
+    Adw.Clamp {
+      orientation: vertical;
+      maximum-size: 600;
+      tightening-threshold: 600;
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {}
+
+        ScrolledWindow {
+          ListBox assign_word_type_dialog_list_box {
+            selection-mode: none;
+
+            styles ["navigation-sidebar"]
+          }
+        }
+      }
+    }
+  }
+}
+
+Adw.Dialog filter_dialog {
   title: _("Filter by Word Type");
   content-height: 600;
   content-width: 450;
@@ -510,147 +445,27 @@ Adw.Dialog word_types_filter_dialog {
 
         Box {
           orientation: vertical;
-          margin-start: 12;
-          margin-end: 12;
-          margin-top: 12;
           margin-bottom: 12;
+          margin-end: 12;
+          margin-start: 12;
+          margin-top: 12;
           spacing: 12;
 
           ScrolledWindow {
             propagate-natural-height: true;
             ListBox filter_dialog_list_box {
               selection-mode: none;
-              
-              Adw.ActionRow {
-                title: _("Noun");
 
-                [suffix]
-                CheckButton noun_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Verb");
-
-                [suffix]
-                CheckButton verb_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-              
-              Adw.ActionRow {
-                title: _("Adjective");
-
-                [suffix]
-                CheckButton adjective_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Adverb");
-
-                [suffix]
-                CheckButton adverb_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Pronoun");
-
-                [suffix]
-                CheckButton pronoun_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Preposition");
-
-                [suffix]
-                CheckButton preposition_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Conjunction");
-
-                [suffix]
-                CheckButton conjunction_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Interjection");
-
-                [suffix]
-                CheckButton interjection_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Article");
-
-                [suffix]
-                CheckButton article_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Idiom");
-
-                [suffix]
-                CheckButton idiom_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Clause");
-
-                [suffix]
-                CheckButton clause_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Prefix");
-
-                [suffix]
-                CheckButton prefix_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              Adw.ActionRow {
-                title: _("Suffix");
-
-                [suffix]
-                CheckButton suffix_check_button_filter_dialog {
-                  toggled => $on_filter_check_button_toggled();
-                }
-              }
-
-              styles ["boxed-list"]
+              styles ["navigation-sidebar"]
             }
           }
 
           Box {
             halign: center;
             valign: center;
-            hexpand: false;
-            vexpand: false;
-
             Button {
-              label: _("Reset");
-              clicked => $on_reset_filter_button_clicked();
+              label: _("Reset All");
+              clicked => $reset_filters();
 
               styles ["pill", "destructive-action"]
             }

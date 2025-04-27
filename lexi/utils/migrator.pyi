@@ -1,0 +1,3 @@
+# pylint: disable=all
+
+def migrate_v2() -> None: ...

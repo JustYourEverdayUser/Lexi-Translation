@@ -2,6 +2,7 @@ using Gtk 4.0;
 using Adw 1;
 
 template $LexiPreferences : Adw.PreferencesDialog {
+  content-height: 600;
   Adw.PreferencesPage {
     title: _("General");
     icon-name: "general-symbolic";
@@ -34,6 +35,36 @@ template $LexiPreferences : Adw.PreferencesDialog {
         activated => $on_import_button_clicked();
 
         styles ["destructive-action"]
+      }
+    }
+  }
+
+  Adw.PreferencesPage {
+    title: _("Word Types");
+    icon-name: "lexi-list-large-symbolic";
+
+    Adw.PreferencesGroup {
+      Adw.EntryRow {
+        show-apply-button: true;
+        title: _("Write new word type name here…");
+        apply => $add_new_word_type();
+      }
+
+      Separator {
+        height-request: 12;
+
+        styles ["spacer"]
+      }
+
+      ScrolledWindow available_word_types_scrolled_window {
+        propagate-natural-height: true;
+        vexpand: true;
+
+        ListBox available_word_types_list_box {
+          selection-mode: none;
+
+          styles ["navigation-sidebar"]
+        }
       }
     }
   }
