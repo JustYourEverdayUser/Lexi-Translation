@@ -30,6 +30,7 @@
     <file alias="import-database-symbolic.svg">icons/icons/symbolic/import-database-symbolic.svg</file>
     <file alias="lexi-list-large-symbolic.svg">icons/icons/symbolic/lexi-list-large-symbolic.svg</file>
     <file alias="lexi-tag-outline-add-symbolic.svg">icons/icons/symbolic/lexi-tag-outline-add-symbolic.svg</file>
+    <file alias="lexi-help-about-symbolic.svg">icons/icons/symbolic/lexi-help-about-symbolic.svg</file>
     <file alias="io.github.dzheremi2.lrcmake-gtk.svg">icons/hicolor/scalable/apps/io.github.dzheremi2.lrcmake-gtk.svg</file>
   </gresource>
 </gresources>

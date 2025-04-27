@@ -591,6 +591,10 @@ class WordRow(Adw.ActionRow):
                     label=f"#{tag}",
                     valign=Gtk.Align.CENTER,
                     css_classes=["pill", "small"],
+                    # pylint: disable=line-too-long
+                    tooltip_text=_(
+                        "Click LMB to search words with this tag\nClick RMB to remove this tag"
+                    ),
                 )
                 button.connect("clicked", clicked, tag)
                 rmb = Gtk.GestureClick(button=3)
@@ -615,6 +619,7 @@ class WordRow(Adw.ActionRow):
     def subtitle(self, subtitle: str) -> None:
         self.subtitle_label.set_label(subtitle)
 
+    # data props
     @property
     def word(self) -> str:
         return self.word_dict["word"]

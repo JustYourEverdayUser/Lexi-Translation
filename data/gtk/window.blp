@@ -127,6 +127,13 @@ template $LexiWindow : Adw.ApplicationWindow {
                     tooltip-text: _("Sort by…");
                     menu-model: sort;
                   }
+
+                  [end]
+                  Button {
+                    icon-name: "filter-words-symbolic";
+                    tooltip-text: _("Filter words by types");
+                    clicked => $open_filer_dialog();
+                  }
                 }
 
                 ScrolledWindow lexicon_scrolled_window {
@@ -178,6 +185,14 @@ template $LexiWindow : Adw.ApplicationWindow {
                       hexpand: true;
                       placeholder-text: _("Find a word");
                       changed => $on_search_entry_changed();
+                      secondary-icon-name: "lexi-help-about-symbolic";
+                      secondary-icon-tooltip-text: _("Query syntax:\
+Word-based: Just word or its tranlsation\
+E.g. “Mom“, “Dad“\
+\
+Tag-based: Query starts with “#”, contains tag name FULLY and doesn't contain word-based query\
+E.g. “#basic#family”, “#basic #suffixes”\
+BUT NOT: “#family mom” or “#famil”");
                     }
 
                     Button {
@@ -402,6 +417,58 @@ Adw.Dialog assign_word_type_dialog {
             selection-mode: none;
 
             styles ["navigation-sidebar"]
+          }
+        }
+      }
+    }
+  }
+}
+
+Adw.Dialog filter_dialog {
+  title: _("Filter by Word Type");
+  content-height: 600;
+  content-width: 450;
+
+  Adw.Clamp {
+    orientation: horizontal;
+    maximum-size: 450;
+    tightening-threshold: 450;
+
+    Adw.Clamp {
+      orientation: vertical;
+      maximum-size: 600;
+      tightening-threshold: 600;
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {}
+
+        Box {
+          orientation: vertical;
+          margin-bottom: 12;
+          margin-end: 12;
+          margin-start: 12;
+          margin-top: 12;
+          spacing: 12;
+
+          ScrolledWindow {
+            propagate-natural-height: true;
+            ListBox filter_dialog_list_box {
+              selection-mode: none;
+
+              styles ["navigation-sidebar"]
+            }
+          }
+
+          Box {
+            halign: center;
+            valign: center;
+            Button {
+              label: _("Reset All");
+              clicked => $reset_filters();
+
+              styles ["pill", "destructive-action"]
+            }
           }
         }
       }

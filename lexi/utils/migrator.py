@@ -25,6 +25,7 @@ def migrate_v2() -> None:
         "Prefix",
         "Suffix",
     ]
+    config["enabled-types"] = []
     config["word-types"].sort()
 
     # Migrate lexicons
@@ -40,6 +41,7 @@ def migrate_v2() -> None:
         yaml.dump(
             lexicon_data, lexicon, sort_keys=False, encoding=None, allow_unicode=True
         )
+        lexicon.close()
 
     # Bump version of the config file
     config["version"] = 2
@@ -52,4 +54,3 @@ def migrate_v2() -> None:
         encoding=None,
         allow_unicode=True,
     )
-    lexicon.close()

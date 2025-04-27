@@ -18,4 +18,4 @@ state_schema: Gio.Settings
 app: LexiApplication
 win: LexiWindow
 config_file: TextIO
-config: dict
+config: dict[str, list[str]]

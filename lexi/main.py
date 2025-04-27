@@ -158,7 +158,8 @@ def main(_version):
         with open(os.path.join(shared.data_dir, "config.yaml"), "x+") as f:
             yaml.dump(
                 {
-                    "filter-types": [],
+                    "word-types": [],
+                    "enabled-types": [],
                     "version": shared.CACHEV,
                 },
                 f,

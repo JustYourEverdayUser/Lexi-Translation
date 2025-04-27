@@ -61,6 +61,8 @@ class LexiWindow(Adw.ApplicationWindow):
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
     assign_word_type_dialog: Adw.Dialog = gtc()
     assign_word_type_dialog_list_box: Gtk.ListBox = gtc()
+    filter_dialog: Adw.Dialog = gtc()
+    filter_dialog_list_box: Gtk.ListBox = gtc()
 
     # References dialog
     references_dialog: Adw.Dialog = gtc()
@@ -269,38 +271,25 @@ class LexiWindow(Adw.ApplicationWindow):
             True if the word matches both the text and type filters, False otherwise.
         """
         text: str = self.lexicon_search_entry.get_text().lower()
+        fits_in_filter = set(shared.config["enabled-types"]).issubset(
+            set(row.word_type)
+        )
         if not text.startswith("#"):
             try:
-                # Check if the search text matches the word or its translation
                 matches_text = (
                     text == ""
                     or text in row.word.lower()
                     or text in row.translation.lower()
                 )
-
-                # # Get the filter types and check if any are enabled
-                # filter_types: dict = shared.config.get("filter-types", {})
-                # enabled_filters = {key for key, value in filter_types.items() if value}
-                # any_type_enabled = bool(enabled_filters)
-
-                # # Get the word's types
-                # word_types = {
-                #     key for key, value in row.word_dict.get("types", {}).items() if value
-                # }
-
-                # # Check if the word's types strictly match the enabled filters
-                # matches_type = word_types == enabled_filters if any_type_enabled else True
-
-                # Return True if the word matches both the text and type filters
-                return matches_text #and matches_type
+                return matches_text and fits_in_filter
 
             except (AttributeError, KeyError):
-                return True  # Default to showing the word if there's an error
+                return True
         else:
             text = text.replace(" ", "")
             tags = set(text.split("#")[1:])
             word_tags = set(row.tags)
-            return tags.issubset(word_tags)
+            return tags.issubset(word_tags) and fits_in_filter
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
@@ -552,6 +541,10 @@ class LexiWindow(Adw.ApplicationWindow):
             i += 1
             row.check_button.set_active(False)
             row.check_button_revealer.set_reveal_child(enabled)
+            if enabled:
+                row.set_activatable_widget(row.check_button)
+            else:
+                row.set_activatable_widget(None)
         self.delete_selected_words_button_revealer.set_reveal_child(enabled)
 
     @Gtk.Template.Callback()
@@ -663,3 +656,41 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.assign_word_type_dialog_list_box.append(
                     widgets.WordTypeRow(word_type, deactivate=False)
                 )
+
+    @Gtk.Template.Callback()
+    def open_filer_dialog(self, *_args) -> None:
+
+        def __on_toggled(_check_button: Gtk.CheckButton) -> None:
+            for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
+                is_toggled = row.get_activatable_widget().get_active()
+                word_type = row.get_title()
+
+                if is_toggled:
+                    if word_type not in shared.config["enabled-types"]:
+                        shared.config["enabled-types"].append(word_type)
+                        shared.config["enabled-types"].sort()
+                else:
+                    if word_type in shared.config["enabled-types"]:
+                        shared.config["enabled-types"].remove(word_type)
+
+            self.lexicon_list_box.invalidate_filter()
+
+        def __populate_filter_dialog() -> None:
+            for word_type in shared.config["word-types"]:
+                action_row = Adw.ActionRow(title=word_type, activatable=False)
+                check_button = Gtk.CheckButton()
+                check_button.connect("toggled", __on_toggled)
+                check_button.set_active(word_type in shared.config["enabled-types"])
+                action_row.set_activatable_widget(check_button)
+                action_row.add_suffix(check_button)
+                self.filter_dialog_list_box.append(action_row)
+
+        self.filter_dialog_list_box.remove_all()
+        __populate_filter_dialog()
+        self.filter_dialog.present(self)
+
+    @Gtk.Template.Callback()
+    def reset_filters(self, *_args) -> None:
+        """Reset all filters in the filter dialog"""
+        for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
+            row.get_activatable_widget().set_active(False)
