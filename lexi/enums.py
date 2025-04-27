@@ -98,3 +98,7 @@ class Schema:
     @staticmethod
     def WORD_AUTOSAVE() -> bool:
         return shared.schema.get_boolean("word-autosave")
+
+    @staticmethod
+    def USE_DEBUG_LOG() -> bool:
+        return shared.schema.get_boolean("use-debug-log")

@@ -151,6 +151,10 @@ class LexiApplication(Adw.Application):
             # Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
             _("Sync lyrics of your loved songs"),
         )
+        dialog.set_debug_info(
+            open(os.path.join(shared.cache_dir, "lexi", "logs", "lexi.log"), "r").read()
+        )
+        dialog.set_debug_info_filename("lexi.log")
         if shared.PREFIX.endswith("Devel"):
             dialog.set_version("Devel")
 

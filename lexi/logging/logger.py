@@ -4,14 +4,18 @@ import platform
 import subprocess
 import sys
 
-from lexi import shared
+from lexi import enums, shared
 
 log_filename = os.path.join(shared.cache_dir, "lexi", "logs", "lexi.log")
 
 os.makedirs(os.path.dirname(log_filename), exist_ok=True)
 
 logging.basicConfig(
-    level=logging.DEBUG if shared.APP_ID.endswith(".Devel") else logging.INFO,
+    level=(
+        logging.DEBUG
+        if shared.APP_ID.endswith(".Devel") or enums.Schema.USE_DEBUG_LOG()
+        else logging.INFO
+    ),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.FileHandler(log_filename, mode="a", encoding="utf-8"),
@@ -20,6 +24,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger("lexi")
+
 
 def log_system_info() -> None:
     """Log system information."""

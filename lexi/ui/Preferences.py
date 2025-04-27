@@ -1,9 +1,11 @@
+import logging
+
 from gi.repository import Adw, Gio, Gtk
 
 from lexi import enums, shared
+from lexi.logging.logger import logger
 from lexi.ui import widgets
 from lexi.utils import backup
-from lexi.logging.logger import logger
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
@@ -18,6 +20,7 @@ class LexiPreferences(Adw.PreferencesDialog):
     import_confirmation_dialog: Adw.AlertDialog = gtc()
     available_word_types_scrolled_window: Gtk.ScrolledWindow = gtc()
     available_word_types_list_box: Gtk.ListBox = gtc()
+    use_debug_log_switch_row: Adw.SwitchRow = gtc()
 
     opened: bool = False
 
@@ -33,11 +36,26 @@ class LexiPreferences(Adw.PreferencesDialog):
             Gio.SettingsBindFlags.DEFAULT,
         )
 
+        shared.schema.bind(
+            "use-debug-log",
+            self.use_debug_log_switch_row,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+
         self.word_autosave_switch_row.connect(
             "notify::active", self.set_save_button_sensetive
         )
+        self.use_debug_log_switch_row.connect("notify::active", self.set_use_debug_log)
 
         self.gen_word_types()
+
+    def set_use_debug_log(self, *_args) -> None:
+        logger.setLevel(
+            logging.DEBUG
+            if self.use_debug_log_switch_row.get_active()
+            else logging.INFO
+        )
 
     def gen_word_types(self) -> None:
         """Generate the word types list and populate the list box"""
