@@ -39,6 +39,7 @@ class LexiPreferences(Adw.PreferencesDialog):
         self.gen_word_types()
 
     def gen_word_types(self) -> None:
+        """Generate the word types list and populate the list box"""
         self.available_word_types_list_box.remove_all()
         if len(shared.config["word-types"]) != 0:
             for word_type in shared.config["word-types"]:
@@ -53,7 +54,7 @@ class LexiPreferences(Adw.PreferencesDialog):
                 Adw.StatusPage(
                     title=_("No word types created yet"),
                     description=_("Add a new word type to get started"),
-                    icon_name=enums.Icon.NO_FOUND
+                    icon_name=enums.Icon.NO_FOUND,
                 )
             )
 
@@ -148,14 +149,18 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     @Gtk.Template.Callback()
     def add_new_word_type(self, entry_row: Adw.EntryRow) -> None:
+        """Add a new word type to the list of available word types on Enter press.
+
+        Parameters
+        ----------
+        entry_row : Adw.EntryRow
+            Adw.EntryRow to get new word type from.
+        """
         if (
             not entry_row.get_text() in shared.config["word-types"]
             and entry_row.get_text() != ""
         ):
             shared.config["word-types"].append(entry_row.get_text())
             shared.config["word-types"].sort()
-            # self.available_word_types_list_box.append(
-            #     widgets.WordTypeRow(entry_row.get_text())
-            # )
             self.gen_word_types()
             entry_row.set_text("")

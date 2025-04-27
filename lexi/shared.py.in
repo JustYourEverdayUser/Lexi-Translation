@@ -16,4 +16,4 @@ state_schema = Gio.Settings.new(APP_ID + ".State")
 app: Adw.Application = None
 win = None
 config_file: TextIO = None
-config: dict = None
+config: dict[str, list[str]] = None

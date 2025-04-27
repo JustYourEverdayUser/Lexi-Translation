@@ -612,7 +612,9 @@ class LexiWindow(Adw.ApplicationWindow):
         self.toast_overlay.add_toast(Adw.Toast(title=_("Word saved"), timeout=2))
 
     def on_search_action(self, *_args) -> None:
-        """Focus words search entry on `Ctrl+F` press"""
+        """
+        Focus the words search entry when the search action is triggered (e.g., via `Ctrl+F`).
+        """
         if self.words_bottom_bar_revealer.get_reveal_child():
             self.lexicon_search_entry.grab_focus()
 
@@ -649,16 +651,22 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_assign_word_type_clicked(self, *_args) -> None:
-        self.assign_word_type_dialog.present(self)
+        """
+        Present the assign word type dialog and populate it with available word types.
+        """
         self.assign_word_type_dialog_list_box.remove_all()
         for word_type in shared.config["word-types"]:
             if word_type not in self.loaded_word.word_type:
                 self.assign_word_type_dialog_list_box.append(
                     widgets.WordTypeRow(word_type, deactivate=False)
                 )
+        self.assign_word_type_dialog.present(self)
 
     @Gtk.Template.Callback()
     def open_filer_dialog(self, *_args) -> None:
+        """
+        Open the filter dialog and populate it with word types and their current states.
+        """
 
         def __on_toggled(_check_button: Gtk.CheckButton) -> None:
             for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable

@@ -15,7 +15,7 @@ class LexiWindow(Adw.ApplicationWindow):
     no_words_yet: Adw.StatusPage
     lexicon_not_selected: Adw.StatusPage
 
-    # UI components
+    # Toast overlay
     toast_overlay: Adw.ToastOverlay
 
     # Navigation view and pages
@@ -52,42 +52,17 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button
     delete_selected_words_button_revealer: Gtk.Revealer
     words_bottom_bar_revealer: Gtk.Revealer
+    assign_word_type_dialog: Adw.Dialog
+    assign_word_type_dialog_list_box: Gtk.ListBox
+    filter_dialog: Adw.Dialog
+    filter_dialog_list_box: Gtk.ListBox
 
     # References dialog
     references_dialog: Adw.Dialog
     references_dialog_list_box: Gtk.ListBox
 
-    # Word Type filter dialog
-    word_types_filter_dialog: Adw.Dialog
-    filter_dialog_list_box: Gtk.ListBox
-    noun_check_button_filter_dialog: Gtk.CheckButton
-    verb_check_button_filter_dialog: Gtk.CheckButton
-    adjective_check_button_filter_dialog: Gtk.CheckButton
-    adverb_check_button_filter_dialog: Gtk.CheckButton
-    pronoun_check_button_filter_dialog: Gtk.CheckButton
-    preposition_check_button_filter_dialog: Gtk.CheckButton
-    conjunction_check_button_filter_dialog: Gtk.CheckButton
-    interjection_check_button_filter_dialog: Gtk.CheckButton
-    article_check_button_filter_dialog: Gtk.CheckButton
-    idiom_check_button_filter_dialog: Gtk.CheckButton
-    clause_check_button_filter_dialog: Gtk.CheckButton
-    prefix_check_button_filter_dialog: Gtk.CheckButton
-    suffix_check_button_filter_dialog: Gtk.CheckButton
-
-    # Word type check buttons
-    noun_check_button: Gtk.CheckButton
-    verb_check_button: Gtk.CheckButton
-    adjective_check_button: Gtk.CheckButton
-    adverb_check_button: Gtk.CheckButton
-    pronoun_check_button: Gtk.CheckButton
-    preposition_check_button: Gtk.CheckButton
-    conjunction_check_button: Gtk.CheckButton
-    interjection_check_button: Gtk.CheckButton
-    article_check_button: Gtk.CheckButton
-    idiom_check_button: Gtk.CheckButton
-    clause_check_button: Gtk.CheckButton
-    prefix_check_button: Gtk.CheckButton
-    suffix_check_button: Gtk.CheckButton
+    # IPA charset flow box
+    # ipa_charset_flow_box: Gtk.FlowBox
 
     # Keybindings overlay
     help_overlay: Gtk.ShortcutsWindow
@@ -149,3 +124,6 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_word_direction_changed(
         self, text: Gtk.Text, pre_direction: Gtk.TextDirection
     ) -> None: ...
+    def on_assign_word_type_clicked(self, *_args: Any) -> None: ...
+    def open_filer_dialog(self, *_args: Any) -> None: ...
+    def reset_filters(self, *_args: Any) -> None: ...

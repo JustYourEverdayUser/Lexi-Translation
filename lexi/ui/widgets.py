@@ -220,6 +220,7 @@ class LexiconRow(Gtk.Box):
 
     @Gtk.Template.Callback()
     def on_add_word_dialog_enter_press(self, *_args) -> None:
+        """Handle the Enter key press in the add word dialog."""
         self.add_word()
 
     @property
@@ -342,6 +343,15 @@ class WordRow(Adw.ActionRow):
     def set_word_direction(
         self, text: Gtk.Text, prev_direction: Gtk.TextDirection
     ) -> None:
+        """Set the text direction for a word property.
+
+        Parameters
+        ----------
+        text : Gtk.Text
+            The text widget whose direction is being set.
+        prev_direction : Gtk.TextDirection
+            The previous direction of the text.
+        """
         directionable_row = text.get_ancestor(EntryRow)
         expander_row = directionable_row.get_ancestor(Adw.ExpanderRow)
 
@@ -453,7 +463,7 @@ class WordRow(Adw.ActionRow):
                 return
 
     def add_list_prop(self, button: Gtk.Button) -> None:
-        """Add a new list property row.
+        """Add a new property to the word's list attributes.
 
         Parameters
         ----------
@@ -847,6 +857,7 @@ class WordTypeRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_clicked(self, *_args) -> None:
+        """Assign the word type to the word."""
         shared.win.loaded_word.word_type.append(self.word_type)
         shared.win.loaded_word.generate_word_type()
         if enums.Schema.WORD_AUTOSAVE():

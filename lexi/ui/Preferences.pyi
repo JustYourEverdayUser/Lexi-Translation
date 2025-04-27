@@ -8,6 +8,8 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     word_autosave_switch_row: Adw.SwitchRow
     import_confirmation_dialog: Adw.AlertDialog
+    available_word_types_scrolled_window: Gtk.ScrolledWindow
+    available_word_types_list_box: Gtk.ListBox
 
     opened: bool
 
@@ -25,3 +27,5 @@ class LexiPreferences(Adw.PreferencesDialog):
     def on_import_database(
         self, file_dialog: Gtk.FileDialog, result: Gio.Task
     ) -> None: ...
+    def gen_word_types(self) -> None: ...
+    def add_new_word_type(self, entry_row: Adw.EntryRow) -> None: ...
