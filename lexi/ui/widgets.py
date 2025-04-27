@@ -5,6 +5,7 @@ import yaml
 from gi.repository import Adw, Gio, Gtk
 
 from lexi import enums, shared
+from lexi.logging.logger import logger
 from lexi.ui.Preferences import LexiPreferences
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
@@ -73,6 +74,7 @@ class LexiconRow(Gtk.Box):
         """Save the lexicon to the file."""
         self.file.seek(0)
         self.file.truncate(0)
+        logger.info("Saving lexicon %s", self.data["name"])
         yaml.dump(
             self.data, self.file, sort_keys=False, encoding=None, allow_unicode=True
         )
@@ -89,6 +91,7 @@ class LexiconRow(Gtk.Box):
             The user's response to the dialog.
         """
         if response == "delete":
+            logger.info("Deleting lexicon %s", self.data["name"])
             if shared.win.loaded_lexicon == self:
                 shared.win.set_word_rows_sensetiveness(False)
                 try:
@@ -104,10 +107,14 @@ class LexiconRow(Gtk.Box):
 
             self.file.close()
             os.remove(self.file.name)
+            logger.info("Lexicon %s deleted", self.data["name"])
             shared.win.build_sidebar()
+        else:
+            logger.info("Lexicon %s deletion cancelled", self.data["name"])
 
     def rename_lexicon(self, *_args) -> None:
         """Show the rename popover for the lexicon."""
+        logger.info("Renaming lexicon %s", self.data["name"])
         self.rename_alert_dialog.present(shared.win)
         self.rename_entry.set_buffer(Gtk.EntryBuffer.new(self.name, -1))
         self.rename_entry.grab_focus()
@@ -138,8 +145,17 @@ class LexiconRow(Gtk.Box):
         """
         if response == "rename":
             if alert_dialog.get_extra_child().get_text_length() != 0:
+                logger.info(
+                    "Renaming lexicon: %s -> %s",
+                    self.name,
+                    alert_dialog.get_extra_child().get_buffer().get_text(),
+                )
                 self.name = alert_dialog.get_extra_child().get_buffer().get_text()
+            else:
+                logger.warning("Lexicon name cannot be empty")
             shared.win.build_sidebar()
+        else:
+            logger.info("Lexicon %s renaming cancelled", self.data["name"])
 
     def show_add_word_dialog(self) -> None:
         """Show the dialog for adding a new word."""
@@ -147,6 +163,7 @@ class LexiconRow(Gtk.Box):
         self.word_entry_row.remove_css_class("error")
         self.translation_entry_row.set_text("")
         self.example_entry_row.set_text("")
+        logger.info("Showing add word dialog for lexicon %s", self.data["name"])
         self.add_word_dialog.present(shared.win)
         self.add_word_dialog.grab_focus()
 
@@ -165,6 +182,7 @@ class LexiconRow(Gtk.Box):
 
         if len(word) == 0:
             self.word_entry_row.add_css_class("error")
+            logger.warning("Word cannot be empty")
             raise AttributeError("Word cannot be empty")
 
         if len(translation) == 0:
@@ -178,25 +196,15 @@ class LexiconRow(Gtk.Box):
             "word": word,
             "translations": translation if translation == [] else [translation],
             "pronunciation": "",
-            "types": {
-                "noun": False,
-                "verb": False,
-                "adjective": False,
-                "adverb": False,
-                "pronoun": False,
-                "preposition": False,
-                "conjunction": False,
-                "interjection": False,
-                "article": False,
-                "idiom": False,
-                "clause": False,
-                "prefix": False,
-                "suffix": False,
-            },
+            "types": [],
             "examples": example if example == [] else [example],
             "references": [],
+            "tags": [],
         }
         self.data["words"].append(new_word)
+        logger.info(
+            "Word %s added to the %s Lexicon", new_word["word"], self.data["name"]
+        )
         self.save_lexicon()
         shared.win.lexicon_list_box.append(WordRow(new_word, self))
         shared.win.lexicon_scrolled_window.set_child(shared.win.lexicon_list_box)
@@ -230,6 +238,7 @@ class LexiconRow(Gtk.Box):
     @name.setter
     def name(self, name: str) -> None:
         if len(name) == 0:
+            logger.warning("Lexicon name cannot be empty")
             raise AttributeError("Lexicon name cannot be empty")
 
         self.data["name"] = name
@@ -287,6 +296,7 @@ class WordRow(Adw.ActionRow):
     @Gtk.Template.Callback()
     def load_word(self, *_args) -> None:
         """Load the word into the main window."""
+        logger.info("Loading word %s", self.word_dict["word"])
         shared.win.loaded_word = self
         shared.win.translations_list_box.remove_all()
         shared.win.examples_list_box.remove_all()
@@ -339,6 +349,7 @@ class WordRow(Adw.ActionRow):
             shared.win.lexicon_split_view.set_show_content(True)
 
         shared.win.set_word_rows_sensetiveness(True)
+        logger.info("Word %s loaded", self.word_dict["word"])
 
     def set_word_direction(
         self, text: Gtk.Text, prev_direction: Gtk.TextDirection
@@ -369,10 +380,18 @@ class WordRow(Adw.ActionRow):
                             Gtk.TextDirection.LTR,
                             Gtk.TextDirection.NONE,
                         ):
+                            logger.debug(
+                                "Setting RTL direction for %s item",
+                                attr.replace("_expander_row", ""),
+                            )
                             self.word_dict[attr.replace("_expander_row", "")][index] = (
                                 "&rtl" + text.get_text()
                             )
                             break
+                        logger.debug(
+                            "Setting LTR direction for %s item",
+                            attr.replace("_expander_row", ""),
+                        )
                         self.word_dict[attr.replace("_expander_row", "")][
                             index
                         ] = text.get_text().replace("&rtl", "")
@@ -420,6 +439,7 @@ class WordRow(Adw.ActionRow):
                 )
                 if row_index is not None:
                     expander_row.remove(row)
+                    logger.info("Removing %s row", attr_name)
                     del self.word_dict[attr_name][row_index]
                     if enums.Schema.WORD_AUTOSAVE():
                         self.lexicon.save_lexicon()
@@ -486,6 +506,7 @@ class WordRow(Adw.ActionRow):
                     )
                 )
                 text = new_row.get_gtk_text()
+                logger.info("Adding %s row", attr_name)
                 expander_row.add_row(new_row)
                 self.word_dict[attr_name].append("")
                 text.connect("changed", self.update_word)
@@ -497,6 +518,11 @@ class WordRow(Adw.ActionRow):
     def delete(self) -> None:
         """Delete the word from the lexicon."""
         self.lexicon.data["words"].remove(self.word_dict)
+        logger.info("Dereffering %s from other words", self.word)
+        for word in self.lexicon.data["words"]:
+            if self.word_dict["id"] in word["references"]:
+                logger.info("Removing %s from %s references", self.word, word["word"])
+                word["references"].remove(self.word_dict["id"])
         shared.win.lexicon_list_box.remove(self)
         if shared.win.loaded_word is self:
             shared.win.word_nav_page.set_title(_("Word"))
@@ -513,8 +539,10 @@ class WordRow(Adw.ActionRow):
         if not self.check_button_revealer.get_reveal_child():
             shared.win.selection_mode_toggle_button.set_active(True)
             self.check_button.set_active(True)
+            logger.debug("Check button activated")
         else:
             self.check_button.set_active(not self.check_button.get_active())
+            logger.debug("Check button deactivated")
 
     @Gtk.Template.Callback()
     def on_check_button_toggled(self, button: Gtk.CheckButton) -> None:
@@ -526,12 +554,15 @@ class WordRow(Adw.ActionRow):
             The check button being toggled.
         """
         if button.get_active():
+            logger.debug("Adding %s to deleatable words", self.word)
             shared.win.selected_words.append(self)
         else:
             shared.win.selected_words.remove(self)
+            logger.debug("Removing %s from deleatable words", self.word)
 
     def get_ref_count(self) -> None:
         """Update the reference count label."""
+        logger.debug("Updating reference count for %s", self.word)
         if self.ref_count > 0:
             self.refs_count_label_box.set_visible(True)
             self.refs_count_label.set_label(str(self.ref_count))
@@ -540,6 +571,7 @@ class WordRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_add_tag_button_clicked(self, *_args) -> None:
+        logger.info("Showing tag addition alert dialog for %s", self.word)
         self.tag_alert_dialog_entry.set_text("")
         self.tag_alert_dialog.present(shared.win)
 
@@ -561,16 +593,21 @@ class WordRow(Adw.ActionRow):
     ) -> None:
         if response == "add":
             tag = self.tag_alert_dialog_entry.get_text().lower().strip()
-            if "#" in tag or " " in tag:
+            if "#" in tag or " " in tag or tag == "":
+                logger.warning("Tag cannot contain spaces or '#'")
                 raise AttributeError("Tag cannot contain spaces or '#'")
 
             if tag in self.tags:
+                logger.warning("Tag already exists")
                 raise AttributeError("Tag already exists")
 
             self.tags.append(tag)
             self.tags.sort()
             self.lexicon.save_lexicon()
+            logger.info("Tag #%s added to %s", tag, self.word)
             self.generate_tag_chips()
+        else:
+            logger.info("Tag addition cancelled")
 
     def generate_tag_chips(self) -> None:
         for _tag in self.tags_box:  # pylint: disable=not-an-iterable
@@ -581,6 +618,7 @@ class WordRow(Adw.ActionRow):
                 current_text = shared.win.lexicon_search_entry.get_text()
                 if not current_text.startswith("#") and current_text != "":
                     return  # Do nothing if the string doesn't start with '#'
+                logger.info("Searching for words with tag %s", current_text + f"#{tag}")
                 shared.win.lexicon_search_entry.set_text(current_text + f"#{tag}")
 
             def rmb_clicked(
@@ -591,6 +629,7 @@ class WordRow(Adw.ActionRow):
                 tag: str,
             ) -> None:
                 self.tags.remove(tag)
+                logger.info("Tag #%s removed from %s", tag, self.word)
                 self.lexicon.save_lexicon()
                 for _tag in self.tags_box:  # pylint: disable=not-an-iterable
                     self.tags_box.remove(_tag)
@@ -735,12 +774,17 @@ class ReferenceRow(Adw.ActionRow):
             ):
                 shared.win.references_list_box.append(ReferenceRow(word_row, True))
 
+        logger.info(
+            "%s added to %s references", self.word_row.word, shared.win.loaded_word.word
+        )
         if shared.win.references_dialog_list_box.get_row_at_index(0) is None:
+            logger.info("No more words to refer")
             shared.win.references_dialog.close()
         shared.win.update_refs_count()
 
     def open_this_word(self, *_args) -> None:
         """Open the referenced word."""
+        logger.info("Opening word %s", self.word_row.word)
         shared.win.lexicon_list_box.select_row(self.word_row)
         self.word_row.load_word()
 
@@ -757,6 +801,11 @@ class ReferenceRow(Adw.ActionRow):
         """Remove the reference to the word."""
         shared.win.loaded_word.word_dict["references"].remove(
             self.word_row.word_dict["id"]
+        )
+        logger.info(
+            "%s removed from %s references",
+            self.word_row.word,
+            shared.win.loaded_word.word,
         )
 
         if enums.Schema.WORD_AUTOSAVE():
@@ -847,10 +896,14 @@ class WordTypeRow(Adw.ActionRow):
         if not isinstance(dialog := shared.win.props.visible_dialog, LexiPreferences):
             shared.win.loaded_word.word_dict["types"].remove(self.word_type)
             shared.win.word_types_list_box.remove(self)
+            logger.info(
+                "Unassigning %s from %s", self.word_type, shared.win.loaded_word.word
+            )
             shared.win.loaded_word.generate_word_type()
             if enums.Schema.WORD_AUTOSAVE():
                 shared.win.loaded_lexicon.save_lexicon()
         else:
+            logger.info("Removing %s from word types", self.word_type)
             dialog.available_word_types_list_box.remove(self)
             shared.config["word-types"].remove(self.word_type)
             dialog.gen_word_types()
@@ -858,6 +911,7 @@ class WordTypeRow(Adw.ActionRow):
     @Gtk.Template.Callback()
     def on_clicked(self, *_args) -> None:
         """Assign the word type to the word."""
+        logger.info("Assigning %s to %s", self.word_type, shared.win.loaded_word.word)
         shared.win.loaded_word.word_type.append(self.word_type)
         shared.win.loaded_word.generate_word_type()
         if enums.Schema.WORD_AUTOSAVE():

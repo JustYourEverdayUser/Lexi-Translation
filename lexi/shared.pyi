@@ -1,3 +1,4 @@
+from functools import cache
 from typing import TextIO
 
 from gi.repository import Gio
@@ -11,6 +12,7 @@ PREFIX: str
 CACHEV: int
 
 data_dir: str
+cache_dir: str
 
 schema: Gio.Settings
 state_schema: Gio.Settings

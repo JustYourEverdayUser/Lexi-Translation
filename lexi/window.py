@@ -5,6 +5,7 @@ import string
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import enums, shared
+from lexi.logging.logger import logger
 from lexi.ui import widgets
 from lexi.ui.Preferences import LexiPreferences
 
@@ -91,8 +92,10 @@ class LexiWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         # Add a CSS class for development mode
         if shared.APP_ID.endswith("Devel"):
+            logger.debug("Enabling development mode decorations")
             self.add_css_class("devel")
 
+        logger.debug("Setting keybinding window")
         self.set_help_overlay(self.help_overlay)
 
         if enums.Schema.WORD_AUTOSAVE():
@@ -149,6 +152,7 @@ class LexiWindow(Adw.ApplicationWindow):
         if keyval == Gdk.KEY_Escape:
             # Handle Escape key press
             if self.selection_mode_toggle_button.get_active():
+                logger.debug("Escape pressed, disabling selection mode")
                 self.selection_mode_toggle_button.set_active(False)
 
     def on_sorting_method_changed(
@@ -166,6 +170,7 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         action.set_state(state)
         self.sort_method = str(state).strip("'")
+        logger.info("Sorting method changed to %s, resorting", self.sort_method)
         self.lexicon_list_box.invalidate_sort()
         shared.state_schema.set_string("sort-method", self.sort_method)
 
@@ -184,6 +189,7 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         action.set_state(state)
         self.sort_type = str(state).strip("'")
+        logger.info("Sorting type changed to %s, resorting", self.sort_type)
         self.lexicon_list_box.invalidate_sort()
         shared.state_schema.set_string("sort-type", self.sort_type)
 
@@ -281,19 +287,31 @@ class LexiWindow(Adw.ApplicationWindow):
                     or text in row.word.lower()
                     or text in row.translation.lower()
                 )
+                logger.debug(
+                    "Word “%s”, is shown: %s", row.word, matches_text and fits_in_filter
+                )
                 return matches_text and fits_in_filter
 
             except (AttributeError, KeyError):
+                logger.debug("An error occurred while filtering word, showing")
                 return True
         else:
             text = text.replace(" ", "")
             tags = set(text.split("#")[1:])
             word_tags = set(row.tags)
+            logger.debug(
+                "Word “%s”, is shown: %s",
+                row.word,
+                tags.issubset(word_tags) and fits_in_filter,
+            )
             return tags.issubset(word_tags) and fits_in_filter
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
         """Toggle the visibility of the sidebar."""
+        logger.info(
+            "Sidebar toggled: %s", not self.overlay_split_view.get_show_sidebar()
+        )
         self.overlay_split_view.set_show_sidebar(
             not self.overlay_split_view.get_show_sidebar()
         )
@@ -310,6 +328,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
         # Toggle search mode and focus the search entry if enabled
         search_bar.set_search_mode(not (search_mode := search_bar.get_search_mode()))
+        logger.debug("Search Lexicons mode: %s", not search_mode)
 
         if not search_mode:
             self.set_focus(search_entry)
@@ -319,6 +338,7 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_add_lexicon_button_clicked(self, *_args) -> None:
         """Present an Add Lexicon alert dialog"""
+        logger.info("Performing lexicon addition")
         self.add_lexicon_alert_dialog.present(self)
         self.add_lexicon_entry.set_buffer(Gtk.EntryBuffer())
         self.add_lexicon_entry.grab_focus()
@@ -352,6 +372,7 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         if response == "add":
             if alert_dialog.get_extra_child().get_text_length() == 0:
+                logger.warning("Trying to add lexicon without a name")
                 return
 
             # Generate a unique random ID for the new lexicon
@@ -374,6 +395,11 @@ class LexiWindow(Adw.ApplicationWindow):
                 f"name: {alert_dialog.get_extra_child().get_buffer().get_text()}\nid: {random_id}\nwords: []"
             )
             file.flush()
+            logger.info(
+                "Lexicon '%s' created with ID '%s'",
+                alert_dialog.get_extra_child().get_buffer().get_text(),
+                random_id,
+            )
 
             # Reset the popover and rebuild the sidebar
             self.build_sidebar()
@@ -382,6 +408,7 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         Build the sidebar with a list of lexicons.
         """
+        logger.info("Building sidebar")
         try:
             if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
                 # Clear the list box and populate it with lexicons
@@ -417,6 +444,7 @@ class LexiWindow(Adw.ApplicationWindow):
         row : Gtk.ListBoxRow
             The selected row.
         """
+        logger.info("Lexicon '%s' selected", row.get_child().name)
         self.lexicon_list_box.remove_all()
         if len(row.get_child().data["words"]) != 0:
             # Populate the list box with words from the selected lexicon
@@ -438,6 +466,7 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         Update the reference count for all words in the lexicon list box.
         """
+        logger.info("Updating references count")
         for word_row in self.lexicon_list_box:  # pylint: disable=not-an-iterable
             word_row.get_ref_count()
 
@@ -450,6 +479,7 @@ class LexiWindow(Adw.ApplicationWindow):
         row : Adw.EntryRow
             Adw.EntryRow emitted this method
         """
+        logger.debug("Word entry changed: %s", row.get_text())
         self.loaded_word.word = row.get_text()
 
     @Gtk.Template.Callback()
@@ -461,6 +491,7 @@ class LexiWindow(Adw.ApplicationWindow):
         row : Adw.EntryRow
             Adw.EntryRow emitted this method
         """
+        logger.debug("Pronunciation entry changed: %s", row.get_text())
         self.loaded_word.pronunciation = row.get_text()
 
     @Gtk.Template.Callback()
@@ -473,6 +504,7 @@ class LexiWindow(Adw.ApplicationWindow):
         button : Gtk.Button
             The button that emitted this method.
         """
+        logger.debug("Added a variable data to a word")
         self.loaded_word.add_list_prop(button)
 
     @Gtk.Template.Callback()
@@ -488,6 +520,7 @@ class LexiWindow(Adw.ApplicationWindow):
                     _("You have already referenced all words"),
                 )
             )
+            logger.info("Rejecting adding a reference: All words are referenced")
             return
 
         self.references_dialog_list_box.remove_all()
@@ -496,6 +529,9 @@ class LexiWindow(Adw.ApplicationWindow):
                 word_row.word_dict["id"] not in self.loaded_word.word_dict["references"]
             ):
                 self.references_dialog_list_box.append(widgets.ReferenceRow(word_row))
+        logger.debug(
+            "Showing references dialog",
+        )
         self.references_dialog.present(self)
 
     @Gtk.Template.Callback()
@@ -504,6 +540,7 @@ class LexiWindow(Adw.ApplicationWindow):
         Show the add word dialog.
         """
         if self.loaded_lexicon is not None:
+            logger.info("Showing add word dialog")
             self.loaded_lexicon.show_add_word_dialog()
 
     @Gtk.Template.Callback()
@@ -517,6 +554,7 @@ class LexiWindow(Adw.ApplicationWindow):
             The toggle button that emitted this method.
         """
         self.set_selection_mode(button.get_active())
+        logger.info("Selection mode toggled: %s", button.get_active())
 
     def set_selection_mode(self, enabled: bool) -> None:
         """
@@ -550,7 +588,9 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_delete_selected_words_action(self, *_args) -> None:
         """Delete selected words."""
+        logger.info("Deleting selected words: %s", len(self.selected_words))
         for row in self.selected_words.copy():
+            logger.info("Deleting word: %s", row.word)
             self.selected_words.remove(row)
             row.delete()
         self.set_selection_mode(False)
@@ -568,6 +608,7 @@ class LexiWindow(Adw.ApplicationWindow):
         active : bool
             Whether the rows should be sensitive or not.
         """
+        logger.debug("Setting word rows sensitivity: %s", active)
         self.word_entry_row.set_sensitive(active)
         self.pronunciation_entry_row.set_sensitive(active)
         self.translations_expander_row.set_sensitive(active)
@@ -603,11 +644,13 @@ class LexiWindow(Adw.ApplicationWindow):
         if LexiPreferences.opened:
             return
         preferences = LexiPreferences()
+        logger.info("Showing preferences")
         preferences.present(self)
 
     @Gtk.Template.Callback()
     def on_save_word_button_clicked(self, *_args) -> None:
         """Perform loaded lexicon save and inform user"""
+        logger.info("Saving word")
         self.loaded_word.lexicon.save_lexicon()
         self.toast_overlay.add_toast(Adw.Toast(title=_("Word saved"), timeout=2))
 
@@ -628,6 +671,7 @@ class LexiWindow(Adw.ApplicationWindow):
         path : str
             path to open
         """
+        logger.info("Opening: %s", path)
         Gio.AppInfo.launch_default_for_uri(f"file://{path}")
 
     def on_word_direction_changed(
@@ -644,8 +688,10 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         if pre_direction in (Gtk.TextDirection.LTR, Gtk.TextDirection.NONE):
             self.loaded_word.word_dict["word"] = "&rtl" + text.get_text()
+            logger.debug("Word direction changed to RTL")
         else:
             self.loaded_word.word_dict["word"] = text.get_text().replace("&rtl", "")
+            logger.debug("Word direction changed to LTR")
         if enums.Schema.WORD_AUTOSAVE():
             self.loaded_lexicon.save_lexicon()
 
@@ -660,6 +706,7 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.assign_word_type_dialog_list_box.append(
                     widgets.WordTypeRow(word_type, deactivate=False)
                 )
+        logger.info("Showing assign word type dialog")
         self.assign_word_type_dialog.present(self)
 
     @Gtk.Template.Callback()
@@ -675,16 +722,19 @@ class LexiWindow(Adw.ApplicationWindow):
 
                 if is_toggled:
                     if word_type not in shared.config["enabled-types"]:
+                        logger.debug("Adding word type to filter: %s", word_type)
                         shared.config["enabled-types"].append(word_type)
                         shared.config["enabled-types"].sort()
                 else:
                     if word_type in shared.config["enabled-types"]:
+                        logger.debug("Removing word type from filter: %s", word_type)
                         shared.config["enabled-types"].remove(word_type)
 
             self.lexicon_list_box.invalidate_filter()
 
         def __populate_filter_dialog() -> None:
             for word_type in shared.config["word-types"]:
+                logger.debug("Adding filter for word type: %s", word_type)
                 action_row = Adw.ActionRow(title=word_type, activatable=False)
                 check_button = Gtk.CheckButton()
                 check_button.connect("toggled", __on_toggled)
@@ -695,10 +745,12 @@ class LexiWindow(Adw.ApplicationWindow):
 
         self.filter_dialog_list_box.remove_all()
         __populate_filter_dialog()
+        logger.info("Showing filter dialog")
         self.filter_dialog.present(self)
 
     @Gtk.Template.Callback()
     def reset_filters(self, *_args) -> None:
         """Reset all filters in the filter dialog"""
+        logger.info("Resetting filters")
         for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
             row.get_activatable_widget().set_active(False)
