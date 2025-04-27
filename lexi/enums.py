@@ -25,23 +25,23 @@ class Icon(str, Enum):
         IMPORT
     """
 
-    TOGGLE_SIDEBAR: str = "toggle-sidebar-symbolic"
-    ADD_PAIR: str = "add-symbolic"
-    TOGGLE_SEARCH: str = "toggle-search-symbolic"
-    SORT: str = "sort-symbolic"
-    APP_MENU: str = "app-menu-symbolic"
-    TOGGLE_SELECTION: str = "toggle-selection-symbolic"
-    LEXICON: str = "lexicon-symbolic"
-    NO_FOUND: str = "no-found-symbolic"
-    DELETE: str = "delete-symbolic"
-    TIMES_REFERENCED: str = "times-referenced-symbolic"
-    FILTER_WORDS: str = "filter-words-symbolic"
-    GENERAL: str = "general-symbolic"
+    TOGGLE_SIDEBAR: str = "lexi-toggle-sidebar-symbolic"
+    ADD_PAIR: str = "lexi-add-symbolic"
+    TOGGLE_SEARCH: str = "lexi-toggle-search-symbolic"
+    SORT: str = "lexi-sort-symbolic"
+    APP_MENU: str = "lexi-app-menu-symbolic"
+    TOGGLE_SELECTION: str = "lexi-toggle-selection-symbolic"
+    LEXICON: str = "lexi-lexicon-symbolic"
+    NO_FOUND: str = "lexi-no-found-symbolic"
+    DELETE: str = "lexi-delete-symbolic"
+    TIMES_REFERENCED: str = "lexi-times-referenced-symbolic"
+    FILTER_WORDS: str = "lexi-filter-words-symbolic"
+    GENERAL: str = "lexi-general-symbolic"
     BACKUP: str = "lexi-backup-symbolic"
-    EXPORT: str = "export-database-symbolic"
-    IMPORT: str = "import-database-symbolic"
+    EXPORT: str = "lexi-export-database-symbolic"
+    IMPORT: str = "lexi-import-database-symbolic"
     LIST_LARGE: str = "lexi-list-large-symbolic"
-    TAG_OUTLINE_ADD: str = "lexi-tag-outline-add-symbolic"
+    TAG_OUTLINE_ADD: str = "lexi-tag-outline-lexi-add-symbolic"
     HELP_ABOUT: str = "lexi-help-about-symbolic"
 
     def __str__(self) -> str:
@@ -84,6 +84,7 @@ class WordType(str, Enum):
 
     def __str__(self) -> str:
         return self.value
+
 
 # pylint: disable=invalid-name
 class Schema:

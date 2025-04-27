@@ -43,12 +43,12 @@ template $LexiWindow : Adw.ApplicationWindow {
                   orientation: horizontal;
 
                   Button toggle_sidebar_button {
-                    icon-name: "toggle-sidebar-symbolic";
+                    icon-name: "lexi-toggle-sidebar-symbolic";
                     tooltip-text: _("Toggle sidebar");
                     clicked => $on_toggle_sidebar_action();
                   }
                   ToggleButton toggle_lexicons_search_button {
-                    icon-name: "toggle-search-symbolic";
+                    icon-name: "lexi-toggle-search-symbolic";
                     tooltip-text: _("Find Lexicon");
                   }
                 }
@@ -58,12 +58,12 @@ template $LexiWindow : Adw.ApplicationWindow {
                   orientation: horizontal;
 
                   Button {
-                    icon-name: "add-symbolic";
+                    icon-name: "lexi-add-symbolic";
                     tooltip-text: _("Add Lexicon");
                     clicked => $on_add_lexicon_button_clicked();
                   }
                   MenuButton {
-                    icon-name: "app-menu-symbolic";
+                    icon-name: "lexi-app-menu-symbolic";
                     tooltip-text: _("App menu");
                     menu-model: app_menu;
                     primary: true;
@@ -123,14 +123,14 @@ template $LexiWindow : Adw.ApplicationWindow {
 
                   [end]
                   MenuButton {
-                    icon-name: "sort-symbolic";
+                    icon-name: "lexi-sort-symbolic";
                     tooltip-text: _("Sort by…");
                     menu-model: sort;
                   }
 
                   [end]
                   Button {
-                    icon-name: "filter-words-symbolic";
+                    icon-name: "lexi-filter-words-symbolic";
                     tooltip-text: _("Filter words by types");
                     clicked => $open_filer_dialog();
                   }
@@ -160,7 +160,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     orientation: horizontal;
 
                     ToggleButton selection_mode_toggle_button {
-                      icon-name: "toggle-selection-symbolic";
+                      icon-name: "lexi-toggle-selection-symbolic";
                       tooltip-text: _("Select words");
                       toggled => $selection_mode_button_toggled();
 
@@ -172,7 +172,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                       transition-duration: 200;
 
                       Button delete_selected_words_button {
-                        icon-name: "delete-symbolic";
+                        icon-name: "lexi-delete-symbolic";
                         tooltip-text: _("Delete selected words");
                         clicked => $on_delete_selected_words_action();
 
@@ -196,7 +196,7 @@ BUT NOT: “#family mom” or “#famil”");
                     }
 
                     Button {
-                      icon-name: "add-symbolic";
+                      icon-name: "lexi-add-symbolic";
                       tooltip-text: _("Add word");
                       clicked => $on_add_word_action();
                       
@@ -254,7 +254,7 @@ BUT NOT: “#family mom” or “#famil”");
                           valign: center;
 
                           Button {
-                            icon-name: "add-symbolic";
+                            icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add translation");
                             clicked => $on_word_list_prop_button_pressed();
 
@@ -272,7 +272,7 @@ BUT NOT: “#family mom” or “#famil”");
                           valign: center;
 
                           Button {
-                            icon-name: "add-symbolic";
+                            icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Assign word type");
                             clicked => $on_assign_word_type_clicked();
 
@@ -289,7 +289,7 @@ BUT NOT: “#family mom” or “#famil”");
                           valign: center;
 
                           Button {
-                            icon-name: "add-symbolic";
+                            icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add example");
                             clicked => $on_word_list_prop_button_pressed();
 
@@ -306,7 +306,7 @@ BUT NOT: “#family mom” or “#famil”");
                           valign: center;
 
                           Button {
-                            icon-name: "add-symbolic";
+                            icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add example");
                             clicked => $on_references_add_button_pressed();
 
@@ -478,7 +478,7 @@ Adw.Dialog filter_dialog {
 
 Adw.StatusPage no_lexicons_yet {
   title: _("No Lexicons found yet");
-  icon-name: "add-symbolic";
+  icon-name: "lexi-add-symbolic";
 
   styles ["compact"]
 }
@@ -486,14 +486,14 @@ Adw.StatusPage no_lexicons_yet {
 Adw.StatusPage no_lexicons_found {
   title: _("No Lexicons found");
   description: _("No Lexicons found for this search request");
-  icon-name: "no-found-symbolic";
+  icon-name: "lexi-no-found-symbolic";
 
   styles ["compact"]
 }
 
 Adw.StatusPage no_words_yet {
   title: _("No Words found yet");
-  icon-name: "add-symbolic";
+  icon-name: "lexi-add-symbolic";
 
   Box {
     halign: center;
@@ -512,13 +512,13 @@ Adw.StatusPage no_words_yet {
 Adw.StatusPage no_words_found {
   title: _("No Words found");
   description: _("No Words found for this search request");
-  icon-name: "no-found-symbolic";
+  icon-name: "lexi-no-found-symbolic";
 }
 
 Adw.StatusPage lexicon_not_selected {
   title: _("No Lexicon selected");
   description: _("Please select a Lexicon to view its words");
-  icon-name: "lexicon-symbolic";
+  icon-name: "lexi-lexicon-symbolic";
 }
 
 Adw.AlertDialog add_lexicon_alert_dialog {

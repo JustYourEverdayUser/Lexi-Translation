@@ -5,7 +5,7 @@ template $LexiPreferences : Adw.PreferencesDialog {
   content-height: 600;
   Adw.PreferencesPage {
     title: _("General");
-    icon-name: "general-symbolic";
+    icon-name: "lexi-general-symbolic";
 
     Adw.PreferencesGroup {
       title: _("Editing");
@@ -24,13 +24,13 @@ template $LexiPreferences : Adw.PreferencesDialog {
       separate-rows: true;
 
       Adw.ButtonRow {
-        start-icon-name: "export-database-symbolic";
+        start-icon-name: "lexi-export-database-symbolic";
         title: _("Export Database");
         activated => $on_export_button_clicked();
       }
 
       Adw.ButtonRow {
-        start-icon-name: "import-database-symbolic";
+        start-icon-name: "lexi-import-database-symbolic";
         title: _("Import Database");
         activated => $on_import_button_clicked();
 
