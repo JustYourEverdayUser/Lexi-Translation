@@ -17,6 +17,7 @@ install_subdir('ui', install_dir: moduledir, exclude_files: [
 install_subdir('utils', install_dir: moduledir, exclude_files: [
   'backup.pyi',
 ])
+install_subdir('logging', install_dir: moduledir)
 
 install_data(
   [

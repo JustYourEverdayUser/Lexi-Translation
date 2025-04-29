@@ -8,6 +8,7 @@ import yaml
 from gi.repository import Adw
 
 from lexi import shared
+from lexi.logging.logger import logger
 
 
 def export_database(path: str) -> None:
@@ -21,6 +22,7 @@ def export_database(path: str) -> None:
     """
     with zipfile.ZipFile(path, "w", zipfile.ZIP_STORED) as zipf:
         if os.path.exists(os.path.join(shared.data_dir, "config.yaml")):
+            logger.debug("Exporting config.yaml")
             zipf.write(
                 os.path.join(shared.data_dir, "config.yaml"), arcname="config.yaml"
             )
@@ -29,6 +31,7 @@ def export_database(path: str) -> None:
             for filename in glob.glob(
                 os.path.join(shared.data_dir, "lexicons", "*yaml")
             ):
+                logger.debug("Exporting lexicons/%s", filename)
                 arcname = os.path.relpath(filename, shared.data_dir)
                 zipf.write(filename, arcname=arcname)
 
@@ -129,6 +132,9 @@ def proof_of_content(zip_path: str) -> bool:
                     database_version_mismatch_panic()
 
             return True
+    logger.warning(
+        "The archive %s is not a valid zip file or does not exist.", zip_path
+    )
     return False
 
 
@@ -142,6 +148,7 @@ def incorrect_archive_panic(*_args) -> None:
         ),
     )
     alert.add_response("close", label=_("Close"))
+    logger.info("Incorrect archive alert")
     alert.present(shared.win)
 
 
@@ -158,4 +165,5 @@ def database_version_mismatch_panic() -> None:
     alert.set_close_response("exit")
     alert.set_default_response("exit")
     alert.connect("response", lambda *_: shared.app.on_quit_action())
+    logger.info("Database version mismatch alert")
     alert.present(shared.win)

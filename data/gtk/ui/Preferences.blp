@@ -14,6 +14,14 @@ template $LexiPreferences : Adw.PreferencesDialog {
         title: _("Automatically save word on change");
       }
     }
+
+    Adw.PreferencesGroup {
+      title: _("Debug");
+
+      Adw.SwitchRow use_debug_log_switch_row {
+        title: _("Use Debug logging profile");
+      }
+    }
   }
 
   Adw.PreferencesPage {

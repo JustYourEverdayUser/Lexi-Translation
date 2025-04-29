@@ -4,6 +4,9 @@
     <key name="word-autosave" type="b">
       <default>true</default>
     </key>
+    <key name="use-debug-log" type="b">
+      <default>false</default>
+    </key>
   </schema>
 
   <schema id="@APP_ID@.State" path="@PREFIX@/State/">

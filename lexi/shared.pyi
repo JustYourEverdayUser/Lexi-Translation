@@ -11,6 +11,7 @@ PREFIX: str
 CACHEV: int
 
 data_dir: str
+cache_dir: str
 
 schema: Gio.Settings
 state_schema: Gio.Settings
@@ -18,4 +19,4 @@ state_schema: Gio.Settings
 app: LexiApplication
 win: LexiWindow
 config_file: TextIO
-config: dict[str, list[str]]
+config: dict[int, list[str]]

@@ -4,10 +4,12 @@ from pathlib import Path
 import yaml
 
 from lexi import shared
+from lexi.logging.logger import logger
 
 
 def migrate_v2() -> None:
     # Migrate main app config
+    logger.info("Migrating config file to v2")
     config: dict = shared.config
     config.pop("filter-types")
     config["word-types"] = [
@@ -29,6 +31,7 @@ def migrate_v2() -> None:
     config["word-types"].sort()
 
     # Migrate lexicons
+    logger.info("Migrating lexicons to v2")
     for file in Path(os.path.join(shared.data_dir, "lexicons")).iterdir():
         lexicon = open(str(file), "r+", encoding="utf-8")
         lexicon_data = yaml.safe_load(lexicon)
@@ -54,3 +57,4 @@ def migrate_v2() -> None:
         encoding=None,
         allow_unicode=True,
     )
+    logger.info("Migration to v2 completed")

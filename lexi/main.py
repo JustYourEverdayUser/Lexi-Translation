@@ -11,6 +11,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
+from lexi.logging.logger import log_filename, log_system_info, logger, prev_log_filename
 from lexi.window import LexiWindow
 
 
@@ -29,6 +30,9 @@ class LexiApplication(Adw.Application):
     # pylint: disable=unused-variable
     def do_activate(self) -> None:  # pylint: disable=arguments-differ
         """Action emitted on app launch"""
+        # Check if lexicons dir exists, create it if not
+
+        logger.info("Creating application window")
         win = self.props.active_window  # pylint: disable=no-member
         if not win:
             shared.win = LexiWindow(application=self)
@@ -85,6 +89,7 @@ class LexiApplication(Adw.Application):
 
     def do_shutdown(self):  # pylint: disable=arguments-differ
         """Action emitted on app close"""
+        logger.info("Saving config file before exit")
         shared.config_file.seek(0)
         shared.config_file.truncate(0)
         yaml.dump(
@@ -114,11 +119,27 @@ class LexiApplication(Adw.Application):
                     f"app.{action[0]}" if scope == self else f"win.{action[0]}",
                     action[1],
                 )
+            logger.debug(
+                "Adding action %s with accels %s",
+                action[0],
+                action[1] if action[1:2] else None,
+            )
             scope.add_action(simple_action)
 
     # pylint: disable=line-too-long
     def on_about_action(self, *_args) -> None:
         """Generates an app about dialog"""
+
+        def get_debug_info() -> str:
+            """Get debug info"""
+            prev_log = ""
+            current_log = open(log_filename, "r", encoding="utf-8").read()
+            if os.path.exists(prev_log_filename):
+                with open(prev_log_filename, "r", encoding="utf-8") as f:
+                    prev_log = f.read()
+
+            return f"PREVIOUS RUN LOG\n\n{prev_log}\n\nCURRENT RUN LOG\n\n{current_log}"
+
         dialog = Adw.AboutDialog.new_from_appdata(
             shared.PREFIX + "/" + shared.APP_ID + ".metainfo.xml", shared.VERSION
         )
@@ -141,21 +162,31 @@ class LexiApplication(Adw.Application):
             # Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
             _("Sync lyrics of your loved songs"),
         )
+        dialog.set_debug_info(get_debug_info())
+        dialog.set_debug_info_filename("lexi.log")
         if shared.PREFIX.endswith("Devel"):
             dialog.set_version("Devel")
 
+        logger.info("Showing about dialog")
         dialog.present(shared.win)
 
 
 def main(_version):
     """App entrypint"""
     # Check if lexicons dir exists, create it if not
+    try:
+        log_system_info()
+    except ValueError:
+        pass
+
     if not os.path.exists(os.path.join(shared.data_dir, "lexicons")):
+        logger.info("Creating lexicons directory")
         os.mkdir(os.path.join(shared.data_dir, "lexicons"))
 
     # Check if config.yaml exists, create it if not
     if not os.path.exists(os.path.join(shared.data_dir, "config.yaml")):
         with open(os.path.join(shared.data_dir, "config.yaml"), "x+") as f:
+            logger.info("Creating config.yaml file")
             yaml.dump(
                 {
                     "word-types": [],
@@ -169,6 +200,7 @@ def main(_version):
             )
 
     # Load config file and config dict to the shared data
+    logger.info("Loading config")
     shared.config_file = open(
         os.path.join(shared.data_dir, "config.yaml"), "r+", encoding="utf-8"
     )
@@ -176,6 +208,7 @@ def main(_version):
 
     # Migrate config file and lexicons to newer versions if their structure has changed
     if shared.config["version"] < shared.CACHEV:
+        logger.info("Migrating config file to %s", shared.CACHEV)
         # pylint: disable=import-outside-toplevel
         from lexi.utils import migrator
 
