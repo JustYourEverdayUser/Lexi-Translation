@@ -11,7 +11,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
-from lexi.logging.logger import log_system_info, logger
+from lexi.logging.logger import log_filename, log_system_info, logger, prev_log_filename
 from lexi.window import LexiWindow
 
 
@@ -129,6 +129,17 @@ class LexiApplication(Adw.Application):
     # pylint: disable=line-too-long
     def on_about_action(self, *_args) -> None:
         """Generates an app about dialog"""
+
+        def get_debug_info() -> str:
+            """Get debug info"""
+            prev_log = ""
+            current_log = open(log_filename, "r", encoding="utf-8").read()
+            if os.path.exists(prev_log_filename):
+                with open(prev_log_filename, "r", encoding="utf-8") as f:
+                    prev_log = f.read()
+
+            return f"PREVIOUS RUN LOG\n\n{prev_log}\n\nCURRENT RUN LOG\n\n{current_log}"
+
         dialog = Adw.AboutDialog.new_from_appdata(
             shared.PREFIX + "/" + shared.APP_ID + ".metainfo.xml", shared.VERSION
         )
@@ -151,9 +162,7 @@ class LexiApplication(Adw.Application):
             # Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
             _("Sync lyrics of your loved songs"),
         )
-        dialog.set_debug_info(
-            open(os.path.join(shared.cache_dir, "lexi", "logs", "lexi.log"), "r").read()
-        )
+        dialog.set_debug_info(get_debug_info())
         dialog.set_debug_info_filename("lexi.log")
         if shared.PREFIX.endswith("Devel"):
             dialog.set_version("Devel")

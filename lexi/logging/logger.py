@@ -6,9 +6,14 @@ import sys
 
 from lexi import enums, shared
 
-log_filename = os.path.join(shared.cache_dir, "lexi", "logs", "lexi.log")
+log_dir = os.path.join(shared.cache_dir, "lexi", "logs")
+log_filename = os.path.join(log_dir, "lexi.log")
+prev_log_filename = os.path.join(log_dir, "lexi_prev.log")
 
-os.makedirs(os.path.dirname(log_filename), exist_ok=True)
+os.makedirs(log_dir, exist_ok=True)
+
+if os.path.exists(log_filename):
+    os.rename(log_filename, prev_log_filename)
 
 logging.basicConfig(
     level=(

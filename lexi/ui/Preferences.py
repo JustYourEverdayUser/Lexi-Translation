@@ -51,6 +51,10 @@ class LexiPreferences(Adw.PreferencesDialog):
         self.gen_word_types()
 
     def set_use_debug_log(self, *_args) -> None:
+        logger.info(
+            "Setting logger profile to %s",
+            "DEBUG" if self.use_debug_log_switch_row.get_active() else "INFO",
+        )
         logger.setLevel(
             logging.DEBUG
             if self.use_debug_log_switch_row.get_active()

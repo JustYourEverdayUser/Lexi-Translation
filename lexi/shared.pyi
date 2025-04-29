@@ -1,4 +1,3 @@
-from functools import cache
 from typing import TextIO
 
 from gi.repository import Gio
@@ -20,4 +19,4 @@ state_schema: Gio.Settings
 app: LexiApplication
 win: LexiWindow
 config_file: TextIO
-config: dict[str, list[str]]
+config: dict[int, list[str]]
