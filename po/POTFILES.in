@@ -13,4 +13,5 @@ lexi/enums.py
 lexi/main.py
 lexi/window.py
 lexi/ui/widgets.py
+lexi/ui/Preferences.py
 lexi/utils/backup.py

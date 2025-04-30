@@ -186,13 +186,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                       placeholder-text: _("Find a word");
                       changed => $on_search_entry_changed();
                       secondary-icon-name: "lexi-help-about-symbolic";
-                      secondary-icon-tooltip-text: _("Query syntax:\
-Word-based: Just word or its tranlsation\
-E.g. “Mom“, “Dad“\
-\
-Tag-based: Query starts with “#”, contains tag name FULLY and doesn't contain word-based query\
-E.g. “#basic#family”, “#basic #suffixes”\
-BUT NOT: “#family mom” or “#famil”");
+                      secondary-icon-tooltip-text: _("Query syntax:\nWord-based: Just word or its tranlsation\nE.g. “Mom“, “Dad“\n\nTag-based: Query starts with “#”, contains tag name FULLY and doesn't contain word-based query\nE.g. “#basic#family”, “#basic #suffixes”\nBUT NOT: “#family mom” or “#famil”");
                     }
 
                     Button {
