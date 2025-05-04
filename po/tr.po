@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 19:52+0300\n"
+"POT-Creation-Date: 2025-05-04 17:22+0300\n"
 "PO-Revision-Date: 2025-01-07 23:55+0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -384,22 +384,17 @@ msgid "References to other words"
 msgstr "Diğer kelimelere referanslar"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:54
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
 msgid "Main window"
 msgstr "Ana pencere"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:58
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
 msgid "Word type filter dialog"
 msgstr "Kelime türü filtreleme penceresi"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:62
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:78
-msgid "Main window with words sorted by reference count"
-msgstr "Referans sayısına göre sıralanmış kelimelerle ana pencere"
-
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:82
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
 msgid "Main window on smaller display"
 msgstr "Küçük ekranlı ana pencere"
 
@@ -515,28 +510,28 @@ msgid "Add a new word type to get started"
 msgstr ""
 
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-#: lexi/utils/backup.py:42
+#: lexi/utils/backup.py:43
 #, python-brace-format
 msgid "Backup exported successfully: {path}"
 msgstr "Yedekleme başarıyla dışa aktarıldı: {path}"
 
-#: lexi/utils/backup.py:43
+#: lexi/utils/backup.py:44
 msgid "Open"
 msgstr "Aç"
 
-#: lexi/utils/backup.py:71
+#: lexi/utils/backup.py:72
 msgid "Database imported successfully"
 msgstr "Veritabanı başarıyla içe aktarıldı"
 
-#: lexi/utils/backup.py:96 lexi/utils/backup.py:145
+#: lexi/utils/backup.py:97 lexi/utils/backup.py:146
 msgid "Incorrect Archive!"
 msgstr "Yanlış Arşiv!"
 
-#: lexi/utils/backup.py:96
+#: lexi/utils/backup.py:97
 msgid "Why?"
 msgstr "Neden?"
 
-#: lexi/utils/backup.py:147
+#: lexi/utils/backup.py:148
 msgid ""
 "This archive seems to be incorrect, since it wasn't passed proof of content "
 "challenge: no config.yaml file and/or lexicons folder inside"
@@ -544,21 +539,24 @@ msgstr ""
 "Bu arşiv geçerli görünmüyor çünkü içerik doğrulama testi geçmedi: config."
 "yaml dosyası veya lexicons klasörü eksik."
 
-#: lexi/utils/backup.py:150
+#: lexi/utils/backup.py:151
 msgid "Close"
 msgstr "Kapat"
 
-#: lexi/utils/backup.py:159
+#: lexi/utils/backup.py:160
 msgid "Database Version Mismatch!"
 msgstr ""
 
-#: lexi/utils/backup.py:161
+#: lexi/utils/backup.py:162
 msgid ""
 "The database version in the archive does not match the current version of "
 "Lexi. Please, restart Lexi after importing this database."
 msgstr ""
 
-#: lexi/utils/backup.py:164
+#: lexi/utils/backup.py:165
 #, fuzzy
 msgid "Exit Lexi"
 msgstr "Lexi"
+
+#~ msgid "Main window with words sorted by reference count"
+#~ msgstr "Referans sayısına göre sıralanmış kelimelerle ana pencere"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 19:52+0300\n"
+"POT-Creation-Date: 2025-05-04 17:22+0300\n"
 "PO-Revision-Date: 2025-05-01 01:01+0000\n"
 "Last-Translator: Артём Чичваров <chichvarov1315@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/lexi/lexi/ru/>\n"
@@ -392,22 +392,17 @@ msgid "References to other words"
 msgstr "Ссылки на другие слова"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:54
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
 msgid "Main window"
 msgstr "Основное окно"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:58
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
 msgid "Word type filter dialog"
 msgstr "Диалог сортировки по типу слова"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:62
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:78
-msgid "Main window with words sorted by reference count"
-msgstr "Основное окно со словами, отсортированными по количеству ссылок"
-
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:82
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
 msgid "Main window on smaller display"
 msgstr "Основное окно на малом дисплее"
 
@@ -526,28 +521,28 @@ msgid "Add a new word type to get started"
 msgstr "Добавьте новый Тип слова, чтобы начать"
 
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-#: lexi/utils/backup.py:42
+#: lexi/utils/backup.py:43
 #, python-brace-format
 msgid "Backup exported successfully: {path}"
 msgstr "Резервная копия сохранена успешно: {path}"
 
-#: lexi/utils/backup.py:43
+#: lexi/utils/backup.py:44
 msgid "Open"
 msgstr "Открыть"
 
-#: lexi/utils/backup.py:71
+#: lexi/utils/backup.py:72
 msgid "Database imported successfully"
 msgstr "База данных импортирована успешно"
 
-#: lexi/utils/backup.py:96 lexi/utils/backup.py:145
+#: lexi/utils/backup.py:97 lexi/utils/backup.py:146
 msgid "Incorrect Archive!"
 msgstr "Некорректный архив!"
 
-#: lexi/utils/backup.py:96
+#: lexi/utils/backup.py:97
 msgid "Why?"
 msgstr "Почему?"
 
-#: lexi/utils/backup.py:147
+#: lexi/utils/backup.py:148
 msgid ""
 "This archive seems to be incorrect, since it wasn't passed proof of content "
 "challenge: no config.yaml file and/or lexicons folder inside"
@@ -555,15 +550,15 @@ msgstr ""
 "Похоже этот архив некорректен, т.к он не прошёл тест на содержимое: нет "
 "файла config.yaml и/или папки lexicons внутри архива"
 
-#: lexi/utils/backup.py:150
+#: lexi/utils/backup.py:151
 msgid "Close"
 msgstr "Закрыть"
 
-#: lexi/utils/backup.py:159
+#: lexi/utils/backup.py:160
 msgid "Database Version Mismatch!"
 msgstr "Несовпадение версии базы данных!"
 
-#: lexi/utils/backup.py:161
+#: lexi/utils/backup.py:162
 msgid ""
 "The database version in the archive does not match the current version of "
 "Lexi. Please, restart Lexi after importing this database."
@@ -571,9 +566,12 @@ msgstr ""
 "Версия базы данных в этом архиве не совпадает с текущей версией Lexi. "
 "Пожалуйста, перезапустите Lexi после импорта базы данных."
 
-#: lexi/utils/backup.py:164
+#: lexi/utils/backup.py:165
 msgid "Exit Lexi"
 msgstr "Выйти из Lexi"
+
+#~ msgid "Main window with words sorted by reference count"
+#~ msgstr "Основное окно со словами, отсортированными по количеству ссылок"
 
 #~ msgid "Lexicon name"
 #~ msgstr "Название Лексикона"

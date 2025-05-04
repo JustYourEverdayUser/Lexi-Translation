@@ -3,6 +3,7 @@ import os
 import shutil
 import tempfile
 import zipfile
+import pathlib
 
 import yaml
 from gi.repository import Adw
@@ -31,7 +32,7 @@ def export_database(path: str) -> None:
             for filename in glob.glob(
                 os.path.join(shared.data_dir, "lexicons", "*yaml")
             ):
-                logger.debug("Exporting lexicons/%s", filename)
+                logger.debug("Exporting lexicons/%s", pathlib.Path(filename).name)
                 arcname = os.path.relpath(filename, shared.data_dir)
                 zipf.write(filename, arcname=arcname)
 

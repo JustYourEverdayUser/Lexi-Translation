@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 19:52+0300\n"
+"POT-Creation-Date: 2025-05-04 17:22+0300\n"
 "PO-Revision-Date: 2025-04-21 09:01+0000\n"
 "Last-Translator: Quentin PAGÈS <quentinantonin@free.fr>\n"
 "Language-Team: Occitan <https://hosted.weblate.org/projects/lexi/lexi/oc/>\n"
@@ -385,22 +385,17 @@ msgid "References to other words"
 msgstr "De referéncias a d’autres mots"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:54
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
 msgid "Main window"
 msgstr "Fenèstra principala"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:58
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:70
 msgid "Word type filter dialog"
 msgstr "Fenèstra de dialòg de filtratge dels tipes de mots"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:62
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:78
-msgid "Main window with words sorted by reference count"
-msgstr "Fenèstra principala amb los mots triats per nombre de referéncias"
-
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:66
-#: data/io.github.dzheremi2.lexi.metainfo.xml.in:82
+#: data/io.github.dzheremi2.lexi.metainfo.xml.in:74
 msgid "Main window on smaller display"
 msgstr "Fenèstra principala amb afichatge pichon"
 
@@ -516,28 +511,28 @@ msgid "Add a new word type to get started"
 msgstr ""
 
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-#: lexi/utils/backup.py:42
+#: lexi/utils/backup.py:43
 #, python-brace-format
 msgid "Backup exported successfully: {path}"
 msgstr "Salvagarda corrèctament exportada : {path}"
 
-#: lexi/utils/backup.py:43
+#: lexi/utils/backup.py:44
 msgid "Open"
 msgstr "Dobrir"
 
-#: lexi/utils/backup.py:71
+#: lexi/utils/backup.py:72
 msgid "Database imported successfully"
 msgstr "Basa de donadas importada amb succès"
 
-#: lexi/utils/backup.py:96 lexi/utils/backup.py:145
+#: lexi/utils/backup.py:97 lexi/utils/backup.py:146
 msgid "Incorrect Archive!"
 msgstr "Archius incorrècts !"
 
-#: lexi/utils/backup.py:96
+#: lexi/utils/backup.py:97
 msgid "Why?"
 msgstr "Perqué ?"
 
-#: lexi/utils/backup.py:147
+#: lexi/utils/backup.py:148
 msgid ""
 "This archive seems to be incorrect, since it wasn't passed proof of content "
 "challenge: no config.yaml file and/or lexicons folder inside"
@@ -545,24 +540,27 @@ msgstr ""
 "Aqueste fichièr d’archiu sembla incorrècte, a pas capitat la pròva de "
 "contengut : cap de fichièr config.yaml e/o dossièr lexicons"
 
-#: lexi/utils/backup.py:150
+#: lexi/utils/backup.py:151
 msgid "Close"
 msgstr "Tampar"
 
-#: lexi/utils/backup.py:159
+#: lexi/utils/backup.py:160
 msgid "Database Version Mismatch!"
 msgstr ""
 
-#: lexi/utils/backup.py:161
+#: lexi/utils/backup.py:162
 msgid ""
 "The database version in the archive does not match the current version of "
 "Lexi. Please, restart Lexi after importing this database."
 msgstr ""
 
-#: lexi/utils/backup.py:164
+#: lexi/utils/backup.py:165
 #, fuzzy
 msgid "Exit Lexi"
 msgstr "Lexi"
+
+#~ msgid "Main window with words sorted by reference count"
+#~ msgstr "Fenèstra principala amb los mots triats per nombre de referéncias"
 
 #~ msgid "Lexicon name"
 #~ msgstr "Nom del lexic"

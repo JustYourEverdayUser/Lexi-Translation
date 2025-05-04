@@ -124,8 +124,8 @@ class LexiPreferences(Adw.PreferencesDialog):
         result : Gio.Task
             The result of the file dialog operation.
         """
-        logger.info("Exporting database to %s", file_dialog.get_path())
         path = file_dialog.save_finish(result).get_path()
+        logger.info("Exporting database to %s", path)
         backup.export_database(path)
         self.close()
 
@@ -136,7 +136,7 @@ class LexiPreferences(Adw.PreferencesDialog):
 
         Presents a confirmation dialog before importing a database.
         """
-        logger.debug("Shmsg=owing import confirmation dialog")
+        logger.debug("Showing import confirmation dialog")
         self.import_confirmation_dialog.present(shared.win)
 
     @Gtk.Template.Callback()
