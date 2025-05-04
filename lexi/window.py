@@ -309,7 +309,7 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
         """Toggle the visibility of the sidebar."""
-        logger.info(
+        logger.debug(
             "Sidebar toggled: %s", not self.overlay_split_view.get_show_sidebar()
         )
         self.overlay_split_view.set_show_sidebar(
@@ -408,7 +408,7 @@ class LexiWindow(Adw.ApplicationWindow):
         """
         Build the sidebar with a list of lexicons.
         """
-        logger.info("Building sidebar")
+        logger.debug("Building sidebar")
         try:
             if os.listdir(os.path.join(shared.data_dir, "lexicons")) != []:
                 # Clear the list box and populate it with lexicons
@@ -444,7 +444,7 @@ class LexiWindow(Adw.ApplicationWindow):
         row : Gtk.ListBoxRow
             The selected row.
         """
-        logger.info("Lexicon '%s' selected", row.get_child().name)
+        logger.debug("Lexicon '%s' selected", row.get_child().name)
         self.lexicon_list_box.remove_all()
         if len(row.get_child().data["words"]) != 0:
             # Populate the list box with words from the selected lexicon
@@ -520,7 +520,7 @@ class LexiWindow(Adw.ApplicationWindow):
                     _("You have already referenced all words"),
                 )
             )
-            logger.info("Rejecting adding a reference: All words are referenced")
+            logger.debug("Rejecting adding a reference: All words are referenced")
             return
 
         self.references_dialog_list_box.remove_all()
@@ -540,7 +540,7 @@ class LexiWindow(Adw.ApplicationWindow):
         Show the add word dialog.
         """
         if self.loaded_lexicon is not None:
-            logger.info("Showing add word dialog")
+            logger.debug("Showing add word dialog")
             self.loaded_lexicon.show_add_word_dialog()
 
     @Gtk.Template.Callback()
@@ -644,7 +644,7 @@ class LexiWindow(Adw.ApplicationWindow):
         if LexiPreferences.opened:
             return
         preferences = LexiPreferences()
-        logger.info("Showing preferences")
+        logger.debug("Showing preferences")
         preferences.present(self)
 
     @Gtk.Template.Callback()
@@ -706,7 +706,7 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.assign_word_type_dialog_list_box.append(
                     widgets.WordTypeRow(word_type, deactivate=False)
                 )
-        logger.info("Showing assign word type dialog")
+        logger.debug("Showing assign word type dialog")
         self.assign_word_type_dialog.present(self)
 
     @Gtk.Template.Callback()
@@ -745,7 +745,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
         self.filter_dialog_list_box.remove_all()
         __populate_filter_dialog()
-        logger.info("Showing filter dialog")
+        logger.debug("Showing filter dialog")
         self.filter_dialog.present(self)
 
     @Gtk.Template.Callback()

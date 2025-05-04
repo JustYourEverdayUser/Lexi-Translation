@@ -148,7 +148,7 @@ def incorrect_archive_panic(*_args) -> None:
         ),
     )
     alert.add_response("close", label=_("Close"))
-    logger.info("Incorrect archive alert")
+    logger.warning("Incorrect archive alert")
     alert.present(shared.win)
 
 
@@ -165,5 +165,5 @@ def database_version_mismatch_panic() -> None:
     alert.set_close_response("exit")
     alert.set_default_response("exit")
     alert.connect("response", lambda *_: shared.app.on_quit_action())
-    logger.info("Database version mismatch alert")
+    logger.warning("Database version mismatch alert")
     alert.present(shared.win)

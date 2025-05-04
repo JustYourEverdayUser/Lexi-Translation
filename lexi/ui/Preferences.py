@@ -109,7 +109,7 @@ class LexiPreferences(Adw.PreferencesDialog):
 
         Opens a file dialog to save the database backup.
         """
-        logger.info("Showing export database dialog")
+        logger.debug("Showing export database dialog")
         dialog = Gtk.FileDialog(initial_name="lexi_backup.zip")
         dialog.save(shared.win, None, self.on_export_database)
 
@@ -136,7 +136,7 @@ class LexiPreferences(Adw.PreferencesDialog):
 
         Presents a confirmation dialog before importing a database.
         """
-        logger.info("Showing import confirmation dialog")
+        logger.debug("Shmsg=owing import confirmation dialog")
         self.import_confirmation_dialog.present(shared.win)
 
     @Gtk.Template.Callback()
@@ -154,13 +154,13 @@ class LexiPreferences(Adw.PreferencesDialog):
             The response ID from the dialog.
         """
         if response == "import":
-            logger.info("Showing import database dialog")
+            logger.debug("Showing import database dialog")
             dialog = Gtk.FileDialog(
                 default_filter=Gtk.FileFilter(mime_types=["application/zip"])
             )
             dialog.open(shared.win, None, self.on_import_database)
         else:
-            logger.info("Import cancelled")
+            logger.debug("Import cancelled")
 
     def on_import_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
         """

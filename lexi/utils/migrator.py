@@ -45,6 +45,7 @@ def migrate_v2() -> None:
             lexicon_data, lexicon, sort_keys=False, encoding=None, allow_unicode=True
         )
         lexicon.close()
+        logger.info("Lexicon %s migrated to v2", lexicon_data["name"])
 
     # Bump version of the config file
     config["version"] = 2

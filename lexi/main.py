@@ -167,7 +167,7 @@ class LexiApplication(Adw.Application):
         if shared.PREFIX.endswith("Devel"):
             dialog.set_version("Devel")
 
-        logger.info("Showing about dialog")
+        logger.debug("Showing about dialog")
         dialog.present(shared.win)
 
 

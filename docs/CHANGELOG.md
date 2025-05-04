@@ -15,7 +15,7 @@
 <p>Translations</p>
 <ul>
     <li>Added Kabyle translation</li>
-    <li>Added Finnish tranlsation</li>
+    <li>Added Finnish translation</li>
     <li>Added Occitan translation</li>
     <li>Translations updated</li>
 </ul>

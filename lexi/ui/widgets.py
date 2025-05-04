@@ -74,7 +74,7 @@ class LexiconRow(Gtk.Box):
         """Save the lexicon to the file."""
         self.file.seek(0)
         self.file.truncate(0)
-        logger.info("Saving lexicon %s", self.data["name"])
+        logger.debug("Saving lexicon %s", self.data["name"])
         yaml.dump(
             self.data, self.file, sort_keys=False, encoding=None, allow_unicode=True
         )
@@ -110,7 +110,7 @@ class LexiconRow(Gtk.Box):
             logger.info("Lexicon %s deleted", self.data["name"])
             shared.win.build_sidebar()
         else:
-            logger.info("Lexicon %s deletion cancelled", self.data["name"])
+            logger.debug("Lexicon %s deletion cancelled", self.data["name"])
 
     def rename_lexicon(self, *_args) -> None:
         """Show the rename popover for the lexicon."""
@@ -155,7 +155,7 @@ class LexiconRow(Gtk.Box):
                 logger.warning("Lexicon name cannot be empty")
             shared.win.build_sidebar()
         else:
-            logger.info("Lexicon %s renaming cancelled", self.data["name"])
+            logger.debug("Lexicon %s renaming cancelled", self.data["name"])
 
     def show_add_word_dialog(self) -> None:
         """Show the dialog for adding a new word."""
@@ -439,7 +439,7 @@ class WordRow(Adw.ActionRow):
                 )
                 if row_index is not None:
                     expander_row.remove(row)
-                    logger.info("Removing %s row", attr_name)
+                    logger.debug("Removing %s row", attr_name)
                     del self.word_dict[attr_name][row_index]
                     if enums.Schema.WORD_AUTOSAVE():
                         self.lexicon.save_lexicon()
@@ -506,7 +506,7 @@ class WordRow(Adw.ActionRow):
                     )
                 )
                 text = new_row.get_gtk_text()
-                logger.info("Adding %s row", attr_name)
+                logger.debug("Adding %s row", attr_name)
                 expander_row.add_row(new_row)
                 self.word_dict[attr_name].append("")
                 text.connect("changed", self.update_word)
@@ -571,7 +571,7 @@ class WordRow(Adw.ActionRow):
 
     @Gtk.Template.Callback()
     def on_add_tag_button_clicked(self, *_args) -> None:
-        logger.info("Showing tag addition alert dialog for %s", self.word)
+        logger.debug("Showing tag addition alert dialog for %s", self.word)
         self.tag_alert_dialog_entry.set_text("")
         self.tag_alert_dialog.present(shared.win)
 
@@ -607,7 +607,7 @@ class WordRow(Adw.ActionRow):
             logger.info("Tag #%s added to %s", tag, self.word)
             self.generate_tag_chips()
         else:
-            logger.info("Tag addition cancelled")
+            logger.debug("Tag addition cancelled")
 
     def generate_tag_chips(self) -> None:
         for _tag in self.tags_box:  # pylint: disable=not-an-iterable
@@ -778,7 +778,7 @@ class ReferenceRow(Adw.ActionRow):
             "%s added to %s references", self.word_row.word, shared.win.loaded_word.word
         )
         if shared.win.references_dialog_list_box.get_row_at_index(0) is None:
-            logger.info("No more words to refer")
+            logger.debug("No more words to refer")
             shared.win.references_dialog.close()
         shared.win.update_refs_count()
 

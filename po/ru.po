@@ -67,7 +67,7 @@ msgstr "Найти слово"
 #: data/gtk/window.blp:189
 msgid ""
 "Query syntax:\n"
-"Word-based: Just word or its tranlsation\n"
+"Word-based: Just word or its translation\n"
 "E.g. “Mom“, “Dad“\n"
 "\n"
 "Tag-based: Query starts with “#”, contains tag name FULLY and doesn't "
