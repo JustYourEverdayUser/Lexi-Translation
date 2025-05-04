@@ -160,6 +160,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     orientation: horizontal;
 
                     ToggleButton selection_mode_toggle_button {
+                      margin-top: 4;
                       icon-name: "lexi-toggle-selection-symbolic";
                       tooltip-text: _("Select words");
                       toggled => $selection_mode_button_toggled();
@@ -172,6 +173,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                       transition-duration: 200;
 
                       Button delete_selected_words_button {
+                        margin-top: 4;
                         icon-name: "lexi-delete-symbolic";
                         tooltip-text: _("Delete selected words");
                         clicked => $on_delete_selected_words_action();
@@ -190,6 +192,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     }
 
                     Button {
+                      margin-top: 4;
                       icon-name: "lexi-add-symbolic";
                       tooltip-text: _("Add word");
                       clicked => $on_add_word_action();
