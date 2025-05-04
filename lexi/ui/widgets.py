@@ -206,7 +206,9 @@ class LexiconRow(Gtk.Box):
             "Word %s added to the %s Lexicon", new_word["word"], self.data["name"]
         )
         self.save_lexicon()
-        shared.win.lexicon_list_box.append(WordRow(new_word, self))
+        shared.win.lexicon_list_box.append(word_row := WordRow(new_word, self))
+        shared.win.lexicon_list_box.select_row(word_row)
+        word_row.activate()
         shared.win.lexicon_scrolled_window.set_child(shared.win.lexicon_list_box)
         shared.win.words_bottom_bar_revealer.set_reveal_child(True)
         self.add_word_dialog.close()
