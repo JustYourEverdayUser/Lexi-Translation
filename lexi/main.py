@@ -30,7 +30,6 @@ class LexiApplication(Adw.Application):
     # pylint: disable=unused-variable
     def do_activate(self) -> None:  # pylint: disable=arguments-differ
         """Action emitted on app launch"""
-        # Check if lexicons dir exists, create it if not
 
         logger.info("Creating application window")
         win = self.props.active_window  # pylint: disable=no-member
