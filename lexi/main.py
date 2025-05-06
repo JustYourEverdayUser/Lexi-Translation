@@ -7,11 +7,12 @@ import yaml
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-# pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position, wrong-import-order
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
 from lexi.logging.logger import log_filename, log_system_info, logger, prev_log_filename
+from lexi.utils.backend import LexiconController
 from lexi.window import LexiWindow
 
 
@@ -41,35 +42,35 @@ class LexiApplication(Adw.Application):
             {
                 # fmt: off
                 ("quit", ("<primary>q","<primary>w",),),
-                ("toggle_sidebar", ("F9",), shared.win),
-                ("show_preferences", ("<primary>comma",), shared.win),
-                ("add_word", ("<primary>n",), shared.win),
-                ("search", ("<primary>f",), shared.win),
+                # ("toggle_sidebar", ("F9",), shared.win),
+                # ("show_preferences", ("<primary>comma",), shared.win),
+                # ("add_word", ("<primary>n",), shared.win),
+                # ("search", ("<primary>f",), shared.win),
                 ("about", )
                 # fmt: on
             }
         )
         self.set_accels_for_action("win.show-help-overlay", ("<primary>question",))
 
-        sort_method = Gio.SimpleAction.new_stateful(
-            "sort_method",
-            GLib.VariantType.new("s"),
-            sorting_method := GLib.Variant(
-                "s", shared.state_schema.get_string("sort-method")
-            ),
-        )
-        sort_method.connect("activate", shared.win.on_sorting_method_changed)
-        shared.win.add_action(sort_method)
+        # sort_method = Gio.SimpleAction.new_stateful(
+        #     "sort_method",
+        #     GLib.VariantType.new("s"),
+        #     sorting_method := GLib.Variant(
+        #         "s", shared.state_schema.get_string("sort-method")
+        #     ),
+        # )
+        # sort_method.connect("activate", shared.win.on_sorting_method_changed)
+        # shared.win.add_action(sort_method)
 
-        sort_type = Gio.SimpleAction.new_stateful(
-            "sort_type",
-            GLib.VariantType.new("s"),
-            sorting_type := GLib.Variant(
-                "s", shared.state_schema.get_string("sort-type")
-            ),
-        )
-        sort_type.connect("activate", shared.win.on_sorting_type_changed)
-        shared.win.add_action(sort_type)
+        # sort_type = Gio.SimpleAction.new_stateful(
+        #     "sort_type",
+        #     GLib.VariantType.new("s"),
+        #     sorting_type := GLib.Variant(
+        #         "s", shared.state_schema.get_string("sort-type")
+        #     ),
+        # )
+        # sort_type.connect("activate", shared.win.on_sorting_type_changed)
+        # shared.win.add_action(sort_type)
 
         shared.state_schema.bind(
             "window-width", shared.win, "default-width", Gio.SettingsBindFlags.DEFAULT
@@ -235,5 +236,6 @@ def main(_version):
                 )
 
     shared.app = app = LexiApplication()
+    shared.lexictrl = LexiconController()
 
     return app.run(sys.argv)

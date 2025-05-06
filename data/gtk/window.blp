@@ -45,7 +45,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button toggle_sidebar_button {
                     icon-name: "lexi-toggle-sidebar-symbolic";
                     tooltip-text: _("Toggle sidebar");
-                    clicked => $on_toggle_sidebar_action();
                   }
                   ToggleButton toggle_lexicons_search_button {
                     icon-name: "lexi-toggle-search-symbolic";
@@ -60,7 +59,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button {
                     icon-name: "lexi-add-symbolic";
                     tooltip-text: _("Add Lexicon");
-                    clicked => $on_add_lexicon_button_clicked();
                   }
                   MenuButton {
                     icon-name: "lexi-app-menu-symbolic";
@@ -79,7 +77,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                   SearchEntry search_entry {
                     placeholder-text: _("Search…");
                     hexpand: true;
-                    changed => $on_lexicon_search_entry_changed();
 
                     ShortcutController {
                       Shortcut {
@@ -94,7 +91,6 @@ template $LexiWindow : Adw.ApplicationWindow {
               ScrolledWindow lexicons_scrolled_window {
                 ListBox lexicons_list_box {
                   selection-mode: single;
-                  row-selected => $on_lexicon_selected();
 
                   styles ["navigation-sidebar"]
                 }
@@ -118,7 +114,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                     icon-name: bind toggle_sidebar_button.icon-name;
                     tooltip-text: bind toggle_sidebar_button.tooltip-text;
                     visible: bind overlay_split_view.show-sidebar inverted;
-                    clicked => $on_toggle_sidebar_action();
                   }
 
                   [end]
@@ -132,7 +127,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button {
                     icon-name: "lexi-filter-words-symbolic";
                     tooltip-text: _("Filter words by types");
-                    clicked => $open_filer_dialog();
                   }
                 }
 
@@ -163,7 +157,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                       margin-top: 4;
                       icon-name: "lexi-toggle-selection-symbolic";
                       tooltip-text: _("Select words");
-                      toggled => $selection_mode_button_toggled();
 
                       styles ["flat"]
                     }
@@ -176,7 +169,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                         margin-top: 4;
                         icon-name: "lexi-delete-symbolic";
                         tooltip-text: _("Delete selected words");
-                        clicked => $on_delete_selected_words_action();
 
                         styles ["destructive-action"]
                       }
@@ -186,7 +178,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                       margin-top: 4;
                       hexpand: true;
                       placeholder-text: _("Find a word");
-                      changed => $on_search_entry_changed();
                       secondary-icon-name: "lexi-help-about-symbolic";
                       secondary-icon-tooltip-text: _("Query syntax:\nWord-based: Just word or its translation\nE.g. “Mom“, “Dad“\n\nTag-based: Query starts with “#”, contains tag name FULLY and doesn't contain word-based query\nE.g. “#basic#family”, “#basic #suffixes”\nBUT NOT: “#family mom” or “#famil”");
                     }
@@ -195,7 +186,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                       margin-top: 4;
                       icon-name: "lexi-add-symbolic";
                       tooltip-text: _("Add word");
-                      clicked => $on_add_word_action();
                       
                       styles ["flat"]
                     }
@@ -214,7 +204,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                   [start]
                   Button save_word_button {
                     label: _("Save");
-                    clicked => $on_save_word_button_clicked();
 
                     styles ["suggested-action"]
                   }
@@ -234,13 +223,11 @@ template $LexiWindow : Adw.ApplicationWindow {
                       Adw.EntryRow word_entry_row {
                         title: _("Word");
                         use-markup: false;
-                        changed => $on_word_entry_changed();
                       }
 
                       Adw.EntryRow pronunciation_entry_row {
                         title: _("Pronunciation");
                         use-markup: false;
-                        changed => $on_pronunciation_entry_changed();
                       }
 
                       Adw.ExpanderRow translations_expander_row {
@@ -253,7 +240,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add translation");
-                            clicked => $on_word_list_prop_button_pressed();
 
                             styles ["flat"]
                           }
@@ -271,7 +257,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Assign word type");
-                            clicked => $on_assign_word_type_clicked();
 
                             styles ["flat"]
                           }
@@ -288,7 +273,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add example");
-                            clicked => $on_word_list_prop_button_pressed();
 
                             styles ["flat"]
                           }
@@ -305,7 +289,6 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add example");
-                            clicked => $on_references_add_button_pressed();
 
                             styles ["flat"]
                           }
@@ -462,7 +445,6 @@ Adw.Dialog filter_dialog {
             valign: center;
             Button {
               label: _("Reset All");
-              clicked => $reset_filters();
 
               styles ["pill", "destructive-action"]
             }
@@ -497,7 +479,6 @@ Adw.StatusPage no_words_yet {
 
     Button {
       label: _("Add Word");
-      clicked => $on_add_word_action();
 
       styles ["pill"]
     }
@@ -524,9 +505,7 @@ Adw.AlertDialog add_lexicon_alert_dialog {
   close-response: "cancel";
   extra-child: Gtk.Entry add_lexicon_entry {
     placeholder-text: _("Name");
-    changed => $on_add_lexicon_entry_changed();
   };
-  response => $on_add_lexicon();
 
   responses [
     cancel: _("Cancel"),

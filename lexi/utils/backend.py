@@ -1,7 +1,7 @@
 import os
 import uuid
 from pathlib import Path
-from typing import Self
+from typing import Iterator, Self, Union
 
 import yaml
 from gi.repository import GObject
@@ -9,10 +9,93 @@ from gi.repository import GObject
 from lexi import shared
 
 
-class Lexicon:
+class LexiconController:
+    __gtype_name__ = "LexiconController"
+
+    def __init__(self) -> None:
+        self._lexicons: list[Lexicon] = []
+
+        self.__populate_lexicons()
+
+    def __iter__(self) -> Iterator["Lexicon"]:
+        """Iterate over the lexicons"""
+        return iter(self._lexicons)
+
+    def __len__(self) -> int:
+        """Return the number of lexicons"""
+        return len(self._lexicons)
+
+    def __populate_lexicons(self) -> None:
+        """Populate the lexicons list with the lexicons from the data directory"""
+        for file in os.listdir(os.path.join(shared.data_dir, "lexicons")):
+            if file.endswith(".yaml"):
+                lexicon = Lexicon.from_str(
+                    os.path.join(shared.data_dir, "lexicons", file)
+                )
+                self._lexicons.append(lexicon)
+
+    def add_lexicon(self, name: str) -> Self:
+        """Add a new lexicon to the controller
+
+        Parameters
+        ----------
+        name : str
+            Name of the lexicon to add
+        """
+        lexicon = Lexicon.for_unexistent(name)
+        self._lexicons.append(lexicon)
+        return self
+
+    def rm_lexicon(self, id_: str) -> "Lexicon":
+        """Remove a Lexicon
+
+        Parameters
+        ----------
+        id : str
+            ID of the lexicon to remove
+
+        Returns
+        ----------
+        Lexicon
+            Lexicon object if found
+
+        Raises
+        ----------
+        ValueError
+            If the lexicon is not found
+        """
+        for i, lexicon in enumerate(self._lexicons):
+            if lexicon.id == id_:
+                lexicon._file.close()  # pylint: disable=protected-access
+                os.remove(lexicon.path[0])
+                self._lexicons.pop(i)
+                return lexicon
+        raise ValueError("Lexicon not found")
+
+    def get_lexicon(self, id_: str) -> Union["Lexicon", None]:
+        """Return the lexicon with the given id
+
+        Parameters
+        ----------
+        id : str
+            ID of the lexicon to return
+
+        Returns
+        -------
+        Lexicon
+            Lexicon object if found, None otherwise
+        """
+        for lexicon in self._lexicons:
+            if lexicon.id == id_:
+                return lexicon
+        return None
+
+
+class Lexicon(GObject.Object):
     __gtype_name__ = "Lexicon"
 
     def __init__(self, path: Path) -> "Lexicon":
+        super().__init__()
         self._file = open(path, "r", encoding="utf-8")
         self._path = path
         self._data = yaml.safe_load(self._file)
@@ -21,12 +104,20 @@ class Lexicon:
 
         self.__populate_words()
 
+    def __iter__(self) -> Iterator["Word"]:
+        """Iterate over the words in the lexicon"""
+        return iter(self.words)
+
+    def __len__(self) -> int:
+        """Return the number of words in the lexicon"""
+        return len(self.words)
+
     def __populate_words(self) -> None:
         """Populate the words list with the words from the lexicon"""
         for word in self._data["words"]:
             self.words.append(Word(word, self))
 
-    def get_word(self, word_id: int) -> "Word" | None:
+    def get_word(self, word_id: int) -> Union["Word", None]:
         """Return the word with the given id from the lexicon
 
         Parameters
@@ -98,8 +189,14 @@ class Lexicon:
     @classmethod
     def for_unexistent(cls, name: str) -> "Lexicon":
         """Create a Lexicon object for a new lexicon"""
-        lexicon_id = str(uuid.uuid4().hex)
-        lexicon_path = os.path.join(shared.data_dir, "lexicons", lexicon_id + ".yaml")
+        while True:
+            lexicon_id = str(uuid.uuid4().hex)
+            lexicon_path = os.path.join(
+                shared.data_dir, "lexicons", lexicon_id + ".yaml"
+            )
+            if not os.path.exists(lexicon_path):
+                break
+
         with open(lexicon_path, "w", encoding="utf-8") as file:
             yaml.dump(
                 {
@@ -115,9 +212,9 @@ class Lexicon:
         return cls(Path(lexicon_path))
 
     @property
-    def path(self) -> list[Path, str]:
+    def path(self) -> tuple[Path, str]:
         """Get the path of the lexicon as a list of Path and str"""
-        return [self._path, str(self._path)]
+        return (self._path, str(self._path))
 
     @GObject.Property(type=str)
     def name(self) -> str:

@@ -20,9 +20,7 @@ template $LexiconRow : Box {
     use-markup: false;
     hexpand: true;
 
-    styles [
-      'heading'
-    ]
+    styles ["heading"]
   }
 }
 
@@ -55,18 +53,18 @@ Adw.Dialog add_word_dialog {
           ListBox {
             Adw.EntryRow word_entry_row {
               title: _("Word");
-              changed => $check_if_word_is_empty();
-              entry-activated => $on_add_word_dialog_enter_press();
+              // changed => $check_if_word_is_empty();
+              // entry-activated => $on_add_word_dialog_enter_press();
             }
 
             Adw.EntryRow translation_entry_row {
               title: _("Translation");
-              entry-activated => $on_add_word_dialog_enter_press();
+              // entry-activated => $on_add_word_dialog_enter_press();
             }
 
             Adw.EntryRow example_entry_row {
               title: _("Example");
-              entry-activated => $on_add_word_dialog_enter_press();
+              // entry-activated => $on_add_word_dialog_enter_press();
             }
 
             styles ["boxed-list"]
@@ -77,7 +75,7 @@ Adw.Dialog add_word_dialog {
 
             Button {
               label: _("Add word");
-              clicked => $add_word();
+              // clicked => $add_word();
 
               styles ["pill", "suggested-action"]
             }
