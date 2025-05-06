@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-04 17:22+0300\n"
+"POT-Creation-Date: 2025-05-06 17:08+0300\n"
 "PO-Revision-Date: 2025-05-01 01:01+0000\n"
 "Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/lexi/lexi/kab/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Lexicons"
 msgstr "Isegzawalen"
 
-#: data/gtk/window.blp:47 data/gtk/window.blp:570
+#: data/gtk/window.blp:47 data/gtk/window.blp:573
 msgid "Toggle sidebar"
 msgstr "Ldi/Mdel afeggag adisan"
 
@@ -50,19 +50,19 @@ msgstr "Smizzwer s…"
 msgid "Filter words by types"
 msgstr "Sizdeg awalen s wanaw-nsen"
 
-#: data/gtk/window.blp:164
+#: data/gtk/window.blp:165
 msgid "Select words"
 msgstr "Fren awalen"
 
-#: data/gtk/window.blp:176
+#: data/gtk/window.blp:178
 msgid "Delete selected words"
 msgstr "Kkes awalen yettwafernen"
 
-#: data/gtk/window.blp:186
+#: data/gtk/window.blp:188
 msgid "Find a word"
 msgstr "Af-d awal"
 
-#: data/gtk/window.blp:189
+#: data/gtk/window.blp:191
 msgid ""
 "Query syntax:\n"
 "Word-based: Just word or its translation\n"
@@ -74,181 +74,181 @@ msgid ""
 "BUT NOT: “#family mom” or “#famil”"
 msgstr ""
 
-#: data/gtk/window.blp:194 data/gtk/ui/LexiconRow.blp:79
+#: data/gtk/window.blp:197 data/gtk/ui/LexiconRow.blp:79
 msgid "Add word"
 msgstr "Rnu awal"
 
-#: data/gtk/window.blp:206 data/gtk/window.blp:232 data/gtk/window.blp:611
-#: data/gtk/ui/LexiconRow.blp:57 lexi/ui/widgets.py:340 lexi/ui/widgets.py:341
-#: lexi/ui/widgets.py:528 lexi/ui/widgets.py:683 lexi/ui/widgets.py:684
+#: data/gtk/window.blp:209 data/gtk/window.blp:235 data/gtk/window.blp:614
+#: data/gtk/ui/LexiconRow.blp:57 lexi/ui/widgets.py:342 lexi/ui/widgets.py:343
+#: lexi/ui/widgets.py:530 lexi/ui/widgets.py:685 lexi/ui/widgets.py:686
 msgid "Word"
 msgstr "Awal"
 
-#: data/gtk/window.blp:213
+#: data/gtk/window.blp:216
 msgid "Save"
 msgstr "Sekles"
 
-#: data/gtk/window.blp:238 data/io.github.dzheremi2.lexi.metainfo.xml.in:14
+#: data/gtk/window.blp:241 data/io.github.dzheremi2.lexi.metainfo.xml.in:14
 msgid "Pronunciation"
 msgstr "Anṭaq"
 
-#: data/gtk/window.blp:244
+#: data/gtk/window.blp:247
 msgid "Translations"
 msgstr "Tisuqilin"
 
-#: data/gtk/window.blp:252
+#: data/gtk/window.blp:255
 msgid "Add translation"
 msgstr "Rnu tasuqilt"
 
-#: data/gtk/window.blp:261
+#: data/gtk/window.blp:264
 msgid "Word Type"
 msgstr "Anaw n wawal"
 
-#: data/gtk/window.blp:270
+#: data/gtk/window.blp:273
 msgid "Assign word type"
 msgstr ""
 
-#: data/gtk/window.blp:279
+#: data/gtk/window.blp:282
 msgid "Examples"
 msgstr "Imedyaten"
 
-#: data/gtk/window.blp:287 data/gtk/window.blp:304
+#: data/gtk/window.blp:290 data/gtk/window.blp:307
 msgid "Add example"
 msgstr "Rnu amedya"
 
-#: data/gtk/window.blp:296 data/gtk/window.blp:623
+#: data/gtk/window.blp:299 data/gtk/window.blp:626
 msgid "References"
 msgstr "Iɣbula"
 
-#: data/gtk/window.blp:360
+#: data/gtk/window.blp:363
 msgid "Refer a Word"
 msgstr ""
 
-#: data/gtk/window.blp:391
+#: data/gtk/window.blp:394
 #, fuzzy
 msgid "Assign Word Type"
 msgstr "Anaw n wawal"
 
-#: data/gtk/window.blp:422
+#: data/gtk/window.blp:425
 msgid "Filter by Word Type"
 msgstr "Sizdeg s wanay n wawal"
 
-#: data/gtk/window.blp:461
+#: data/gtk/window.blp:464
 #, fuzzy
 msgid "Reset All"
 msgstr "Ales awennez"
 
-#: data/gtk/window.blp:474
+#: data/gtk/window.blp:477
 msgid "No Lexicons found yet"
 msgstr "Ulac imawalen akka tura"
 
-#: data/gtk/window.blp:481
+#: data/gtk/window.blp:484
 msgid "No Lexicons found"
 msgstr "Ulac amawal"
 
-#: data/gtk/window.blp:482
+#: data/gtk/window.blp:485
 msgid "No Lexicons found for this search request"
 msgstr "Ulac amawal i d-yufraren i usuter-a n unadi"
 
-#: data/gtk/window.blp:489
+#: data/gtk/window.blp:492
 msgid "No Words found yet"
 msgstr "Ulac awalen akka tura"
 
-#: data/gtk/window.blp:496 data/gtk/ui/LexiconRow.blp:32
+#: data/gtk/window.blp:499 data/gtk/ui/LexiconRow.blp:32
 msgid "Add Word"
 msgstr "Rnu awal"
 
-#: data/gtk/window.blp:507
+#: data/gtk/window.blp:510
 msgid "No Words found"
 msgstr "Ulac awalen i d-yufraren"
 
-#: data/gtk/window.blp:508
+#: data/gtk/window.blp:511
 msgid "No Words found for this search request"
 msgstr "Ulac awalen i d-yufraren i usuter-a n unadi"
 
-#: data/gtk/window.blp:513
+#: data/gtk/window.blp:516
 msgid "No Lexicon selected"
 msgstr "Ulac amawal yettwafernen"
 
-#: data/gtk/window.blp:514
+#: data/gtk/window.blp:517
 msgid "Please select a Lexicon to view its words"
 msgstr "Ttxil-k·m fren amawal akken ad twaliḍ awalen-is, ma ulac aɣilif"
 
-#: data/gtk/window.blp:520
+#: data/gtk/window.blp:523
 msgid "Add new Lexicon"
 msgstr "Rnu asegzawal amaynut"
 
-#: data/gtk/window.blp:523 data/gtk/ui/LexiconRow.blp:102
+#: data/gtk/window.blp:526 data/gtk/ui/LexiconRow.blp:102
 msgid "Name"
 msgstr "Isem"
 
-#: data/gtk/window.blp:529 data/gtk/ui/LexiconRow.blp:107
-#: data/gtk/ui/LexiconRow.blp:119 data/gtk/ui/Preferences.blp:89
+#: data/gtk/window.blp:532 data/gtk/ui/LexiconRow.blp:107
+#: data/gtk/ui/LexiconRow.blp:119 data/gtk/ui/Preferences.blp:101
 #: data/gtk/ui/WordRow.blp:103
 msgid "Cancel"
 msgstr "Semmet"
 
-#: data/gtk/window.blp:530 data/gtk/ui/WordRow.blp:104
+#: data/gtk/window.blp:533 data/gtk/ui/WordRow.blp:104
 msgid "Add"
 msgstr "Rnu"
 
-#: data/gtk/window.blp:542 data/gtk/ui/Preferences.blp:7
+#: data/gtk/window.blp:545 data/gtk/ui/Preferences.blp:7
 msgid "General"
 msgstr "Amatu"
 
-#: data/gtk/window.blp:545
+#: data/gtk/window.blp:548
 msgid "Quit"
 msgstr "Ffeɣ"
 
-#: data/gtk/window.blp:550
+#: data/gtk/window.blp:553
 msgid "Search words"
 msgstr "Nadi ɣef wawalen"
 
-#: data/gtk/window.blp:555
+#: data/gtk/window.blp:558
 msgid "Show filter dialog"
 msgstr "Sken-d imsizdigen"
 
-#: data/gtk/window.blp:560
+#: data/gtk/window.blp:563
 msgid "Show preferences"
 msgstr "Sken-d ismenyifen"
 
-#: data/gtk/window.blp:565 data/gtk/window.blp:589
+#: data/gtk/window.blp:568 data/gtk/window.blp:592
 msgid "Keybindings"
 msgstr "Inegzumen n unasiw"
 
-#: data/gtk/window.blp:576 data/gtk/ui/Preferences.blp:11
+#: data/gtk/window.blp:579 data/gtk/ui/Preferences.blp:11
 msgid "Editing"
 msgstr "Asiẓreg"
 
-#: data/gtk/window.blp:579
+#: data/gtk/window.blp:582
 msgid "Add new word"
 msgstr "Rnu awal amaynut"
 
-#: data/gtk/window.blp:588
+#: data/gtk/window.blp:591
 msgid "Preferences"
 msgstr "Imenyafen"
 
-#: data/gtk/window.blp:590
+#: data/gtk/window.blp:593
 msgid "About"
 msgstr "Ɣef"
 
-#: data/gtk/window.blp:597
+#: data/gtk/window.blp:600
 msgid "Ascending"
 msgstr "S walluy"
 
-#: data/gtk/window.blp:603
+#: data/gtk/window.blp:606
 msgid "Descending"
 msgstr "S usider"
 
-#: data/gtk/window.blp:617
+#: data/gtk/window.blp:620
 msgid "First Translation"
 msgstr "Tasuqilt tamezwarut"
 
-#: data/gtk/ui/LexiconRow.blp:63 lexi/ui/widgets.py:320 lexi/ui/widgets.py:503
+#: data/gtk/ui/LexiconRow.blp:63 lexi/ui/widgets.py:322 lexi/ui/widgets.py:505
 msgid "Translation"
 msgstr "Tasuqilt"
 
-#: data/gtk/ui/LexiconRow.blp:68 lexi/ui/widgets.py:321 lexi/ui/widgets.py:505
+#: data/gtk/ui/LexiconRow.blp:68 lexi/ui/widgets.py:323 lexi/ui/widgets.py:507
 msgid "Example"
 msgstr "Amedya"
 
@@ -281,34 +281,52 @@ msgid "Use Debug logging profile"
 msgstr ""
 
 #: data/gtk/ui/Preferences.blp:28
+#, fuzzy
+msgid "Database"
+msgstr "Sifeḍ azadur n yisefka"
+
+#: data/gtk/ui/Preferences.blp:33
 msgid "Backup"
 msgstr "Aḥraz"
 
-#: data/gtk/ui/Preferences.blp:36
+#: data/gtk/ui/Preferences.blp:37
 msgid "Export Database"
 msgstr "Sifeḍ azadur n yisefka"
 
-#: data/gtk/ui/Preferences.blp:42
+#: data/gtk/ui/Preferences.blp:43
 msgid "Import Database"
 msgstr "Kter azadur n isefka"
 
 #: data/gtk/ui/Preferences.blp:51
+#, fuzzy
+msgid "Export"
+msgstr "Kter"
+
+#: data/gtk/ui/Preferences.blp:55
+msgid "Export to Memorado"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:56
+msgid "Export Lexi database as Memorado compatible database"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:63
 msgid "Word Types"
 msgstr "Anawen n wawal"
 
-#: data/gtk/ui/Preferences.blp:57
+#: data/gtk/ui/Preferences.blp:69
 msgid "Write new word type name here…"
 msgstr "Aru isem amaynut n wanaw n wawal da…"
 
-#: data/gtk/ui/Preferences.blp:82
+#: data/gtk/ui/Preferences.blp:94
 msgid "Import Database?"
 msgstr "Kter azadur n isefka?"
 
-#: data/gtk/ui/Preferences.blp:83
+#: data/gtk/ui/Preferences.blp:95
 msgid "Importing database will ERASE the existing one!"
 msgstr ""
 
-#: data/gtk/ui/Preferences.blp:90
+#: data/gtk/ui/Preferences.blp:102
 msgid "Import"
 msgstr "Kter"
 
@@ -402,55 +420,55 @@ msgid "dict;dictionary;word;words;lexi;lexicon;lexicons;"
 msgstr ""
 "dict;dictionary;word;words;lexi;lexicon;lexicons;amawal;awal;asegzawal;"
 
-#: lexi/enums.py:71
+#: lexi/enums.py:72
 msgid "Noun"
 msgstr "Isem"
 
-#: lexi/enums.py:72
+#: lexi/enums.py:73
 msgid "Verb"
 msgstr "Amyag"
 
-#: lexi/enums.py:73
+#: lexi/enums.py:74
 msgid "Adjective"
 msgstr "Arbib"
 
-#: lexi/enums.py:74
+#: lexi/enums.py:75
 msgid "Adverb"
 msgstr "Amernu"
 
-#: lexi/enums.py:75
+#: lexi/enums.py:76
 msgid "Pronoun"
 msgstr "Amqim"
 
-#: lexi/enums.py:76
+#: lexi/enums.py:77
 msgid "Preposition"
 msgstr "Tanzeɣt"
 
-#: lexi/enums.py:77
+#: lexi/enums.py:78
 msgid "Conjunction"
 msgstr "Tasɣunt"
 
-#: lexi/enums.py:78
+#: lexi/enums.py:79
 msgid "Interjection"
 msgstr "Tayyayt"
 
-#: lexi/enums.py:79
+#: lexi/enums.py:80
 msgid "Article"
 msgstr "Amagrad"
 
-#: lexi/enums.py:80
+#: lexi/enums.py:81
 msgid "Idiom"
 msgstr "Tanfalit"
 
-#: lexi/enums.py:81
+#: lexi/enums.py:82
 msgid "Clause"
 msgstr "Tafada"
 
-#: lexi/enums.py:82
+#: lexi/enums.py:83
 msgid "Prefix"
 msgstr "Azwir"
 
-#: lexi/enums.py:83
+#: lexi/enums.py:84
 msgid "Suffix"
 msgstr "Adfir"
 
@@ -464,17 +482,17 @@ msgstr "ButterflyOfFire"
 msgid "Inspiration"
 msgstr "Tasuqilt"
 
-#: lexi/main.py:156
-msgid "Bug Reporters"
+#: lexi/main.py:159
+msgid "Advisers"
 msgstr ""
 
 #. Translators: This is the name of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:161
+#: lexi/main.py:168
 msgid "Chronograph"
 msgstr "Chronograph"
 
 #. Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:163
+#: lexi/main.py:170
 msgid "Sync lyrics of your loved songs"
 msgstr "Mtawi isefra n tezlatin i tḥemmleḍ s waṭas"
 
@@ -490,11 +508,11 @@ msgstr ""
 msgid "Word saved"
 msgstr "Yettwaklas wawal-nni"
 
-#: lexi/ui/widgets.py:292 lexi/ui/widgets.py:478 lexi/ui/widgets.py:480
+#: lexi/ui/widgets.py:294 lexi/ui/widgets.py:480 lexi/ui/widgets.py:482
 msgid "No translation yet"
 msgstr "Ur ɛad tella tsuqilt"
 
-#: lexi/ui/widgets.py:645
+#: lexi/ui/widgets.py:647
 msgid ""
 "Click LMB to search words with this tag\n"
 "Click RMB to remove this tag"
@@ -510,50 +528,56 @@ msgid "Add a new word type to get started"
 msgstr ""
 
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-#: lexi/utils/backup.py:43
+#: lexi/utils/backup.py:45
 #, python-brace-format
 msgid "Backup exported successfully: {path}"
 msgstr ""
 
-#: lexi/utils/backup.py:44
+#: lexi/utils/backup.py:46 lexi/utils/backup.py:238
 msgid "Open"
 msgstr "Ldi"
 
-#: lexi/utils/backup.py:72
+#: lexi/utils/backup.py:74
 msgid "Database imported successfully"
 msgstr ""
 
-#: lexi/utils/backup.py:97 lexi/utils/backup.py:146
+#: lexi/utils/backup.py:99 lexi/utils/backup.py:148
 msgid "Incorrect Archive!"
 msgstr ""
 
-#: lexi/utils/backup.py:97
+#: lexi/utils/backup.py:99
 msgid "Why?"
 msgstr "Ayɣeṛ?"
 
-#: lexi/utils/backup.py:148
+#: lexi/utils/backup.py:150
 msgid ""
 "This archive seems to be incorrect, since it wasn't passed proof of content "
 "challenge: no config.yaml file and/or lexicons folder inside"
 msgstr ""
 
-#: lexi/utils/backup.py:151
+#: lexi/utils/backup.py:153
 msgid "Close"
 msgstr "Mdel"
 
-#: lexi/utils/backup.py:160
+#: lexi/utils/backup.py:162
 msgid "Database Version Mismatch!"
 msgstr ""
 
-#: lexi/utils/backup.py:162
+#: lexi/utils/backup.py:164
 msgid ""
 "The database version in the archive does not match the current version of "
 "Lexi. Please, restart Lexi after importing this database."
 msgstr ""
 
-#: lexi/utils/backup.py:165
+#: lexi/utils/backup.py:167
 msgid "Exit Lexi"
 msgstr "Ffeɣ seg Lexi"
+
+#. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF. Memorado is the name of the other app and SHOULDN'T be translated
+#: lexi/utils/backup.py:237
+#, python-brace-format
+msgid "Memorado database exported successfully: {path}"
+msgstr ""
 
 #~ msgid "Lexicon name"
 #~ msgstr "Isem n umawal"
