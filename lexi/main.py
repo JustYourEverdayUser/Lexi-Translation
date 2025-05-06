@@ -152,8 +152,15 @@ class LexiApplication(Adw.Application):
             _("Inspiration"),
             ("heliguy4599 (Warehouse) https://github.com/flattool/warehouse",),
         )
+        dialog.add_credit_section(
+            "Others", ("Memorado https://github.com/wbernard/Memorado",)
+        )
         dialog.add_acknowledgement_section(
-            _("Bug Reporters"), ("rezatester94 https://github.com/rezatester94",)
+            _("Advisers"),
+            (
+                "rezatester94 https://github.com/rezatester94",
+                "hellpe https://github.com/hellpe",
+            ),
         )
         dialog.add_other_app(
             "io.github.dzheremi2.lrcmake-gtk",

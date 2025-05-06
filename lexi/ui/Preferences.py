@@ -196,3 +196,17 @@ class LexiPreferences(Adw.PreferencesDialog):
             shared.config["word-types"].sort()
             self.gen_word_types()
             entry_row.set_text("")
+
+    @Gtk.Template.Callback()
+    def on_export_memorado_button_clicked(self, *_args) -> None:
+        logger.debug("Showing export database to Memorado dialog")
+        dialog = Gtk.FileDialog(initial_name="lexi_database.db")
+        dialog.save(shared.win, None, self.on_export_memorado_database)
+
+    def on_export_memorado_database(
+        self, file_dialog: Gtk.FileDialog, result: Gio.Task
+    ) -> None:
+        path = file_dialog.save_finish(result).get_path()
+        logger.info("Exporting database to %s as Memorado database", path)
+        backup.export_memorado_database(path)
+        self.close()

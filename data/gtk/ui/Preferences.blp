@@ -25,11 +25,12 @@ template $LexiPreferences : Adw.PreferencesDialog {
   }
 
   Adw.PreferencesPage {
-    title: _("Backup");
+    title: _("Database");
     icon-name: "lexi-backup-symbolic";
 
     Adw.PreferencesGroup {
       separate-rows: true;
+      title: _("Backup");
 
       Adw.ButtonRow {
         start-icon-name: "lexi-export-database-symbolic";
@@ -43,6 +44,17 @@ template $LexiPreferences : Adw.PreferencesDialog {
         activated => $on_import_button_clicked();
 
         styles ["destructive-action"]
+      }
+    }
+
+    Adw.PreferencesGroup {
+      title: _("Export");
+
+      Adw.ButtonRow {
+        start-icon-name: "im.bernard.Memorado-symbolic";
+        title: _("Export to Memorado");
+        tooltip-text: _("Export Lexi database as Memorado compatible database");
+        activated => $on_export_memorado_button_clicked();
       }
     }
   }

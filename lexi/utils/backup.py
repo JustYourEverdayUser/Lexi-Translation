@@ -1,9 +1,11 @@
 import glob
 import os
-import shutil
-import tempfile
-import zipfile
 import pathlib
+import shutil
+import sqlite3
+import tempfile
+import uuid
+import zipfile
 
 import yaml
 from gi.repository import Adw
@@ -168,3 +170,72 @@ def database_version_mismatch_panic() -> None:
     alert.connect("response", lambda *_: shared.app.on_quit_action())
     logger.warning("Database version mismatch alert")
     alert.present(shared.win)
+
+
+# Memorado Export
+def export_memorado_database(path: str) -> None:
+    """Export Lexi database as SQLite3 Memorado compatible database
+
+    Parameters
+    ----------
+    path : str
+        path of the exported `.db` file
+    """
+    if os.path.exists(path):
+        logger.debug("Removing %s since it's already exists", path)
+        os.remove(path)
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+    logger.debug("Initializing database at %s", path)
+    cursor.execute(
+        """CREATE TABLE if not exists cards (
+                   deck_id TEXT, front TEXT, back TEXT)"""
+    )
+    cursor.execute(
+        """CREATE TABLE if not exists decks (deck_id TEXT,
+                   name TEXT,
+                   icon TEXT)"""
+    )
+
+    for lexicon in pathlib.Path(os.path.join(shared.data_dir, "lexicons")).iterdir():
+        with open(str(lexicon), "r") as file:
+            lexicon_data = yaml.safe_load(file)
+            logger.debug("Exporting Lexicon “%s”", lexicon_data["name"])
+            deck_id = str(uuid.uuid4().hex)
+            cursor.execute(
+                """INSERT INTO decks VALUES (
+                        :deck_id, :name, :icon)""",
+                {
+                    "deck_id": deck_id,
+                    "name": lexicon_data["name"],
+                    "icon": "🤖",
+                },
+            )
+            for word in lexicon_data["words"]:
+                logger.debug(
+                    "Exporting word “%s” from Lexicon “%s”",
+                    word["word"],
+                    lexicon_data["name"],
+                )
+                cursor.execute(
+                    """INSERT INTO cards VALUES (
+                               :deck_id, :front, :back)""",
+                    {
+                        "deck_id": deck_id,
+                        "front": word["word"],
+                        "back": ", ".join(word["translations"]),
+                    },
+                )
+            conn.commit()
+            logger.debug("Export of “%s” Lexicon completed", lexicon_data["name"])
+    conn.commit()
+    conn.close()
+    if os.path.exists(path):
+        # pylint: disable=line-too-long
+        toast = Adw.Toast(
+            # Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF. Memorado is the name of the other app and SHOULDN'T be translated
+            title=_(f"Memorado database exported successfully: {path}"),
+            button_label=_("Open"),
+        )
+        toast.connect("button-clicked", shared.win.open_dir, os.path.dirname(path))
+        shared.win.toast_overlay.add_toast(toast)

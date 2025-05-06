@@ -31,6 +31,8 @@
     <file alias="lexi-list-large-symbolic.svg">icons/icons/symbolic/lexi-list-large-symbolic.svg</file>
     <file alias="lexi-tag-outline-add-symbolic.svg">icons/icons/symbolic/lexi-tag-outline-add-symbolic.svg</file>
     <file alias="lexi-help-about-symbolic.svg">icons/icons/symbolic/lexi-help-about-symbolic.svg</file>
+    <!-- Downloaded from https://github.com/wbernard/Memorado/blob/b5317e1b6cdfe1258cd1efaf21099a65a39640c6/data/icons/hicolor/symbolic/apps/im.bernard.Memorado-symbolic.svg -->
+    <file alias="im.bernard.Memorado-symbolic.svg">icons/icons/symbolic/im.bernard.Memorado-symbolic.svg</file>
     <file alias="io.github.dzheremi2.lrcmake-gtk.svg">icons/hicolor/scalable/apps/io.github.dzheremi2.lrcmake-gtk.svg</file>
   </gresource>
 </gresources>

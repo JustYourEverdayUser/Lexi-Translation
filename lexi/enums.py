@@ -43,6 +43,7 @@ class Icon(str, Enum):
     LIST_LARGE: str = "lexi-list-large-symbolic"
     TAG_OUTLINE_ADD: str = "lexi-tag-outline-lexi-add-symbolic"
     HELP_ABOUT: str = "lexi-help-about-symbolic"
+    MEMORADO: str = "im.bernard.Memorado-symbolic"
 
     def __str__(self) -> str:
         return self.value
