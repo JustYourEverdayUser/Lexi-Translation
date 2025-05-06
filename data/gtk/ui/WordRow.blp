@@ -97,6 +97,7 @@ Adw.AlertDialog tag_alert_dialog {
   extra-child: Entry tag_alert_dialog_entry {
     placeholder-text: _("Tag…");
     changed => $on_tag_alert_dialog_entry_changed();
+    activate => $on_tag_entry_activated();
   };
 
   responses [

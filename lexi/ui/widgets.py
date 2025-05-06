@@ -576,6 +576,7 @@ class WordRow(Adw.ActionRow):
         logger.debug("Showing tag addition alert dialog for %s", self.word)
         self.tag_alert_dialog_entry.set_text("")
         self.tag_alert_dialog.present(shared.win)
+        self.tag_alert_dialog_entry.grab_focus()
 
     @Gtk.Template.Callback()
     def on_tag_alert_dialog_entry_changed(self, entry: Gtk.Entry) -> None:
@@ -588,6 +589,13 @@ class WordRow(Adw.ActionRow):
         else:
             if "error" in entry.get_css_classes():
                 entry.remove_css_class("error")
+
+    @Gtk.Template.Callback()
+    def on_tag_entry_activated(self, *_args) -> None:
+        self.on_tag_alert_dialog_response(
+            _alert_dialog=self.tag_alert_dialog, response="add"
+        )
+        self.tag_alert_dialog.close()
 
     @Gtk.Template.Callback()
     def on_tag_alert_dialog_response(
