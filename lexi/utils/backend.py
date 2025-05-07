@@ -96,7 +96,7 @@ class Lexicon(GObject.Object):
 
     def __init__(self, path: Path) -> "Lexicon":
         super().__init__()
-        self._file = open(path, "r", encoding="utf-8")
+        self._file = open(path, "r+", encoding="utf-8")
         self._path = path
         self._data = yaml.safe_load(self._file)
         self.id = self._data["id"]
@@ -173,6 +173,8 @@ class Lexicon(GObject.Object):
         for word in self.words:
             words.append(word._word)  # pylint: disable=protected-access
         self._data["words"] = words
+        self._file.seek(0)
+        self._file.truncate(0)
         yaml.dump(
             self._data,
             self._file,
@@ -235,16 +237,35 @@ class Lexicon(GObject.Object):
             )
 
 
-class Word:
+# pylint: disable=too-many-public-methods
+class Word(GObject.Object):
     __gtype_name__ = "Word"
 
+    __gsignals__ = {
+        "tags-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "translations-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "examples-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "references-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "types-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
+    }
+
     def __init__(self, word: dict, parent_lexicon: Lexicon) -> "Word":
+        super().__init__()
         self._word = word
         self.parent_lexicon = parent_lexicon
+
+        self.connect("notify::word", lambda *_: self.parent_lexicon.save())
+        self.connect("notify::pronunciation", lambda *_: self.parent_lexicon.save())
+        self.connect("tags-changed", lambda *_: self.parent_lexicon.save())
+        self.connect("translations-changed", lambda *_: self.parent_lexicon.save())
+        self.connect("examples-changed", lambda *_: self.parent_lexicon.save())
+        self.connect("references-changed", lambda *_: self.parent_lexicon.save())
+        self.connect("types-changed", lambda *_: self.parent_lexicon.save())
 
     def add_translation(self, translation: str) -> Self:
         """Add a translation to the word"""
         self._word["translations"].append(translation)
+        self.emit("translations-changed")
         return self
 
     def set_translation(self, index: int, translation: str) -> Self:
@@ -253,6 +274,7 @@ class Word:
             self._word["translations"][index] = translation
         else:
             raise IndexError("Index out of range")
+        self.emit("translations-changed")
         return self
 
     def rm_translation(self, index: int) -> Self:
@@ -261,6 +283,7 @@ class Word:
             self._word["translations"].pop(index)
         else:
             raise IndexError("Index out of range")
+        self.emit("translations-changed")
         return self
 
     def add_type(self, type_: str) -> Self:
@@ -269,6 +292,7 @@ class Word:
             self._word["types"].append(type_)
         else:
             raise ValueError("Type already exists")
+        self.emit("types-changed")
         return self
 
     def rm_type(self, type_: str) -> Self:
@@ -277,11 +301,13 @@ class Word:
             self._word["types"].remove(type_)
         else:
             raise ValueError("Type not found")
+        self.emit("types-changed")
         return self
 
     def add_example(self, example: str) -> Self:
         """Add an example to the word"""
         self._word["examples"].append(example)
+        self.emit("examples-changed")
         return self
 
     def set_example(self, index: int, example: str) -> Self:
@@ -290,6 +316,7 @@ class Word:
             self._word["examples"][index] = example
         else:
             raise IndexError("Index out of range")
+        self.emit("examples-changed")
         return self
 
     def rm_example(self, index: int) -> Self:
@@ -298,6 +325,7 @@ class Word:
             self._word["examples"].pop(index)
         else:
             raise IndexError("Index out of range")
+        self.emit("examples-changed")
         return self
 
     def add_reference(self, reference: int) -> Self:
@@ -306,6 +334,7 @@ class Word:
             self._word["references"].append(reference)
         else:
             raise ValueError("Reference already exists")
+        self.emit("references-changed")
         return self
 
     def rm_reference(self, reference: int) -> Self:
@@ -314,6 +343,7 @@ class Word:
             self._word["references"].remove(reference)
         else:
             raise ValueError("Reference not found")
+        self.emit("references-changed")
         return self
 
     def add_tag(self, tag: str) -> Self:
@@ -322,6 +352,7 @@ class Word:
             self._word["tags"].append(tag)
         else:
             raise ValueError("Tag already exists")
+        self.emit("tags-changed")
         return self
 
     def rm_tag(self, tag: str) -> Self:
@@ -330,9 +361,10 @@ class Word:
             self._word["tags"].remove(tag)
         else:
             raise ValueError("Tag not found")
+        self.emit("tags-changed")
         return self
 
-    # Immutable properties
+    # Plain properties
     @property
     def id(self) -> int:
         """ID of the word"""
@@ -363,15 +395,15 @@ class Word:
         """Tags of the word"""
         return self._word["tags"]
 
-    # Mutable properties
+    # GObject properties
     @GObject.Property(type=str)
     def word(self) -> str:
-        """The name of the word"""
+        """The word itself"""
         return self._word["word"]
 
     @word.setter
     def word(self, word: str) -> None:
-        """The name of the word"""
+        """The word itself"""
         self._word["word"] = word
 
     @GObject.Property(type=str)

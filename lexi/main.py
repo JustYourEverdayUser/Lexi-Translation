@@ -42,7 +42,7 @@ class LexiApplication(Adw.Application):
             {
                 # fmt: off
                 ("quit", ("<primary>q","<primary>w",),),
-                # ("toggle_sidebar", ("F9",), shared.win),
+                ("toggle_sidebar", ("F9",), shared.win),
                 # ("show_preferences", ("<primary>comma",), shared.win),
                 # ("add_word", ("<primary>n",), shared.win),
                 # ("search", ("<primary>f",), shared.win),

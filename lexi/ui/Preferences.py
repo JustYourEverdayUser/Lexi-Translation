@@ -15,7 +15,6 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     __gtype_name__ = "LexiPreferences"
 
-    word_autosave_switch_row: Adw.SwitchRow = gtc()
     import_confirmation_dialog: Adw.AlertDialog = gtc()
     available_word_types_scrolled_window: Gtk.ScrolledWindow = gtc()
     available_word_types_list_box: Gtk.ListBox = gtc()

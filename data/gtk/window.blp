@@ -45,10 +45,12 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button toggle_sidebar_button {
                     icon-name: "lexi-toggle-sidebar-symbolic";
                     tooltip-text: _("Toggle sidebar");
+                    clicked => $on_toggle_sidebar_action();
                   }
                   ToggleButton toggle_lexicons_search_button {
                     icon-name: "lexi-toggle-search-symbolic";
                     tooltip-text: _("Find Lexicon");
+                    toggled => $on_toggle_search_action();
                   }
                 }
 
@@ -59,6 +61,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button {
                     icon-name: "lexi-add-symbolic";
                     tooltip-text: _("Add Lexicon");
+                    clicked => $on_add_lexicon_button_clicked();
                   }
                   MenuButton {
                     icon-name: "lexi-app-menu-symbolic";
@@ -91,6 +94,7 @@ template $LexiWindow : Adw.ApplicationWindow {
               ScrolledWindow lexicons_scrolled_window {
                 ListBox lexicons_list_box {
                   selection-mode: single;
+                  row-selected => $load_lexicon();
 
                   styles ["navigation-sidebar"]
                 }
@@ -114,6 +118,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                     icon-name: bind toggle_sidebar_button.icon-name;
                     tooltip-text: bind toggle_sidebar_button.tooltip-text;
                     visible: bind overlay_split_view.show-sidebar inverted;
+                    clicked => $on_toggle_sidebar_action();
                   }
 
                   [end]
@@ -135,6 +140,8 @@ template $LexiWindow : Adw.ApplicationWindow {
                   vexpand: true;
 
                   ListBox lexicon_list_box {
+                    row-selected => $load_word();
+
                     styles ["navigation-sidebar"]
                   }
                 }
@@ -200,14 +207,7 @@ template $LexiWindow : Adw.ApplicationWindow {
 
               Adw.ToolbarView {
                 [top]
-                Adw.HeaderBar {
-                  [start]
-                  Button save_word_button {
-                    label: _("Save");
-
-                    styles ["suggested-action"]
-                  }
-                }
+                Adw.HeaderBar {}
 
                 Adw.Clamp {
                   ScrolledWindow {
@@ -223,11 +223,13 @@ template $LexiWindow : Adw.ApplicationWindow {
                       Adw.EntryRow word_entry_row {
                         title: _("Word");
                         use-markup: false;
+                        changed => $on_word_entry_changed();
                       }
 
                       Adw.EntryRow pronunciation_entry_row {
                         title: _("Pronunciation");
                         use-markup: false;
+                        changed => $on_pronunciation_entry_changed();
                       }
 
                       Adw.ExpanderRow translations_expander_row {
@@ -503,8 +505,10 @@ Adw.AlertDialog add_lexicon_alert_dialog {
   default-response: "add";
   heading: _("Add new Lexicon");
   close-response: "cancel";
+  response => $on_add_lexicon();
   extra-child: Gtk.Entry add_lexicon_entry {
     placeholder-text: _("Name");
+    changed => $on_add_lexicon_entry_changed();
   };
 
   responses [
