@@ -9,6 +9,7 @@ import yaml
 from gi.repository import GObject
 
 from lexi import shared
+from lexi.logging.logger import logger
 
 
 class LexiconController:
@@ -153,6 +154,7 @@ class Lexicon(GObject.Object):
         """
         self.words.append(Word(word, self))
         self._data["words"].append(word)
+        self.save()
         return self
 
     def rm_word(self, id_: int) -> Self:
@@ -165,12 +167,19 @@ class Lexicon(GObject.Object):
         """
         for i, word in enumerate(self.words):
             if word.id == id_:
+                for _word in self.words:
+                    if word.id in _word.references:
+                        logger.debug(
+                            "Dereffering “%s” from “%s”", word.word, _word.word
+                        )
+                        _word.rm_reference(word.id)
                 # pylint: disable=protected-access
                 self._data["words"].remove(word._word)
                 self.words.pop(i)
                 break
         else:
             raise ValueError("Word not found")
+        self.save()
         return self
 
     def save(self) -> None:
@@ -196,7 +205,10 @@ class Lexicon(GObject.Object):
 
     @classmethod
     def for_unexistent(cls, name: str) -> "Lexicon":
-        """Create a Lexicon object for a new lexicon"""
+        """Create a Lexicon object for a new lexicon
+        
+        Also create corresponding file
+        """
         while True:
             lexicon_id = str(uuid.uuid4().hex)
             lexicon_path = os.path.join(

@@ -1,4 +1,4 @@
-from gi.repository import Adw, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from lexi import enums, shared
 from lexi.logging.logger import logger
@@ -115,7 +115,7 @@ class LexiWindow(Adw.ApplicationWindow):
         self.lexicon_list_box.set_sort_func(sort_words)
         self.lexicon_list_box.set_filter_func(filter_words)
         self.search_bar.connect_entry(self.search_entry)
-        # key_kapture_controller.connect("key-pressed", self.on_key_pressed)
+        key_kapture_controller.connect("key-pressed", self.__on_key_pressed)
         self.connect("notify::loaded-lexicon", self.__on_lexicon_changed)
         self.connect("notify::loaded-word", self.__on_word_changed)
         self.connect("notify::state", self.__on_state_change)
@@ -163,18 +163,37 @@ class LexiWindow(Adw.ApplicationWindow):
         else:
             self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
 
+    def __on_key_pressed(
+        self, _controller: Gtk.EventControllerKey, keyval: int, *_args
+    ) -> None:
+        """
+        Handle key press events
+
+        Parameters
+        ----------
+        _controller : Gtk.EventControllerKey
+            The key event controller that emitted this method
+        keyval : int
+            The value of the pressed key
+        """
+        if keyval == Gdk.KEY_Escape:
+            # Handle Escape key press
+            if self.selection_mode_toggle_button.get_active():
+                logger.debug("Escape pressed, disabling selection mode")
+                self.selection_mode_toggle_button.set_active(False)
+
     def on_sorting_method_changed(
         self, action: Gio.SimpleAction, state: GLib.Variant
     ) -> None:
         """
-        Handle changes to the sorting method.
+        Handle changes to the sorting method
 
         Parameters
         ----------
         action : Gio.SimpleAction
-            The action that triggered the change.
+            The action that triggered the change
         state : GLib.Variant
-            The new state of the sorting method.
+            The new state of the sorting method
         """
         action.set_state(state)
         self.sort_method = str(state).strip("'")
@@ -186,14 +205,14 @@ class LexiWindow(Adw.ApplicationWindow):
         self, action: Gio.SimpleAction, state: GLib.Variant
     ) -> None:
         """
-        Handle changes to the sorting type.
+        Handle changes to the sorting type
 
         Parameters
         ----------
         action : Gio.SimpleAction
-            The action that triggered the change.
+            The action that triggered the change
         state : GLib.Variant
-            The new state of the sorting type.
+            The new state of the sorting type
         """
         action.set_state(state)
         self.sort_type = str(state).strip("'")
@@ -593,6 +612,62 @@ class LexiWindow(Adw.ApplicationWindow):
         Gio.AppInfo.launch_default_for_uri(f"file://{path}")
 
     @Gtk.Template.Callback()
+    def selection_mode_button_toggled(self, button: Gtk.ToggleButton) -> None:
+        """
+        Toggle selection mode
+
+        Parameters
+        ----------
+        button : Gtk.ToggleButton
+            The toggle button that emitted this method
+        """
+        self.set_selection_mode(button.get_active())
+        logger.info("Selection mode toggled: %s", button.get_active())
+
+    def set_selection_mode(self, enabled: bool) -> None:
+        """
+        Enable or disable selection mode for the words list box
+
+        Parameters
+        ----------
+        enabled : bool
+            Whether to enable or disable selection mode
+        """
+        # Gratefully "stolen" from
+        # https://github.com/flattool/warehouse/blob/0a18e5d81b8b06e45bf493b3ff31c12edbd36869/src/packages_page/packages_page.py#L226
+        if enabled:
+            self.lexicon_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        else:
+            self.lexicon_list_box.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        self.selection_mode_toggle_button.set_active(enabled)
+
+        i = 0
+        row: WordRow
+        while row := self.lexicon_list_box.get_row_at_index(i):
+            i += 1
+            row.check_button.set_active(False)
+            row.check_button_revealer.set_reveal_child(enabled)
+            if enabled:
+                row.set_activatable_widget(row.check_button)
+            else:
+                row.set_activatable_widget(None)
+        self.delete_selected_words_button_revealer.set_reveal_child(enabled)
+
+    @Gtk.Template.Callback()
+    def on_delete_selected_words_action(self, *_args) -> None:
+        """Delete selected words"""
+        logger.info("Deleting selected words: %s", len(self.selected_words))
+        for row in self.selected_words.copy():
+            logger.info("Deleting word: “%s”", row.word.word)
+            self.selected_words.remove(row)
+            row.delete()
+        self.set_selection_mode(False)
+        if self.lexicon_list_box.get_row_at_index(0) is None:
+            self.lexicon_scrolled_window.set_child(self.no_words_yet)
+            self.words_bottom_bar_revealer.set_reveal_child(False)
+            self.__set_row_sensitiveness(False)
+
+    @Gtk.Template.Callback()
     def on_search_entry_changed(self, *_args) -> None:
         """
         Invalidate the filter for the lexicon list box when the search entry changes
@@ -643,6 +718,8 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.lexicon_scrolled_window.set_child(self.lexicon_not_selected)
                 self.sort_menu_button.set_sensitive(False)
                 self.filter_button.set_sensitive(False)
+                self.word_nav_page.set_title(_("Word"))
+                self.lexicon_nav_page.set_title("Lexi")
                 self.__set_row_sensitiveness(False)
             case enums.WindowState.EMPTY_WORDS:
                 self.__on_state_change(state_=enums.WindowState.EMPTY)

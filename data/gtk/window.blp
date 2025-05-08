@@ -81,12 +81,12 @@ template $LexiWindow : Adw.ApplicationWindow {
                     changed => $on_lexicon_search_entry_changed();
                     hexpand: true;
 
-                    // ShortcutController {
-                    //   Shortcut {
-                    //     trigger: "Escape";
-                    //     action: "action(win.toggle_search)";
-                    //   }
-                    // }
+                    ShortcutController {
+                      Shortcut {
+                        trigger: "Escape";
+                        action: "action(win.toggle_search)";
+                      }
+                    }
                   }
                 }
               }
@@ -165,6 +165,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                       margin-top: 4;
                       icon-name: "lexi-toggle-selection-symbolic";
                       tooltip-text: _("Select words");
+                      toggled => $selection_mode_button_toggled();
 
                       styles ["flat"]
                     }
@@ -177,6 +178,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                         margin-top: 4;
                         icon-name: "lexi-delete-symbolic";
                         tooltip-text: _("Delete selected words");
+                        clicked => $on_delete_selected_words_action();
 
                         styles ["destructive-action"]
                       }

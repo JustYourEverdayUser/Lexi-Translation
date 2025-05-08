@@ -1,6 +1,6 @@
 from gi.repository import Adw, Gtk
 
-from lexi import shared
+from lexi import enums, shared
 from lexi.logging.logger import logger
 from lexi.utils.backend import Word
 
@@ -149,6 +149,48 @@ class WordRow(Adw.ActionRow):
                 rmb.connect("released", __rmb_clicked, tag)
                 button.add_controller(rmb)
                 self.tags_box.append(button)
+
+    def do_check_button(self, *_args) -> None:
+        """Toggle the visibility of the check button"""
+        if not self.check_button_revealer.get_reveal_child():
+            shared.win.selection_mode_toggle_button.set_active(True)
+            self.check_button.set_active(True)
+            logger.debug("Check button of “%s” activated", self.word.word)
+        else:
+            self.check_button.set_active(not self.check_button.get_active())
+            logger.debug("Check button of “%s” deactivated", self.word.word)
+
+    @Gtk.Template.Callback()
+    def on_check_button_toggled(self, button: Gtk.CheckButton) -> None:
+        """Handle toggling of the check button
+
+        Parameters
+        ----------
+        button : Gtk.CheckButton
+            The check button being toggled
+        """
+        if button.get_active():
+            logger.debug("Adding “%s” to deleatable words", self.word.word)
+            shared.win.selected_words.append(self)
+        else:
+            shared.win.selected_words.remove(self)
+            logger.debug("Removing “%s” from deletable words", self.word.word)
+
+    def get_ref_count(self) -> None:
+        """Update the reference count label"""
+        logger.debug("Updating reference count for “%s”", self.word.word)
+        if self.word.ref_count > 0:
+            self.refs_count_label_box.set_visible(True)
+            self.refs_count_label.set_label(str(self.word.ref_count))
+        else:
+            self.refs_count_label_box.set_visible(False)
+
+    def delete(self) -> None:
+        self.word.parent_lexicon.rm_word(self.word.id)
+        shared.win.lexicon_list_box.remove(self)
+        shared.win.lexicon_list_box.select_row(None)
+        if shared.win.lexicon_list_box.get_row_at_index(0) is None:
+            shared.win.set_property("state", enums.WindowState.EMPTY_WORDS)
 
     @property
     def title(self) -> str:
