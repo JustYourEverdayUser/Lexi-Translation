@@ -3,6 +3,7 @@ from gi.repository import Adw, GObject, Gtk
 from lexi import enums, shared
 from lexi.logging.logger import logger
 from lexi.ui.LexiconRow import LexiconRow
+from lexi.ui.ReferenceRow import ReferenceRow
 from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon, Word
 
@@ -134,6 +135,9 @@ class LexiWindow(Adw.ApplicationWindow):
             for _item in child:
                 if isinstance(_item, Gtk.Text):
                     self.word_entry_row_text = _item
+                    self.word_entry_row_text.connect(
+                        "direction-changed", self.__on_word_direction_changed
+                    )
 
         for child in self.pronunciation_entry_row.get_child():
             for _item in child:
@@ -278,14 +282,21 @@ class LexiWindow(Adw.ApplicationWindow):
                         expander_row[1], expander_row[2], item.replace("&rtl", "")
                     )
                     if item.startswith("&rtl"):
-                        row.get_gtk_text().get_direction(Gtk.TextDirection.RTL)
+                        row.get_gtk_text().set_direction(Gtk.TextDirection.RTL)
                     row.get_gtk_text().connect("changed", self.__update_word)
                     row.get_gtk_text().connect("backspace", self.__remove_list_prop)
                     row.get_gtk_text().connect(
                         "direction-changed", self.__list_prop_dir_changed
                     )
                     expander_row[0].add_row(row)
+
+            # Loading references
+            for reference in self.loaded_word.references:
+                word = self.loaded_lexicon.get_word(reference)
+                self.references_list_box.append(ReferenceRow(word))
+
             self.__set_row_sensitiveness(True)
+            self.word_nav_page.set_title(self.loaded_word.word.replace("&rtl", ""))
 
     @Gtk.Template.Callback()
     def on_word_entry_changed(self, text: Gtk.Text) -> None:
@@ -390,6 +401,20 @@ class LexiWindow(Adw.ApplicationWindow):
             pass
 
     @Gtk.Template.Callback()
+    def on_add_reference_button_clicked(self, *_args) -> None:
+        self.references_dialog_list_box.remove_all()
+        if len(self.loaded_lexicon) == 0:
+            self.toast_overlay.add_toast(
+                Adw.Toast(title=_("You have already referenced all words"))
+            )
+            logger.debug("Rejecting adding a reference: All words are referenced")
+            return
+        for word in self.loaded_lexicon:  # pylint: disable=not-an-iterable
+            if word.id != self.loaded_word.id:
+                self.references_dialog_list_box.append(ReferenceRow(word, False))
+        self.references_dialog.present(self)
+
+    @Gtk.Template.Callback()
     def on_add_translation_button_clicked(self, *_args) -> None:
         self.loaded_word.add_translation("")
         self.__add_prop_entryrow(
@@ -409,6 +434,18 @@ class LexiWindow(Adw.ApplicationWindow):
         row.get_gtk_text().connect("backspace", self.__remove_list_prop)
         row.get_gtk_text().connect("direction-changed", self.__list_prop_dir_changed)
         listbox.append(row)
+
+    def __on_word_direction_changed(
+        self, _text: Gtk.Text, prev_dir: Gtk.TextDirection
+    ) -> None:
+        self.loaded_word.set_property(
+            "word",
+            (
+                "&rtl" + self.word_entry_row.get_text()
+                if prev_dir != Gtk.TextDirection.RTL
+                else self.word_entry_row.get_text()
+            ),
+        )
 
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:

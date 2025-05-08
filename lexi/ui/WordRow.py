@@ -43,11 +43,12 @@ class WordRow(Adw.ActionRow):
 
         self.word.connect("notify::word", self.__reactivity)
         self.word.connect("tags-changed", self.__reactivity)
+        self.word.connect("translations-changed", self.__reactivity)
 
     def __reactivity(self, *_args) -> None:
-        self.title = self.word.word
+        self.title = self.word.word.replace("&rtl", "")
         try:
-            self.subtitle = self.word.translations[0]
+            self.subtitle = self.word.translations[0].replace("&rtl", "")
         except IndexError:
             _("No translation yet")
 

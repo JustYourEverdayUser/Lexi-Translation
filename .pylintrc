@@ -22,6 +22,8 @@ disable=raw-checker-failed,
         no-name-in-module,
         unspecified-encoding,
         consider-using-with,
+        too-many-arguments,
+        too-many-positional-arguments,
         no-member, # Some kind of workaround, since after updating pygobject stubs Pylint uses this message even if class HAS this member
         no-value-for-parameter # Some kind of workaround, since after updating pygobject stubs Pylint uses this message in situations when it shouldn't
 

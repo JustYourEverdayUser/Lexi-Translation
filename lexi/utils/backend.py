@@ -1,3 +1,5 @@
+"""Module, providing backend classes for Lexi (Word, Lexicon)"""
+
 import os
 import uuid
 from pathlib import Path

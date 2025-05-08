@@ -1,3 +1,5 @@
+"""Methods for migrating from previous versions of config and lexicons to newer ones"""
+
 import os
 from pathlib import Path
 

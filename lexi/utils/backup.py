@@ -1,3 +1,5 @@
+"""Methods for Lexi database Export/Import in various formats"""
+
 import glob
 import os
 import pathlib

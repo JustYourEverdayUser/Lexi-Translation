@@ -1,9 +1,10 @@
 # pylint: disable=all
-from typing import Any, Optional
+from typing import Any
 
-from gi.repository import Adw, Gio, GLib, Gtk
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from lexi.ui import widgets
+from lexi.utils.backend import Lexicon, Word
 
 class LexiWindow(Adw.ApplicationWindow):
     """App window class"""
@@ -76,8 +77,8 @@ class LexiWindow(Adw.ApplicationWindow):
     sort_type: str
 
     # Variables
-    loaded_lexicon: widgets.LexiconRow
-    loaded_word: widgets.WordRow
+    loaded_lexicon: Lexicon
+    loaded_word: Word
     selected_words: list[widgets.WordRow]
 
     def __init__(self, **kwargs: Any) -> None: ...
@@ -127,3 +128,7 @@ class LexiWindow(Adw.ApplicationWindow):
     def on_assign_word_type_clicked(self, *_args: Any) -> None: ...
     def open_filer_dialog(self, *_args: Any) -> None: ...
     def reset_filters(self, *_args: Any) -> None: ...
+    @property
+    def loaded_lexicon(self) -> Lexicon: ...
+    @property
+    def loaded_word(self) -> Word: ...

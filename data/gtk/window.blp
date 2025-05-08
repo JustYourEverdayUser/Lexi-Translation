@@ -293,6 +293,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add reference");
+                            clicked => $on_add_reference_button_clicked();
 
                             styles ["flat"]
                           }
