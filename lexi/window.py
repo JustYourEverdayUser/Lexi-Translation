@@ -1,7 +1,4 @@
 import os
-import random
-import string
-from inspect import getargvalues
 
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
@@ -52,6 +49,7 @@ class LexiWindow(Adw.ApplicationWindow):
     lexicon_search_entry: Gtk.Entry = gtc()
 
     # Word-related components
+    sort_menu_button: Gtk.MenuButton = gtc()
     word_entry_row: Adw.EntryRow = gtc()
     pronunciation_entry_row: Adw.EntryRow = gtc()
     translations_expander_row: Adw.ExpanderRow = gtc()
@@ -64,6 +62,7 @@ class LexiWindow(Adw.ApplicationWindow):
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
     assign_word_type_dialog: Adw.Dialog = gtc()
     assign_word_type_dialog_list_box: Gtk.ListBox = gtc()
+    filter_button: Gtk.Button = gtc()
     filter_dialog: Adw.Dialog = gtc()
     filter_dialog_list_box: Gtk.ListBox = gtc()
 
@@ -90,7 +89,9 @@ class LexiWindow(Adw.ApplicationWindow):
     _loaded_word: Word = None
     selected_words: list = []
 
-    def __init__(self, **kwargs) -> None:
+    _state: enums.WindowState = None
+
+    def __init__(self, **kwargs) -> "LexiWindow":
         super().__init__(**kwargs)
         # Add a CSS class for development mode
         if shared.APP_ID.endswith("Devel"):
@@ -114,6 +115,7 @@ class LexiWindow(Adw.ApplicationWindow):
         # key_kapture_controller.connect("key-pressed", self.on_key_pressed)
         self.connect("notify::loaded-lexicon", self.__on_lexicon_changed)
         self.connect("notify::loaded-word", self.__on_word_changed)
+        self.connect("notify::state", self.__on_state_change)
 
         # Extracts ListBoxes from expander rows
         for epxander_row in (
@@ -139,6 +141,7 @@ class LexiWindow(Adw.ApplicationWindow):
                 if isinstance(_item, Gtk.Text):
                     self.pronunciation_entry_row_text = _item
 
+        self.__on_state_change(state_=enums.WindowState.EMPTY)
         self.build_sidebar()
 
     def build_sidebar(self) -> None:
@@ -235,13 +238,17 @@ class LexiWindow(Adw.ApplicationWindow):
         """Handle the lexicon change event"""
         if self.loaded_lexicon is not None:
             self.lexicon_list_box.remove_all()
+            if len(self.loaded_lexicon) == 0:
+                self.set_property("state", enums.WindowState.EMPTY_WORDS)
+                return
             for word in self.loaded_lexicon:  # pylint: disable=not-an-iterable
                 word_row = WordRow(word)
                 self.lexicon_list_box.append(word_row)
             self.lexicon_scrolled_window.set_child(self.lexicon_list_box)
             self.lexicon_nav_page.set_title(self.loaded_lexicon.name)
+            self.set_property("state", enums.WindowState.WORDS)
         else:
-            self.lexicon_scrolled_window.set_child(self.lexicon_not_selected)
+            self.set_property("state", enums.WindowState.EMPTY)
 
     def __on_word_changed(self, *_args) -> None:
         """Handle the word change event"""
@@ -279,10 +286,14 @@ class LexiWindow(Adw.ApplicationWindow):
                         "direction-changed", self.__list_prop_dir_changed
                     )
                     expander_row[0].add_row(row)
+            self.__set_row_sensitiveness(True)
 
     @Gtk.Template.Callback()
     def on_word_entry_changed(self, text: Gtk.Text) -> None:
-        self.loaded_word.set_property("word", text.get_text())
+        try:
+            self.loaded_word.set_property("word", text.get_text())
+        except AttributeError:
+            logger.debug("Failed to set the “word” property of the loaded_word")
 
     @Gtk.Template.Callback()
     def on_pronunciation_entry_changed(self, text: Gtk.Text) -> None:
@@ -332,6 +343,22 @@ class LexiWindow(Adw.ApplicationWindow):
                 )
                 break
 
+    def __set_row_sensitiveness(self, sensitive: bool) -> None:
+        self.word_entry_row.set_sensitive(sensitive)
+        self.pronunciation_entry_row.set_sensitive(sensitive)
+        self.translations_expander_row.set_sensitive(sensitive)
+        self.word_type_expander_row.set_sensitive(sensitive)
+        self.examples_expander_row.set_sensitive(sensitive)
+        self.references_expander_row.set_sensitive(sensitive)
+        if not sensitive:
+            self.set_property("loaded-word", None)
+            self.word_entry_row.set_text("")
+            self.pronunciation_entry_row.set_text("")
+            self.translations_expander_row.set_expanded(sensitive)
+            self.word_type_expander_row.set_expanded(sensitive)
+            self.examples_expander_row.set_expanded(sensitive)
+            self.references_expander_row.set_expanded(sensitive)
+
     @Gtk.Template.Callback()
     def load_lexicon(self, _list_box: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
         """Load the lexicon into the window static UI elements"""
@@ -342,8 +369,11 @@ class LexiWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def load_word(self, _list_box: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
         """Load the word into the window static UI elements"""
-        logger.info("Loading “%s” word into the UI", row.word.word)
-        self.set_property("loaded-word", row.word)
+        try:
+            logger.info("Loading “%s” word into the UI", row.word.word)
+            self.set_property("loaded-word", row.word)
+        except AttributeError:
+            pass
 
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:
@@ -364,6 +394,31 @@ class LexiWindow(Adw.ApplicationWindow):
     def loaded_word(self, word: Word) -> None:
         """The currently loaded word"""
         self._loaded_word = word
+
+    @GObject.Property()
+    def state(self) -> enums.WindowState:
+        return self._state
+
+    @state.setter
+    def state(self, state: enums.WindowState) -> None:
+        self._state = state
+
+    def __on_state_change(self, *_args, state_: enums.WindowState = None) -> None:
+        state = self.state if not state_ else state_
+        match state:
+            case enums.WindowState.EMPTY:
+                self.words_bottom_bar_revealer.set_reveal_child(False)
+                self.lexicon_scrolled_window.set_child(self.lexicon_not_selected)
+                self.sort_menu_button.set_sensitive(False)
+                self.filter_button.set_sensitive(False)
+                self.__set_row_sensitiveness(False)
+            case enums.WindowState.EMPTY_WORDS:
+                self.__on_state_change(state_=enums.WindowState.EMPTY)
+                self.lexicon_scrolled_window.set_child(self.no_words_yet)
+            case enums.WindowState.WORDS:
+                self.words_bottom_bar_revealer.set_reveal_child(True)
+                self.sort_menu_button.set_sensitive(True)
+                self.filter_button.set_sensitive(True)
 
 
 class EntryRow(Adw.EntryRow):

@@ -157,11 +157,8 @@ class Lexicon(GObject.Object):
         """
         for i, word in enumerate(self.words):
             if word.id == id_:
+                self._data["words"].remove(word._word) # pylint: disable=protected-access
                 self.words.pop(i)
-                for _word in self._data["words"]:
-                    if _word["id"] == id_:
-                        self._data["words"].remove(_word)
-                        break
                 break
         else:
             raise ValueError("Word not found")
