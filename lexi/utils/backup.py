@@ -43,7 +43,7 @@ def export_database(path: str) -> None:
         if os.path.exists(path):
             toast = Adw.Toast(
                 # Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-                title=_(f"Backup exported successfully: {path}"),
+                title=_("Backup exported successfully: {path}").format(path=path),
                 button_label=_("Open"),
             )
             toast.connect("button-clicked", shared.win.open_dir, os.path.dirname(path))
@@ -233,7 +233,7 @@ def export_memorado_database(path: str) -> None:
     if os.path.exists(path):
         toast = Adw.Toast(
             # Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF. Memorado is the name of the other app and SHOULDN'T be translated
-            title=_(f"Memorado database exported successfully: {path}"),
+            title=_("Memorado database exported successfully: {path}").format(path=path),
             button_label=_("Open"),
         )
         toast.connect("button-clicked", shared.win.open_dir, os.path.dirname(path))

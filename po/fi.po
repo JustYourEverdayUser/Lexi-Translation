@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 17:08+0300\n"
+"POT-Creation-Date: 2025-05-09 02:32+0300\n"
 "PO-Revision-Date: 2025-05-04 21:03+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/lexi/lexi/fi/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Lexicons"
 msgstr "Leksikot"
 
-#: data/gtk/window.blp:47 data/gtk/window.blp:573
+#: data/gtk/window.blp:47 data/gtk/window.blp:560
 msgid "Toggle sidebar"
 msgstr "Sivupalkki päällä/pois"
 
@@ -50,19 +50,19 @@ msgstr "Järjestä…"
 msgid "Filter words by types"
 msgstr "Suodata sanoja tyypin mukaan"
 
-#: data/gtk/window.blp:165
+#: data/gtk/window.blp:167
 msgid "Select words"
 msgstr "Valitse sanat"
 
-#: data/gtk/window.blp:178
+#: data/gtk/window.blp:180
 msgid "Delete selected words"
 msgstr "Poista valitut sanat"
 
-#: data/gtk/window.blp:188
+#: data/gtk/window.blp:191
 msgid "Find a word"
 msgstr "Löydä sana"
 
-#: data/gtk/window.blp:191
+#: data/gtk/window.blp:193
 msgid ""
 "Query syntax:\n"
 "Word-based: Just word or its translation\n"
@@ -74,295 +74,294 @@ msgid ""
 "BUT NOT: “#family mom” or “#famil”"
 msgstr ""
 
-#: data/gtk/window.blp:197 data/gtk/ui/LexiconRow.blp:79
+#: data/gtk/window.blp:199 data/gtk/ui/LexiconRow.blp:77
 msgid "Add word"
 msgstr "Lisää sana"
 
-#: data/gtk/window.blp:209 data/gtk/window.blp:235 data/gtk/window.blp:614
-#: data/gtk/ui/LexiconRow.blp:57 lexi/ui/widgets.py:342 lexi/ui/widgets.py:343
-#: lexi/ui/widgets.py:530 lexi/ui/widgets.py:685 lexi/ui/widgets.py:686
+#: data/gtk/window.blp:210 data/gtk/window.blp:228 data/gtk/window.blp:601
+#: data/gtk/ui/LexiconRow.blp:55 lexi/window.py:721
 msgid "Word"
 msgstr "Sana"
 
-#: data/gtk/window.blp:216
-msgid "Save"
-msgstr "Tallenna"
-
-#: data/gtk/window.blp:241 data/io.github.dzheremi2.lexi.metainfo.xml.in:14
+#: data/gtk/window.blp:234 data/io.github.dzheremi2.lexi.metainfo.xml.in:14
 msgid "Pronunciation"
 msgstr "Ääntäminen"
 
-#: data/gtk/window.blp:247
+#: data/gtk/window.blp:240
 msgid "Translations"
 msgstr "Käännökset"
 
-#: data/gtk/window.blp:255
+#: data/gtk/window.blp:248
 msgid "Add translation"
 msgstr "Lisää käännös"
 
-#: data/gtk/window.blp:264
+#: data/gtk/window.blp:257
 msgid "Word Type"
 msgstr "Sanatyyppi"
 
-#: data/gtk/window.blp:273
+#: data/gtk/window.blp:266
 msgid "Assign word type"
 msgstr "Määritä sanatyyppi"
 
-#: data/gtk/window.blp:282
+#: data/gtk/window.blp:275
 msgid "Examples"
 msgstr "Esimerkit"
 
-#: data/gtk/window.blp:290 data/gtk/window.blp:307
+#: data/gtk/window.blp:283
 msgid "Add example"
 msgstr "Lisää esimerkki"
 
-#: data/gtk/window.blp:299 data/gtk/window.blp:626
+#: data/gtk/window.blp:292 data/gtk/window.blp:613
 msgid "References"
 msgstr "Viittaukset"
 
-#: data/gtk/window.blp:363
+#: data/gtk/window.blp:300
+#, fuzzy
+msgid "Add reference"
+msgstr "Asetukset"
+
+#: data/gtk/window.blp:356
 msgid "Refer a Word"
 msgstr "Viittaa sanaa"
 
-#: data/gtk/window.blp:394
+#: data/gtk/window.blp:387
 msgid "Assign Word Type"
 msgstr "Määritä sanatyyppi"
 
-#: data/gtk/window.blp:425
+#: data/gtk/window.blp:418
 msgid "Filter by Word Type"
 msgstr "Suodata sanatyypin mukaan"
 
-#: data/gtk/window.blp:464
+#: data/gtk/window.blp:457
 #, fuzzy
 msgid "Reset All"
 msgstr "Nollaa"
 
-#: data/gtk/window.blp:477
+#: data/gtk/window.blp:470
 msgid "No Lexicons found yet"
 msgstr "Leksikkoja ei löytynyt vielä"
 
-#: data/gtk/window.blp:484
+#: data/gtk/window.blp:477
 msgid "No Lexicons found"
 msgstr "Leksikkoja ei löytynyt"
 
-#: data/gtk/window.blp:485
+#: data/gtk/window.blp:478
 msgid "No Lexicons found for this search request"
 msgstr "Tällä hakupyynnöllä ei löytynyt leksikkoja"
 
-#: data/gtk/window.blp:492
+#: data/gtk/window.blp:485
 msgid "No Words found yet"
 msgstr "Sanoja ei löytynyt vielä"
 
-#: data/gtk/window.blp:499 data/gtk/ui/LexiconRow.blp:32
+#: data/gtk/window.blp:492 data/gtk/ui/LexiconRow.blp:30
 msgid "Add Word"
 msgstr "Lisää sana"
 
-#: data/gtk/window.blp:510
+#: data/gtk/window.blp:502
 msgid "No Words found"
 msgstr "Sanoja ei löytynyt"
 
-#: data/gtk/window.blp:511
+#: data/gtk/window.blp:503
 msgid "No Words found for this search request"
 msgstr "Tällä hakupyynnöllä ei löytynyt sanoja"
 
-#: data/gtk/window.blp:516
+#: data/gtk/window.blp:508
 msgid "No Lexicon selected"
 msgstr "Leksikkoa ei ole valittu"
 
-#: data/gtk/window.blp:517
+#: data/gtk/window.blp:509
 msgid "Please select a Lexicon to view its words"
 msgstr "Valitse leksikko nähdäksesi siihen kuuluvat sanat"
 
-#: data/gtk/window.blp:523
+#: data/gtk/window.blp:515
 msgid "Add new Lexicon"
 msgstr "Lisää uusi leksikko"
 
-#: data/gtk/window.blp:526 data/gtk/ui/LexiconRow.blp:102
+#: data/gtk/window.blp:519 data/gtk/ui/LexiconRow.blp:100
 msgid "Name"
 msgstr "Nimi"
 
-#: data/gtk/window.blp:532 data/gtk/ui/LexiconRow.blp:107
-#: data/gtk/ui/LexiconRow.blp:119 data/gtk/ui/Preferences.blp:101
-#: data/gtk/ui/WordRow.blp:103
+#: data/gtk/window.blp:524 data/gtk/ui/LexiconRow.blp:105
+#: data/gtk/ui/LexiconRow.blp:117 data/gtk/ui/Preferences.blp:102
+#: data/gtk/ui/WordRow.blp:102
 msgid "Cancel"
 msgstr "Peru"
 
-#: data/gtk/window.blp:533 data/gtk/ui/WordRow.blp:104
+#: data/gtk/window.blp:525 data/gtk/ui/WordRow.blp:103
 msgid "Add"
 msgstr "Lisää"
 
-#: data/gtk/window.blp:545 data/gtk/ui/Preferences.blp:7
+#: data/gtk/window.blp:537 data/gtk/ui/Preferences.blp:7
 msgid "General"
 msgstr "Yleiset"
 
-#: data/gtk/window.blp:548
+#: data/gtk/window.blp:540
 msgid "Quit"
 msgstr "Lopeta"
 
-#: data/gtk/window.blp:553
+#: data/gtk/window.blp:545
 msgid "Search words"
 msgstr "Etsi sanoja"
 
-#: data/gtk/window.blp:558
-msgid "Show filter dialog"
-msgstr "Näytä suodatusikkuna"
-
-#: data/gtk/window.blp:563
+#: data/gtk/window.blp:550
 msgid "Show preferences"
 msgstr "Näytä asetukset"
 
-#: data/gtk/window.blp:568 data/gtk/window.blp:592
+#: data/gtk/window.blp:555 data/gtk/window.blp:579
 msgid "Keybindings"
 msgstr "Pikanäppäimet"
 
-#: data/gtk/window.blp:579 data/gtk/ui/Preferences.blp:11
+#: data/gtk/window.blp:566 data/gtk/ui/Preferences.blp:11
 msgid "Editing"
 msgstr "Muokkaus"
 
-#: data/gtk/window.blp:582
+#: data/gtk/window.blp:569
 msgid "Add new word"
 msgstr "Lisää uusi sana"
 
-#: data/gtk/window.blp:591
+#: data/gtk/window.blp:578
 msgid "Preferences"
 msgstr "Asetukset"
 
-#: data/gtk/window.blp:593
+#: data/gtk/window.blp:580
 msgid "About"
 msgstr "Tietoja"
 
-#: data/gtk/window.blp:600
+#: data/gtk/window.blp:587
 msgid "Ascending"
 msgstr "Nouseva"
 
-#: data/gtk/window.blp:606
+#: data/gtk/window.blp:593
 msgid "Descending"
 msgstr "Laskeva"
 
-#: data/gtk/window.blp:620
+#: data/gtk/window.blp:607
 msgid "First Translation"
 msgstr "Ensimmäinen käännös"
 
-#: data/gtk/ui/LexiconRow.blp:63 lexi/ui/widgets.py:322 lexi/ui/widgets.py:505
+#: data/gtk/ui/LexiconRow.blp:61 lexi/window.py:345 lexi/window.py:518
 msgid "Translation"
 msgstr "Käännös"
 
-#: data/gtk/ui/LexiconRow.blp:68 lexi/ui/widgets.py:323 lexi/ui/widgets.py:507
+#: data/gtk/ui/LexiconRow.blp:66 lexi/window.py:346 lexi/window.py:524
 msgid "Example"
 msgstr "Esimerkki"
 
-#: data/gtk/ui/LexiconRow.blp:98
+#: data/gtk/ui/LexiconRow.blp:96
 msgid "Rename this Lexicon"
 msgstr "Nimetäänkö tämä leksikko uudelleen?"
 
-#: data/gtk/ui/LexiconRow.blp:108 data/gtk/ui/LexiconRow.blp:126
+#: data/gtk/ui/LexiconRow.blp:106 data/gtk/ui/LexiconRow.blp:124
 msgid "Rename"
 msgstr "Nimeä uudelleen"
 
-#: data/gtk/ui/LexiconRow.blp:114
+#: data/gtk/ui/LexiconRow.blp:112
 msgid "Delete this Lexicon?"
 msgstr "Poistetaanko tämä leksikko?"
 
-#: data/gtk/ui/LexiconRow.blp:120 data/gtk/ui/LexiconRow.blp:127
+#: data/gtk/ui/LexiconRow.blp:118 data/gtk/ui/LexiconRow.blp:125
 msgid "Delete"
 msgstr "Poista"
 
 #: data/gtk/ui/Preferences.blp:14
-msgid "Automatically save word on change"
-msgstr "Tallenna sana automaattisesti sen muuttuessa"
+msgid "Save changes on app exit"
+msgstr ""
 
-#: data/gtk/ui/Preferences.blp:19
+#: data/gtk/ui/Preferences.blp:15
+msgid ""
+"Save changes to the files only after the app exit to reduce the number of "
+"disk accesses\n"
+"May cause data loss"
+msgstr ""
+
+#: data/gtk/ui/Preferences.blp:20
 msgid "Debug"
 msgstr "Vianjäljitys"
 
-#: data/gtk/ui/Preferences.blp:22
+#: data/gtk/ui/Preferences.blp:23
 msgid "Use Debug logging profile"
 msgstr "Käytä vianjäljityksen lokitusprofiilia"
 
-#: data/gtk/ui/Preferences.blp:28
+#: data/gtk/ui/Preferences.blp:29
 #, fuzzy
 msgid "Database"
 msgstr "Vie tietokanta"
 
-#: data/gtk/ui/Preferences.blp:33
+#: data/gtk/ui/Preferences.blp:34
 msgid "Backup"
 msgstr "Varmuuskopio"
 
-#: data/gtk/ui/Preferences.blp:37
+#: data/gtk/ui/Preferences.blp:38
 msgid "Export Database"
 msgstr "Vie tietokanta"
 
-#: data/gtk/ui/Preferences.blp:43
+#: data/gtk/ui/Preferences.blp:44
 msgid "Import Database"
 msgstr "Tuo tietokanta"
 
-#: data/gtk/ui/Preferences.blp:51
+#: data/gtk/ui/Preferences.blp:52
 #, fuzzy
 msgid "Export"
 msgstr "Tuo"
 
-#: data/gtk/ui/Preferences.blp:55
+#: data/gtk/ui/Preferences.blp:56
 msgid "Export to Memorado"
 msgstr ""
 
-#: data/gtk/ui/Preferences.blp:56
+#: data/gtk/ui/Preferences.blp:57
 msgid "Export Lexi database as Memorado compatible database"
 msgstr ""
 
-#: data/gtk/ui/Preferences.blp:63
+#: data/gtk/ui/Preferences.blp:64
 msgid "Word Types"
 msgstr "Sanatyypit"
 
-#: data/gtk/ui/Preferences.blp:69
+#: data/gtk/ui/Preferences.blp:70
 msgid "Write new word type name here…"
 msgstr "Kirjoita uusi sanatyypin nimi tähän…"
 
-#: data/gtk/ui/Preferences.blp:94
+#: data/gtk/ui/Preferences.blp:95
 msgid "Import Database?"
 msgstr "Tuodaanko tietokanta?"
 
-#: data/gtk/ui/Preferences.blp:95
+#: data/gtk/ui/Preferences.blp:96
 msgid "Importing database will ERASE the existing one!"
 msgstr "Tietokannan tuominen YLIKIRJOITTAA aiemman tietokannan sisällön!"
 
-#: data/gtk/ui/Preferences.blp:102
+#: data/gtk/ui/Preferences.blp:103
 msgid "Import"
 msgstr "Tuo"
 
-#: data/gtk/ui/ReferenceRow.blp:14
-msgid "Delete this reference"
-msgstr "Poista tämä viittaus"
-
-#: data/gtk/ui/WordRow.blp:56
+#: data/gtk/ui/WordRow.blp:54
 msgid "Add new tag"
 msgstr "Lisää uusi tunniste"
 
-#: data/gtk/ui/WordRow.blp:69
+#: data/gtk/ui/WordRow.blp:67
 msgid "Selection check button"
 msgstr ""
 
-#: data/gtk/ui/WordRow.blp:92
+#: data/gtk/ui/WordRow.blp:90
 msgid "Add Tag"
 msgstr "Lisää tunniste"
 
-#: data/gtk/ui/WordRow.blp:93
+#: data/gtk/ui/WordRow.blp:91
 msgid ""
 "Type a new tag WITHOUT hashtag prefix and spaces. Existed tag also would be "
 "rejected"
 msgstr ""
 
-#: data/gtk/ui/WordRow.blp:98
+#: data/gtk/ui/WordRow.blp:96
 msgid "Tag…"
 msgstr "Tunniste…"
 
 #. Translators: The app name is untranslatable. Just rewrite it on your language
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:7
-#: data/io.github.dzheremi2.lexi.desktop.in:4
+#: data/io.github.dzheremi2.lexi.desktop.in:3
 msgid "Lexi"
 msgstr "Lexi"
 
 #: data/io.github.dzheremi2.lexi.metainfo.xml.in:8
-#: data/io.github.dzheremi2.lexi.desktop.in:5
+#: data/io.github.dzheremi2.lexi.desktop.in:4
 msgid "Build your own dictionary"
 msgstr "Rakenna oma sanasto"
 
@@ -414,11 +413,9 @@ msgid "Main window on smaller display"
 msgstr "Pääikkuna pienellä näytöllä"
 
 #. Translators: Search terms to find this application. Please, do NOT delete original english keywords, just add yuor language translations to them. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.github.dzheremi2.lexi.desktop.in:12
+#: data/io.github.dzheremi2.lexi.desktop.in:11
 msgid "dict;dictionary;word;words;lexi;lexicon;lexicons;"
-msgstr ""
-"dict;dictionary;word;words;lexi;lexicon;lexicons;sanasto;leksikko;sana;"
-"sanoja;"
+msgstr "dict;dictionary;word;words;lexi;lexicon;lexicons;sanasto;leksikko;sana;sanoja;"
 
 #: lexi/enums.py:72
 msgid "Noun"
@@ -473,87 +470,92 @@ msgid "Suffix"
 msgstr "Takaliite"
 
 #. Translators: Add Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog. PLEASE, DON'T DELETE PREVIOUS TRANSLATORS CREDITS AND SEPARATE YOURSELF BY NEWLINE `\n` METASYMBOL
-#: lexi/main.py:149
+#: lexi/main.py:152
 msgid "translator-credits"
 msgstr "Jiri Grönroos"
 
-#: lexi/main.py:152
+#: lexi/main.py:155
 msgid "Inspiration"
 msgstr "Inspiraatio"
 
-#: lexi/main.py:159
+#: lexi/main.py:162
 msgid "Advisers"
 msgstr ""
 
 #. Translators: This is the name of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:168
+#: lexi/main.py:171
 msgid "Chronograph"
 msgstr "Chronograph"
 
 #. Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:170
+#: lexi/main.py:173
 msgid "Sync lyrics of your loved songs"
 msgstr "Synkronoi rakastamiesi kappaleiden sanat"
 
-#: lexi/window.py:103
-msgid "Word autosave is enabled"
-msgstr "Sanan automaattinen tallennus on käytössä"
-
-#: lexi/window.py:520
+#: lexi/window.py:481
 msgid "You have already referenced all words"
 msgstr "Olet jo viitannut kaikki sanat"
 
-#: lexi/window.py:655
-msgid "Word saved"
-msgstr "Sana tallennettu"
+#: lexi/window.py:495
+#, fuzzy
+msgid "No word types available"
+msgstr "Sanatyyppejä ei ole vielä luotu"
 
-#: lexi/ui/widgets.py:294 lexi/ui/widgets.py:480 lexi/ui/widgets.py:482
+#: lexi/window.py:495
+msgid "Configure"
+msgstr ""
+
+#: lexi/ui/Preferences.py:183
+msgid "No word types created yet"
+msgstr "Sanatyyppejä ei ole vielä luotu"
+
+#: lexi/ui/Preferences.py:184
+msgid "Add a new word type to get started"
+msgstr "Lisää uusi sanatyyppi aloittaaksesi"
+
+#: lexi/ui/ReferenceRow.py:23 lexi/ui/TypeRow.py:20
+msgid "Delete this reference"
+msgstr "Poista tämä viittaus"
+
+#: lexi/ui/ReferenceRow.py:36 lexi/ui/WordRow.py:41 lexi/ui/WordRow.py:100
 msgid "No translation yet"
 msgstr "Ei käännöstä vielä"
 
-#: lexi/ui/widgets.py:647
+#: lexi/ui/WordRow.py:143
 msgid ""
 "Click LMB to search words with this tag\n"
 "Click RMB to remove this tag"
 msgstr ""
 
-#: lexi/ui/Preferences.py:78
-msgid "No word types created yet"
-msgstr "Sanatyyppejä ei ole vielä luotu"
-
-#: lexi/ui/Preferences.py:79
-msgid "Add a new word type to get started"
-msgstr "Lisää uusi sanatyyppi aloittaaksesi"
-
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
-#: lexi/utils/backup.py:45
+#: lexi/utils/backup.py:46
 #, python-brace-format
 msgid "Backup exported successfully: {path}"
 msgstr "Varmuuskopio viety onnistuneesti: {path}"
 
-#: lexi/utils/backup.py:46 lexi/utils/backup.py:238
+#: lexi/utils/backup.py:47 lexi/utils/backup.py:237
 msgid "Open"
 msgstr "Avaa"
 
-#: lexi/utils/backup.py:74
+#: lexi/utils/backup.py:75
 msgid "Database imported successfully"
 msgstr "Tietokanta tuotu onnistuneesti"
 
-#: lexi/utils/backup.py:99 lexi/utils/backup.py:148
+#: lexi/utils/backup.py:101 lexi/utils/backup.py:149
 msgid "Incorrect Archive!"
 msgstr "Virheellinen arkisto!"
 
-#: lexi/utils/backup.py:99
+#: lexi/utils/backup.py:101
 msgid "Why?"
 msgstr "Miksi?"
 
-#: lexi/utils/backup.py:150
+#: lexi/utils/backup.py:151
 msgid ""
 "This archive seems to be incorrect, since it wasn't passed proof of content "
 "challenge: no config.yaml file and/or lexicons folder inside"
 msgstr ""
 
-#: lexi/utils/backup.py:153
+#: lexi/utils/backup.py:154
 msgid "Close"
 msgstr "Sulje"
 
@@ -572,10 +574,25 @@ msgid "Exit Lexi"
 msgstr "Lopeta Lexi"
 
 #. Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF. Memorado is the name of the other app and SHOULDN'T be translated
-#: lexi/utils/backup.py:237
+#: lexi/utils/backup.py:236
 #, fuzzy, python-brace-format
 msgid "Memorado database exported successfully: {path}"
 msgstr "Varmuuskopio viety onnistuneesti: {path}"
+
+#~ msgid "Save"
+#~ msgstr "Tallenna"
+
+#~ msgid "Show filter dialog"
+#~ msgstr "Näytä suodatusikkuna"
+
+#~ msgid "Automatically save word on change"
+#~ msgstr "Tallenna sana automaattisesti sen muuttuessa"
+
+#~ msgid "Word autosave is enabled"
+#~ msgstr "Sanan automaattinen tallennus on käytössä"
+
+#~ msgid "Word saved"
+#~ msgstr "Sana tallennettu"
 
 #~ msgid "Main window with words sorted by reference count"
 #~ msgstr "Pääikkuna, jossa sanat järjestetty viittausten määrän mukaan"

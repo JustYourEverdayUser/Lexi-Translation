@@ -3,7 +3,6 @@
 data/gtk/window.blp
 data/gtk/ui/LexiconRow.blp
 data/gtk/ui/Preferences.blp
-data/gtk/ui/ReferenceRow.blp
 data/gtk/ui/WordRow.blp
 
 data/io.github.dzheremi2.lexi.metainfo.xml.in
@@ -12,6 +11,8 @@ data/io.github.dzheremi2.lexi.desktop.in
 lexi/enums.py
 lexi/main.py
 lexi/window.py
-lexi/ui/widgets.py
 lexi/ui/Preferences.py
+lexi/ui/ReferenceRow.py
+lexi/ui/TypeRow.py
+lexi/ui/WordRow.py
 lexi/utils/backup.py
