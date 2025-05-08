@@ -242,6 +242,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add translation");
+                            clicked => $on_add_translation_button_clicked();
 
                             styles ["flat"]
                           }
@@ -275,6 +276,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add example");
+                            clicked => $on_add_example_button_clicked();
 
                             styles ["flat"]
                           }
@@ -290,7 +292,7 @@ template $LexiWindow : Adw.ApplicationWindow {
 
                           Button {
                             icon-name: "lexi-add-symbolic";
-                            tooltip-text: _("Add example");
+                            tooltip-text: _("Add reference");
 
                             styles ["flat"]
                           }

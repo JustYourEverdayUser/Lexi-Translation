@@ -1,10 +1,6 @@
-import logging
+from gi.repository import Adw, Gtk
 
-from gi.repository import Adw, Gio, Gtk
-
-from lexi import enums, shared
-from lexi.logging.logger import logger
-from lexi.utils import backup
+from lexi import shared
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 
@@ -24,4 +20,3 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     def __init__(self) -> None:
         super().__init__()
-        

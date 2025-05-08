@@ -1,9 +1,8 @@
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, GObject, Gtk
 
 from lexi import enums, shared
 from lexi.logging.logger import logger
 from lexi.ui.LexiconRow import LexiconRow
-from lexi.ui.Preferences import LexiPreferences
 from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon, Word
 
@@ -323,6 +322,7 @@ class LexiWindow(Adw.ApplicationWindow):
                 if _row == row:
                     __callable = getattr(self.loaded_word, f"rm_{row.id[:-1]}")
                     __callable(i)
+                    list_box.remove(row)
                     break
 
     def __list_prop_dir_changed(
@@ -388,6 +388,27 @@ class LexiWindow(Adw.ApplicationWindow):
             self.set_property("loaded-word", row.word)
         except AttributeError:
             pass
+
+    @Gtk.Template.Callback()
+    def on_add_translation_button_clicked(self, *_args) -> None:
+        self.loaded_word.add_translation("")
+        self.__add_prop_entryrow(
+            self.translations_list_box, "translations", _("Translation")
+        )
+
+    @Gtk.Template.Callback()
+    def on_add_example_button_clicked(self, *_args) -> None:
+        self.loaded_word.add_example("")
+        self.__add_prop_entryrow(self.examples_list_box, "examples", _("Example"))
+
+    def __add_prop_entryrow(
+        self, listbox: Gtk.ListBox, id_: str, title: str = ""
+    ) -> None:
+        row = EntryRow(id_, title=title, text="")
+        row.get_gtk_text().connect("changed", self.__update_word)
+        row.get_gtk_text().connect("backspace", self.__remove_list_prop)
+        row.get_gtk_text().connect("direction-changed", self.__list_prop_dir_changed)
+        listbox.append(row)
 
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:

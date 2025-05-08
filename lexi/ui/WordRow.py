@@ -1,5 +1,3 @@
-from typing import Self
-
 from gi.repository import Adw, Gtk
 
 from lexi import shared

@@ -41,7 +41,7 @@ class LexiconRow(Gtk.Box):
             "pressed", lambda *_: self.actions_popover.popup()
         )
 
-        actions: Gio.SimpleActionGroup = Gio.SimpleActionGroup.new()
+        actions: Gio.SimpleActionGroup = Gio.SimpleActionGroup()
         rename_action: Gio.SimpleAction = Gio.SimpleAction.new("rename", None)
         rename_action.connect("activate", self.__rename_lexicon)
         delete_action: Gio.SimpleAction = Gio.SimpleAction.new("delete", None)
