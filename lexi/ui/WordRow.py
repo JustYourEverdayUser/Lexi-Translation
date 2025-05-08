@@ -139,7 +139,6 @@ class WordRow(Adw.ActionRow):
                     label=f"#{tag}",
                     valign=Gtk.Align.CENTER,
                     css_classes=["pill", "small"],
-                    # pylint: disable=line-too-long
                     tooltip_text=_(
                         "Click LMB to search words with this tag\nClick RMB to remove this tag"
                     ),

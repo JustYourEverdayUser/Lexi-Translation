@@ -8,7 +8,7 @@ from lexi.ui.ReferenceRow import ReferenceRow
 from lexi.ui.TypeRow import TypeRow
 from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon, Word
-from lexi.utils.sort_filter import filter_words, sort_words
+from lexi.utils.sort_filter import filter_lexicons, filter_words, sort_words
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/window.ui")
@@ -111,7 +111,7 @@ class LexiWindow(Adw.ApplicationWindow):
         self.add_controller(key_kapture_controller)
 
         # Connections
-        # self.lexicons_list_box.set_filter_func(self.filter_lexicons)
+        self.lexicons_list_box.set_filter_func(filter_lexicons)
         self.lexicon_list_box.set_sort_func(sort_words)
         self.lexicon_list_box.set_filter_func(filter_words)
         self.search_bar.connect_entry(self.search_entry)
@@ -201,7 +201,6 @@ class LexiWindow(Adw.ApplicationWindow):
         self.lexicon_list_box.invalidate_sort()
         shared.state_schema.set_string("sort-type", self.sort_type)
 
-
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
         """Toggles the sidebar visibility"""
@@ -212,9 +211,10 @@ class LexiWindow(Adw.ApplicationWindow):
             not self.overlay_split_view.get_show_sidebar()
         )
 
-    @Gtk.Template.Callback()
     def on_toggle_search_action(self, *_args) -> None:
-        """Toggle the visibility of the search bar"""
+        """
+        Toggle the visibility of the search bar.
+        """
         if self.overlay_split_view.get_show_sidebar():
             search_bar = self.search_bar
             search_entry = self.search_entry
@@ -237,6 +237,13 @@ class LexiWindow(Adw.ApplicationWindow):
         self.add_lexicon_alert_dialog.present(self)
         self.add_lexicon_entry.set_buffer(Gtk.EntryBuffer())
         self.add_lexicon_entry.grab_focus()
+
+    @Gtk.Template.Callback()
+    def on_lexicon_search_entry_changed(self, *_args) -> None:
+        """
+        Invalidate the filter for the lexicons list box when the lexicons search entry changes
+        """
+        self.lexicons_list_box.invalidate_filter()
 
     @Gtk.Template.Callback()
     def on_add_lexicon_entry_changed(self, text: Gtk.Text) -> None:
@@ -553,6 +560,45 @@ class LexiWindow(Adw.ApplicationWindow):
         logger.debug("Showing filter dialog")
         self.filter_dialog.present(self)
 
+    def on_show_preferences_action(self, *_args) -> None:
+        """Present the Preferences dialog to the user"""
+        if LexiPreferences.opened:
+            return
+        preferences = LexiPreferences()
+        logger.debug("Showing preferences")
+        preferences.present(self)
+
+    def on_add_word_action(self, *_args) -> None:
+        if isinstance(self.loaded_lexicon, Lexicon):
+            self.status_page_add_word_button.emit("clicked")
+
+    def on_search_action(self, *_args) -> None:
+        """
+        Focus the words search entry when the search action is triggered (e.g., via `Ctrl+F`)
+        """
+        if self.words_bottom_bar_revealer.get_reveal_child():
+            self.lexicon_search_entry.grab_focus()
+
+    def open_dir(self, _toast: Adw.Toast, path: str) -> None:
+        """Opens the given path in the file manager
+
+        Parameters
+        ----------
+        _toast : Adw.Toast
+            toast which emitted this method
+        path : str
+            path to open
+        """
+        logger.info("Opening: “%s”", path)
+        Gio.AppInfo.launch_default_for_uri(f"file://{path}")
+
+    @Gtk.Template.Callback()
+    def on_search_entry_changed(self, *_args) -> None:
+        """
+        Invalidate the filter for the lexicon list box when the search entry changes
+        """
+        self.lexicon_list_box.invalidate_filter()
+
     @Gtk.Template.Callback()
     def reset_filters(self, *_args) -> None:
         """Reset all filters in the filter dialog"""
@@ -560,7 +606,6 @@ class LexiWindow(Adw.ApplicationWindow):
         for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
             row.get_activatable_widget().set_active(False)
         self.filter_dialog.close()
-
 
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:

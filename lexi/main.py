@@ -43,9 +43,9 @@ class LexiApplication(Adw.Application):
                 # fmt: off
                 ("quit", ("<primary>q","<primary>w",),),
                 ("toggle_sidebar", ("F9",), shared.win),
-                # ("show_preferences", ("<primary>comma",), shared.win),
-                # ("add_word", ("<primary>n",), shared.win),
-                # ("search", ("<primary>f",), shared.win),
+                ("show_preferences", ("<primary>comma",), shared.win),
+                ("add_word", ("<primary>n",), shared.win),
+                ("search", ("<primary>f",), shared.win),
                 ("about", )
                 # fmt: on
             }
@@ -126,7 +126,6 @@ class LexiApplication(Adw.Application):
             )
             scope.add_action(simple_action)
 
-    # pylint: disable=line-too-long
     def on_about_action(self, *_args) -> None:
         """Generates an app about dialog"""
 
@@ -215,7 +214,7 @@ def main(_version):
 
     # Migrate config file and lexicons to newer versions if their structure has changed
     if shared.config["version"] < shared.CACHEV:
-        logger.info("Migrating config file to %s", shared.CACHEV)
+        logger.info("Migrating database version to v%s", shared.CACHEV)
         # pylint: disable=import-outside-toplevel
         from lexi.utils import migrator
 

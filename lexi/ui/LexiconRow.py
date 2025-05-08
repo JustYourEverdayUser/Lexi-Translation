@@ -70,7 +70,7 @@ class LexiconRow(Gtk.Box):
             shared.lexictrl.rm_lexicon(self.lexicon.id)
             logger.info("Lexicon “%s” deleted", self.lexicon.name)
             shared.win.build_sidebar()
-            shared.win.set_property("state", enums.WindowState.EMPTY)
+            shared.win.set_property("loaded-lexicon", None)
         else:
             logger.debug("Lexicon “%s” deletion cancelled", self.lexicon.name)
 

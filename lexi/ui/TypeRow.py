@@ -2,7 +2,6 @@ from gi.repository import Adw, Gtk
 
 from lexi import enums, shared
 from lexi.logging.logger import logger
-from lexi.ui.Preferences import LexiPreferences
 
 
 class TypeRow(Adw.ActionRow):
@@ -38,6 +37,9 @@ class TypeRow(Adw.ActionRow):
         shared.win.assign_word_type_dialog.close()
 
     def __on_clicked(self, *_args) -> None:
+        # pylint: disable=import-outside-toplevel
+        from lexi.ui.Preferences import LexiPreferences
+
         if not isinstance(dialog := shared.win.props.visible_dialog, LexiPreferences):
             shared.win.loaded_word.rm_type(self.type)
             logger.info(

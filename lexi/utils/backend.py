@@ -36,6 +36,12 @@ class LexiconController:
                 )
                 self._lexicons.append(lexicon)
 
+    def regenerate_lexicons(self) -> Self:
+        """Remove all Lexicons from `self._lexicons` and populate it again"""
+        self._lexicons.clear()
+        self.__populate_lexicons()
+        return self
+
     def add_lexicon(self, name: str) -> Self:
         """Add a new lexicon to the controller
 
