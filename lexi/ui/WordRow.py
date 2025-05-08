@@ -123,8 +123,16 @@ class WordRow(Adw.ActionRow):
                 self.word.rm_tag(tag)
                 logger.info("Tag “#%s” removed from “%s”", tag, self.word.word)
 
+                for button in self.__tmp_tags_buttons:
+                    if button.get_label() == f"#{tag}":
+                        self.tags_box.remove(button)
+                        self.__tmp_tags_buttons.remove(button)
+                        break
+
             for _tag in self.__tmp_tags_buttons:
-                self.tags_box.remove(_tag)
+                if _tag.get_parent() == self.tags_box:
+                    self.tags_box.remove(_tag)
+            self.__tmp_tags_buttons.clear()
 
             for tag in self.word.tags:
                 button = Gtk.Button(

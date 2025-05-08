@@ -159,7 +159,8 @@ class Lexicon(GObject.Object):
         """
         for i, word in enumerate(self.words):
             if word.id == id_:
-                self._data["words"].remove(word._word) # pylint: disable=protected-access
+                # pylint: disable=protected-access
+                self._data["words"].remove(word._word)
                 self.words.pop(i)
                 break
         else:
@@ -395,6 +396,16 @@ class Word(GObject.Object):
     def tags(self) -> list[str]:
         """Tags of the word"""
         return self._word["tags"]
+
+    @property
+    def ref_count(self) -> int:
+        """The amount this word was referenced"""
+        cnt = 0
+        for word_ in self.parent_lexicon:
+            for reference in word_.references:
+                if reference == self.id:
+                    cnt += 1
+        return cnt
 
     # GObject properties
     @GObject.Property(type=str)

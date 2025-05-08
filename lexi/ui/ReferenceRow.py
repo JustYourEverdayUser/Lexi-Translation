@@ -32,7 +32,7 @@ class ReferenceRow(Adw.ActionRow):
         self.set_title(self.word.word.replace("&rtl", ""))
         self.set_subtitle(
             self.word.translations[0].replace("&rtl", "")
-            if self.word.translations[0]
+            if self.word.translations
             else _("No translation yet")
         )
 

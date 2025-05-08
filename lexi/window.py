@@ -1,4 +1,4 @@
-from gi.repository import Adw, GObject, Gtk
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from lexi import enums, shared
 from lexi.logging.logger import logger
@@ -8,6 +8,7 @@ from lexi.ui.ReferenceRow import ReferenceRow
 from lexi.ui.TypeRow import TypeRow
 from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon, Word
+from lexi.utils.sort_filter import sort_words
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/window.ui")
@@ -111,7 +112,7 @@ class LexiWindow(Adw.ApplicationWindow):
 
         # Connections
         # self.lexicons_list_box.set_filter_func(self.filter_lexicons)
-        # self.lexicon_list_box.set_sort_func(self.sort_words)
+        self.lexicon_list_box.set_sort_func(sort_words)
         # self.lexicon_list_box.set_filter_func(self.filter_words)
         self.search_bar.connect_entry(self.search_entry)
         # key_kapture_controller.connect("key-pressed", self.on_key_pressed)
@@ -161,6 +162,45 @@ class LexiWindow(Adw.ApplicationWindow):
             self.lexicons_scrolled_window.set_child(self.lexicons_list_box)
         else:
             self.lexicons_scrolled_window.set_child(self.no_lexicons_yet)
+
+    def on_sorting_method_changed(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None:
+        """
+        Handle changes to the sorting method.
+
+        Parameters
+        ----------
+        action : Gio.SimpleAction
+            The action that triggered the change.
+        state : GLib.Variant
+            The new state of the sorting method.
+        """
+        action.set_state(state)
+        self.sort_method = str(state).strip("'")
+        logger.info("Sorting method changed to “%s”, resorting", self.sort_method)
+        self.lexicon_list_box.invalidate_sort()
+        shared.state_schema.set_string("sort-method", self.sort_method)
+
+    def on_sorting_type_changed(
+        self, action: Gio.SimpleAction, state: GLib.Variant
+    ) -> None:
+        """
+        Handle changes to the sorting type.
+
+        Parameters
+        ----------
+        action : Gio.SimpleAction
+            The action that triggered the change.
+        state : GLib.Variant
+            The new state of the sorting type.
+        """
+        action.set_state(state)
+        self.sort_type = str(state).strip("'")
+        logger.info("Sorting type changed to “%s”, resorting", self.sort_type)
+        self.lexicon_list_box.invalidate_sort()
+        shared.state_schema.set_string("sort-type", self.sort_type)
+
 
     @Gtk.Template.Callback()
     def on_toggle_sidebar_action(self, *_args) -> None:
