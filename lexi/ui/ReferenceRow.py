@@ -28,7 +28,6 @@ class ReferenceRow(Adw.ActionRow):
             self.add_suffix(box)
             self.connect("activated", self.__on_activated_go)
         else:
-            self.set_activatable(True)
             self.connect("activated", self.__on_activated)
         self.set_title(self.word.word.replace("&rtl", ""))
         self.set_subtitle(

@@ -3,7 +3,9 @@ from gi.repository import Adw, GObject, Gtk
 from lexi import enums, shared
 from lexi.logging.logger import logger
 from lexi.ui.LexiconRow import LexiconRow
+from lexi.ui.Preferences import LexiPreferences
 from lexi.ui.ReferenceRow import ReferenceRow
+from lexi.ui.TypeRow import TypeRow
 from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon, Word
 
@@ -295,6 +297,11 @@ class LexiWindow(Adw.ApplicationWindow):
                 word = self.loaded_lexicon.get_word(reference)
                 self.references_list_box.append(ReferenceRow(word))
 
+            # Loading types
+            for type_ in self.loaded_word.types:
+                typerow = TypeRow(type_)
+                self.word_types_list_box.append(typerow)
+
             self.__set_row_sensitiveness(True)
             self.word_nav_page.set_title(self.loaded_word.word.replace("&rtl", ""))
 
@@ -413,6 +420,30 @@ class LexiWindow(Adw.ApplicationWindow):
             if word.id != self.loaded_word.id:
                 self.references_dialog_list_box.append(ReferenceRow(word, False))
         self.references_dialog.present(self)
+
+    @Gtk.Template.Callback()
+    def on_add_type_button_clicked(self, *_args) -> None:
+        self.assign_word_type_dialog_list_box.remove_all()
+        if len(shared.config["word-types"]) == 0:
+            toast = Adw.Toast(
+                title=_("No word types available"), button_label=_("Configure")
+            )
+            toast.connect(
+                "button-clicked",
+                lambda *_: (
+                    LexiPreferences().present(self)
+                    if not LexiPreferences.opened
+                    else None
+                ),
+            )
+            self.toast_overlay.add_toast(toast)
+            logger.debug("Rejecting adding a type: No types available")
+            return
+        for type_ in shared.config["word-types"]:
+            if type_ not in self.loaded_word.types:
+                typerow = TypeRow(type_, has_suffix=False)
+                self.assign_word_type_dialog_list_box.append(typerow)
+        self.assign_word_type_dialog.present(self)
 
     @Gtk.Template.Callback()
     def on_add_translation_button_clicked(self, *_args) -> None:

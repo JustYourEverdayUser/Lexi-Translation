@@ -260,6 +260,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Assign word type");
+                            clicked => $on_add_type_button_clicked();
 
                             styles ["flat"]
                           }
