@@ -114,3 +114,7 @@ class Schema:
     @staticmethod
     def USE_DEBUG_LOG() -> bool:
         return shared.schema.get_boolean("use-debug-log")
+
+    @staticmethod
+    def SAVE_ON_EXIT() -> bool:
+        return shared.schema.get_boolean("save-on-exit")

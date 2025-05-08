@@ -8,6 +8,15 @@ template $LexiPreferences : Adw.PreferencesDialog {
     icon-name: "lexi-general-symbolic";
 
     Adw.PreferencesGroup {
+      title: _("Editing");
+
+      Adw.SwitchRow save_on_exit_switch_row {
+        title: _("Save changes on app exit");
+        subtitle: _("Save changes to the files only after the app exit to reduce the number of disk accesses\nMay cause data loss");
+      }
+    }
+
+    Adw.PreferencesGroup {
       title: _("Debug");
 
       Adw.SwitchRow use_debug_log_switch_row {

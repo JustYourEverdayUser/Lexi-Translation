@@ -8,7 +8,7 @@ from typing import Iterator, Self, Union
 import yaml
 from gi.repository import GObject
 
-from lexi import shared
+from lexi import enums, shared
 from lexi.logging.logger import logger
 
 
@@ -182,7 +182,7 @@ class Lexicon(GObject.Object):
         self.save()
         return self
 
-    def save(self) -> None:
+    def _save(self) -> None:
         """Save the lexicon to the file"""
         words = []
         for word in self.words:
@@ -197,6 +197,10 @@ class Lexicon(GObject.Object):
             encoding=None,
             allow_unicode=True,
         )
+
+    def save(self) -> None:
+        if not enums.Schema.SAVE_ON_EXIT():
+            self._save()
 
     @classmethod
     def from_str(cls, path: str) -> "Lexicon":

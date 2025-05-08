@@ -10,7 +10,7 @@ gi.require_version("Adw", "1")
 # pylint: disable=wrong-import-position, wrong-import-order
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
-from lexi import shared
+from lexi import enums, shared
 from lexi.logging.logger import log_filename, log_system_info, logger, prev_log_filename
 from lexi.utils.backend import LexiconController
 from lexi.window import LexiWindow
@@ -99,6 +99,10 @@ class LexiApplication(Adw.Application):
             encoding=None,
             allow_unicode=True,
         )
+        if enums.Schema.SAVE_ON_EXIT():
+            logger.info("Saving Lexicons on exit")
+            for lexicon in shared.lexictrl:
+                lexicon._save()  # pylint: disable=protected-access
 
     def create_actions(self, actions: set) -> None:
         """Creates actions for provided scope with provided accels

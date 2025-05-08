@@ -16,6 +16,7 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     __gtype_name__ = "LexiPreferences"
 
+    save_on_exit_switch_row: Adw.SwitchRow = gtc()
     import_confirmation_dialog: Adw.AlertDialog = gtc()
     available_word_types_scrolled_window: Gtk.ScrolledWindow = gtc()
     available_word_types_list_box: Gtk.ListBox = gtc()
@@ -31,6 +32,12 @@ class LexiPreferences(Adw.PreferencesDialog):
         shared.schema.bind(
             "use-debug-log",
             self.use_debug_log_switch_row,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
+        )
+        shared.schema.bind(
+            "save-on-exit",
+            self.save_on_exit_switch_row,
             "active",
             Gio.SettingsBindFlags.DEFAULT,
         )
