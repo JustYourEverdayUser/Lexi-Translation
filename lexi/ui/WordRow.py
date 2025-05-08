@@ -10,7 +10,7 @@ gtc = Gtk.Template.Child  # pylint: disable=invalid-name
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/ui/WordRow.ui")
 class WordRow(Adw.ActionRow):
     """Word row class
-    
+
     Parameters
     ----------
     word : Word
@@ -19,7 +19,6 @@ class WordRow(Adw.ActionRow):
 
     __gtype_name__ = "WordRow"
 
-    # Word-related components
     title_label: Gtk.Label = gtc()
     subtitle_label: Gtk.Label = gtc()
     tags_box: Adw.WrapBox = gtc()
@@ -29,6 +28,8 @@ class WordRow(Adw.ActionRow):
     refs_count_label: Gtk.Label = gtc()
     tag_alert_dialog: Adw.AlertDialog = gtc()
     tag_alert_dialog_entry: Gtk.Entry = gtc()
+
+    __tmp_tags_buttons = []  # Since Adw.FlowBox doesn't have a remove_all() method
 
     def __init__(self, word: Word) -> "WordRow":
         super().__init__()
@@ -45,6 +46,52 @@ class WordRow(Adw.ActionRow):
         self.word.connect("tags-changed", self.__reactivity)
         self.word.connect("translations-changed", self.__reactivity)
 
+    @Gtk.Template.Callback()
+    def on_add_tag_button_clicked(self, *_args) -> None:
+        logger.debug("Showing tag addition alert dialog for “%s”", self.word.word)
+        self.tag_alert_dialog_entry.set_text("")
+        self.tag_alert_dialog.present(shared.win)
+        self.tag_alert_dialog_entry.grab_focus()
+
+    @Gtk.Template.Callback()
+    def on_tag_alert_dialog_entry_changed(self, entry: Gtk.Entry) -> None:
+        if (
+            "#" in entry.get_text()
+            or entry.get_text().lower() in self.word.tags
+            or " " in entry.get_text().strip()
+        ):
+            entry.add_css_class("error")
+        else:
+            if "error" in entry.get_css_classes():
+                entry.remove_css_class("error")
+
+    @Gtk.Template.Callback()
+    def on_tag_entry_activated(self, *_args) -> None:
+        self.on_tag_alert_dialog_response(
+            _alert_dialog=self.tag_alert_dialog, response="add"
+        )
+        self.tag_alert_dialog.close()
+
+    @Gtk.Template.Callback()
+    def on_tag_alert_dialog_response(
+        self, _alert_dialog: Adw.AlertDialog, response: str
+    ) -> None:
+        if response == "add":
+            tag = self.tag_alert_dialog_entry.get_text().lower().strip()
+            if "#" in tag or " " in tag or tag == "":
+                logger.warning("Tag cannot contain spaces or '#'")
+                raise AttributeError("Tag cannot contain spaces or '#'")
+
+            if tag in self.word.tags:
+                logger.warning("Tag already exists")
+                raise AttributeError("Tag already exists")
+
+            self.word.add_tag(tag)
+            self.__generate_tag_chips()
+            logger.info("Tag “#%s” added to “%s”", tag, self.word.word)
+        else:
+            logger.debug("Tag addition cancelled")
+
     def __reactivity(self, *_args) -> None:
         self.title = self.word.word.replace("&rtl", "")
         try:
@@ -55,8 +102,6 @@ class WordRow(Adw.ActionRow):
         self.__generate_tag_chips()
 
     def __generate_tag_chips(self) -> None:
-        for _tag in self.tags_box:  # pylint: disable=not-an-iterable
-            self.tags_box.remove(_tag)
         if self.word.tags != []:
 
             def __clicked(_button: Gtk.Button, tag: str) -> None:
@@ -69,17 +114,17 @@ class WordRow(Adw.ActionRow):
                 shared.win.lexicon_search_entry.set_text(f"{current_text}#{tag}")
 
             def __rmb_clicked(
-                _button: Gtk.Button,
                 _gesture: Gtk.GestureClick,
+                _n_press: int,
                 _x: float,
                 _y: float,
                 tag: str,
             ) -> None:
-                self.word.tags.remove(tag)
+                self.word.rm_tag(tag)
                 logger.info("Tag “#%s” removed from “%s”", tag, self.word.word)
-                for _tag in self.tags_box:  # pylint: disable=not-an-iterable
-                    self.tags_box.remove(_tag)
-                self.__generate_tag_chips()
+
+            for _tag in self.__tmp_tags_buttons:
+                self.tags_box.remove(_tag)
 
             for tag in self.word.tags:
                 button = Gtk.Button(
@@ -91,6 +136,7 @@ class WordRow(Adw.ActionRow):
                         "Click LMB to search words with this tag\nClick RMB to remove this tag"
                     ),
                 )
+                self.__tmp_tags_buttons.append(button)
                 button.connect("clicked", __clicked, tag)
                 rmb = Gtk.GestureClick(button=3)
                 rmb.connect("released", __rmb_clicked, tag)

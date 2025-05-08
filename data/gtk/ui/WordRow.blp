@@ -52,7 +52,7 @@ template $WordRow : Adw.ActionRow {
     Button {
       icon-name: "lexi-tag-outline-add-symbolic";
       tooltip-text: _("Add new tag");
-      // clicked => $on_add_tag_button_clicked();
+      clicked => $on_add_tag_button_clicked();
 
       styles ["circular"]
     }
@@ -91,11 +91,11 @@ Adw.AlertDialog tag_alert_dialog {
   body: _("Type a new tag WITHOUT hashtag prefix and spaces. Existed tag also would be rejected");
   default-response: "add";
   close-response: "cancel";
-  // response => $on_tag_alert_dialog_response();
+  response => $on_tag_alert_dialog_response();
   extra-child: Entry tag_alert_dialog_entry {
     placeholder-text: _("Tag…");
-    // changed => $on_tag_alert_dialog_entry_changed();
-    // activate => $on_tag_entry_activated();
+    changed => $on_tag_alert_dialog_entry_changed();
+    activate => $on_tag_entry_activated();
   };
 
   responses [

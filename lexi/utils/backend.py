@@ -291,6 +291,7 @@ class Word(GObject.Object):
             self._word["types"].append(type_)
         else:
             raise ValueError("Type already exists")
+        self._word["types"].sort()
         self.emit("types-changed")
         return self
 
@@ -351,6 +352,7 @@ class Word(GObject.Object):
             self._word["tags"].append(tag)
         else:
             raise ValueError("Tag already exists")
+        self._word["tags"].sort()
         self.emit("tags-changed")
         return self
 
