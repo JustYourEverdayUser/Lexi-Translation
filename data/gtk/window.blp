@@ -132,6 +132,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                   Button filter_button {
                     icon-name: "lexi-filter-words-symbolic";
                     tooltip-text: _("Filter words by types");
+                    clicked => $open_filer_dialog();
                   }
                 }
 
@@ -451,6 +452,7 @@ Adw.Dialog filter_dialog {
             valign: center;
             Button {
               label: _("Reset All");
+              clicked => $reset_filters();
 
               styles ["pill", "destructive-action"]
             }

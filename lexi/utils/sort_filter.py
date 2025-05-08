@@ -1,6 +1,7 @@
 """Module with methods for `invalidate_sort()` and `invalidate_filter()` methods"""
 
 from lexi import shared
+from lexi.logging.logger import logger
 from lexi.ui.WordRow import WordRow
 
 
@@ -48,3 +49,47 @@ def sort_words(row1: WordRow, row2: WordRow) -> int:
             return -1
         else:
             return 0
+
+
+# pylint: disable=line-too-long
+def filter_words(row: WordRow) -> bool:
+    """
+    Filter words in the list box based on the search entry text and strict type filters.
+
+    Parameters
+    ----------
+    row : WordRow
+        a sortable WordRow
+
+    Returns
+    -------
+    bool
+        True if the word matches both the text and type filters, False otherwise.
+    """
+    text: str = shared.win.lexicon_search_entry.get_text().lower()
+    fits_in_filter = set(shared.config["enabled-types"]).issubset(set(row.word.types))
+    if not text.startswith("#"):
+        try:
+            matches_text = (
+                text == ""
+                or text in row.word.word.lower()
+                or (text in row.word.translations[0].lower() if row.word.translations else "")
+            )
+            logger.debug(
+                "Word “%s”, is shown: %s", row.word.word, matches_text and fits_in_filter
+            )
+            return matches_text and fits_in_filter
+
+        except (AttributeError, KeyError):
+            logger.debug("An error occurred while filtering word, showing")
+            return True
+    else:
+        text = text.replace(" ", "")
+        tags = set(text.split("#")[1:])
+        word_tags = set(row.word.tags)
+        logger.debug(
+            "Word “%s”, is shown: %s",
+            row.word.word,
+            tags.issubset(word_tags) and fits_in_filter,
+        )
+        return tags.issubset(word_tags) and fits_in_filter

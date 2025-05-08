@@ -8,7 +8,7 @@ from lexi.ui.ReferenceRow import ReferenceRow
 from lexi.ui.TypeRow import TypeRow
 from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon, Word
-from lexi.utils.sort_filter import sort_words
+from lexi.utils.sort_filter import filter_words, sort_words
 
 
 @Gtk.Template(resource_path=shared.PREFIX + "/gtk/window.ui")
@@ -113,7 +113,7 @@ class LexiWindow(Adw.ApplicationWindow):
         # Connections
         # self.lexicons_list_box.set_filter_func(self.filter_lexicons)
         self.lexicon_list_box.set_sort_func(sort_words)
-        # self.lexicon_list_box.set_filter_func(self.filter_words)
+        self.lexicon_list_box.set_filter_func(filter_words)
         self.search_bar.connect_entry(self.search_entry)
         # key_kapture_controller.connect("key-pressed", self.on_key_pressed)
         self.connect("notify::loaded-lexicon", self.__on_lexicon_changed)
@@ -517,6 +517,50 @@ class LexiWindow(Adw.ApplicationWindow):
                 else self.word_entry_row.get_text()
             ),
         )
+
+    @Gtk.Template.Callback()
+    def open_filer_dialog(self, *_args) -> None:
+        def __on_toggled(_check_button: Gtk.CheckButton) -> None:
+            for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
+                is_toggled = row.get_activatable_widget().get_active()
+                word_type = row.get_title()
+
+                if is_toggled:
+                    if word_type not in shared.config["enabled-types"]:
+                        logger.debug("Adding word type to filter: %s", word_type)
+                        shared.config["enabled-types"].append(word_type)
+                        shared.config["enabled-types"].sort()
+                else:
+                    if word_type in shared.config["enabled-types"]:
+                        logger.debug("Removing word type from filter: %s", word_type)
+                        shared.config["enabled-types"].remove(word_type)
+
+            self.lexicon_list_box.invalidate_filter()
+
+        def __populate_filter_dialog() -> None:
+            for word_type in shared.config["word-types"]:
+                logger.debug("Adding filter for word type: %s", word_type)
+                action_row = Adw.ActionRow(title=word_type, activatable=False)
+                check_button = Gtk.CheckButton()
+                check_button.connect("toggled", __on_toggled)
+                check_button.set_active(word_type in shared.config["enabled-types"])
+                action_row.set_activatable_widget(check_button)
+                action_row.add_suffix(check_button)
+                self.filter_dialog_list_box.append(action_row)
+
+        self.filter_dialog_list_box.remove_all()
+        __populate_filter_dialog()
+        logger.debug("Showing filter dialog")
+        self.filter_dialog.present(self)
+
+    @Gtk.Template.Callback()
+    def reset_filters(self, *_args) -> None:
+        """Reset all filters in the filter dialog"""
+        logger.debug("Resetting filters")
+        for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
+            row.get_activatable_widget().set_active(False)
+        self.filter_dialog.close()
+
 
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:
