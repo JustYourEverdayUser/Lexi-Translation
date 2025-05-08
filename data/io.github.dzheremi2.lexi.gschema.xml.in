@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="Chronograph">
   <schema id="@APP_ID@" path="@PREFIX@/">
-    <key name="word-autosave" type="b">
-      <default>true</default>
-    </key>
     <key name="use-debug-log" type="b">
       <default>false</default>
     </key>

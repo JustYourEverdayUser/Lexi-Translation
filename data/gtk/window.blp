@@ -78,8 +78,8 @@ template $LexiWindow : Adw.ApplicationWindow {
                 Adw.Clamp {
                   SearchEntry search_entry {
                     placeholder-text: _("Search…");
-                    hexpand: true;
                     changed => $on_lexicon_search_entry_changed();
+                    hexpand: true;
 
                     ShortcutController {
                       Shortcut {
@@ -94,7 +94,7 @@ template $LexiWindow : Adw.ApplicationWindow {
               ScrolledWindow lexicons_scrolled_window {
                 ListBox lexicons_list_box {
                   selection-mode: single;
-                  row-selected => $on_lexicon_selected();
+                  row-selected => $load_lexicon();
 
                   styles ["navigation-sidebar"]
                 }
@@ -122,14 +122,14 @@ template $LexiWindow : Adw.ApplicationWindow {
                   }
 
                   [end]
-                  MenuButton {
+                  MenuButton sort_menu_button {
                     icon-name: "lexi-sort-symbolic";
                     tooltip-text: _("Sort by…");
                     menu-model: sort;
                   }
 
                   [end]
-                  Button {
+                  Button filter_button {
                     icon-name: "lexi-filter-words-symbolic";
                     tooltip-text: _("Filter words by types");
                     clicked => $open_filer_dialog();
@@ -141,6 +141,8 @@ template $LexiWindow : Adw.ApplicationWindow {
                   vexpand: true;
 
                   ListBox lexicon_list_box {
+                    row-selected => $load_word();
+
                     styles ["navigation-sidebar"]
                   }
                 }
@@ -185,17 +187,16 @@ template $LexiWindow : Adw.ApplicationWindow {
                     Entry lexicon_search_entry {
                       margin-top: 4;
                       hexpand: true;
-                      placeholder-text: _("Find a word");
                       changed => $on_search_entry_changed();
+                      placeholder-text: _("Find a word");
                       secondary-icon-name: "lexi-help-about-symbolic";
                       secondary-icon-tooltip-text: _("Query syntax:\nWord-based: Just word or its translation\nE.g. “Mom“, “Dad“\n\nTag-based: Query starts with “#”, contains tag name FULLY and doesn't contain word-based query\nE.g. “#basic#family”, “#basic #suffixes”\nBUT NOT: “#family mom” or “#famil”");
                     }
 
-                    Button {
+                    Button add_word_button {
                       margin-top: 4;
                       icon-name: "lexi-add-symbolic";
                       tooltip-text: _("Add word");
-                      clicked => $on_add_word_action();
                       
                       styles ["flat"]
                     }
@@ -210,15 +211,7 @@ template $LexiWindow : Adw.ApplicationWindow {
 
               Adw.ToolbarView {
                 [top]
-                Adw.HeaderBar {
-                  [start]
-                  Button save_word_button {
-                    label: _("Save");
-                    clicked => $on_save_word_button_clicked();
-
-                    styles ["suggested-action"]
-                  }
-                }
+                Adw.HeaderBar {}
 
                 Adw.Clamp {
                   ScrolledWindow {
@@ -253,7 +246,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add translation");
-                            clicked => $on_word_list_prop_button_pressed();
+                            clicked => $on_add_translation_button_clicked();
 
                             styles ["flat"]
                           }
@@ -271,7 +264,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Assign word type");
-                            clicked => $on_assign_word_type_clicked();
+                            clicked => $on_add_type_button_clicked();
 
                             styles ["flat"]
                           }
@@ -288,7 +281,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                           Button {
                             icon-name: "lexi-add-symbolic";
                             tooltip-text: _("Add example");
-                            clicked => $on_word_list_prop_button_pressed();
+                            clicked => $on_add_example_button_clicked();
 
                             styles ["flat"]
                           }
@@ -304,8 +297,8 @@ template $LexiWindow : Adw.ApplicationWindow {
 
                           Button {
                             icon-name: "lexi-add-symbolic";
-                            tooltip-text: _("Add example");
-                            clicked => $on_references_add_button_pressed();
+                            tooltip-text: _("Add reference");
+                            clicked => $on_add_reference_button_clicked();
 
                             styles ["flat"]
                           }
@@ -495,9 +488,8 @@ Adw.StatusPage no_words_yet {
   Box {
     halign: center;
 
-    Button {
+    Button status_page_add_word_button {
       label: _("Add Word");
-      clicked => $on_add_word_action();
 
       styles ["pill"]
     }
@@ -522,11 +514,11 @@ Adw.AlertDialog add_lexicon_alert_dialog {
   default-response: "add";
   heading: _("Add new Lexicon");
   close-response: "cancel";
+  response => $on_add_lexicon();
   extra-child: Gtk.Entry add_lexicon_entry {
     placeholder-text: _("Name");
     changed => $on_add_lexicon_entry_changed();
   };
-  response => $on_add_lexicon();
 
   responses [
     cancel: _("Cancel"),
@@ -552,11 +544,6 @@ ShortcutsWindow help_overlay {
       ShortcutsShortcut {
         title: _("Search words");
         action-name: "win.search";
-      }
-
-      ShortcutsShortcut {
-        title: _("Show filter dialog");
-        action-name: "win.filter_button_clicked";
       }
 
       ShortcutsShortcut {

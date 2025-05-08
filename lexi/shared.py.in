@@ -16,5 +16,12 @@ state_schema = Gio.Settings.new(APP_ID + ".State")
 
 app: Adw.Application = None
 win = None
+lexictrl = None
 config_file: TextIO = None
 config: dict[int, list[str]] = None
+
+# Handler IDs for connections
+handler_ids: dict[str, int] = {
+    "win.add_word_button": None,
+    "win.status_page_add_word_button": None
+}

@@ -87,18 +87,29 @@ class WordType(str, Enum):
         return self.value
 
 
+class WindowState(Enum):
+    """Enum class for LexiWindow states
+
+    ::
+
+        EMPTY -> "No Lexicon selected"
+        EMPTY_WORDS -> "Selected Lexicon with no words"
+        WORDS -> "Selected Lexicon with words"
+    """
+
+    EMPTY = 0
+    EMPTY_WORDS = 1
+    WORDS = 2
+
+
 # pylint: disable=invalid-name
 class Schema:
     """Enum for all Lexi gschema values
 
     ::
 
-        WORD_AUTOSAVE() : bool
+        USE_DEBUG_LOG() : bool
     """
-
-    @staticmethod
-    def WORD_AUTOSAVE() -> bool:
-        return shared.schema.get_boolean("word-autosave")
 
     @staticmethod
     def USE_DEBUG_LOG() -> bool:

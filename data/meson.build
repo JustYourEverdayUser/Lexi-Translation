@@ -4,9 +4,7 @@ blueprints = custom_target(
         'gtk/window.blp',
         'gtk/ui/LexiconRow.blp',
         'gtk/ui/WordRow.blp',
-        'gtk/ui/ReferenceRow.blp',
-        'gtk/ui/Preferences.blp',
-        'gtk/ui/WordTypeRow.blp'
+        'gtk/ui/Preferences.blp'
     ),
     output: '.',
     command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],

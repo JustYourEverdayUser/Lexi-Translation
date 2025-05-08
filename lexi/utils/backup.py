@@ -1,3 +1,5 @@
+"""Methods for Lexi database Export/Import in various formats"""
+
 import glob
 import os
 import pathlib
@@ -38,7 +40,6 @@ def export_database(path: str) -> None:
                 arcname = os.path.relpath(filename, shared.data_dir)
                 zipf.write(filename, arcname=arcname)
 
-        # pylint: disable=line-too-long
         if os.path.exists(path):
             toast = Adw.Toast(
                 # Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF
@@ -80,12 +81,13 @@ def import_database(zip_path: str) -> None:
                     shared.win.lexicon_not_selected
                 )
                 shared.win.words_bottom_bar_revealer.set_reveal_child(False)
-                shared.win.set_word_rows_sensetiveness(False)
+                shared.win.set_property("loaded-lexicon", None)
                 shared.win.word_entry_row.set_text("")
                 shared.win.pronunciation_entry_row.set_text("")
                 shared.win.translations_list_box.remove_all()
                 shared.win.examples_list_box.remove_all()
                 shared.win.references_list_box.remove_all()
+                shared.lexictrl.regenerate_lexicons()
                 shared.win.build_sidebar()
                 shared.config_file = open(
                     os.path.join(shared.data_dir, "config.yaml"),
@@ -143,7 +145,6 @@ def proof_of_content(zip_path: str) -> bool:
 
 def incorrect_archive_panic(*_args) -> None:
     """Display an alert dialog for an incorrect archive."""
-    # pylint: disable=line-too-long
     alert = Adw.AlertDialog(
         heading=_("Incorrect Archive!"),
         body=_(
@@ -157,7 +158,6 @@ def incorrect_archive_panic(*_args) -> None:
 
 def database_version_mismatch_panic() -> None:
     """Display an alert dialog for a database version mismatch."""
-    # pylint: disable=line-too-long
     alert = Adw.AlertDialog(
         heading=_("Database Version Mismatch!"),
         body=_(
@@ -231,7 +231,6 @@ def export_memorado_database(path: str) -> None:
     conn.commit()
     conn.close()
     if os.path.exists(path):
-        # pylint: disable=line-too-long
         toast = Adw.Toast(
             # Translators: DO NOT TRANSLATE TEXT WITHIN CURLY BRACKETS AND BRACKETS ITSELF. Memorado is the name of the other app and SHOULDN'T be translated
             title=_(f"Memorado database exported successfully: {path}"),

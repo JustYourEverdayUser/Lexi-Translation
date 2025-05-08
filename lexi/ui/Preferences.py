@@ -4,7 +4,7 @@ from gi.repository import Adw, Gio, Gtk
 
 from lexi import enums, shared
 from lexi.logging.logger import logger
-from lexi.ui import widgets
+from lexi.ui.TypeRow import TypeRow
 from lexi.utils import backup
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
@@ -16,7 +16,6 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     __gtype_name__ = "LexiPreferences"
 
-    word_autosave_switch_row: Adw.SwitchRow = gtc()
     import_confirmation_dialog: Adw.AlertDialog = gtc()
     available_word_types_scrolled_window: Gtk.ScrolledWindow = gtc()
     available_word_types_list_box: Gtk.ListBox = gtc()
@@ -30,84 +29,24 @@ class LexiPreferences(Adw.PreferencesDialog):
         self.connect("closed", lambda *_: self.set_opened(False))
 
         shared.schema.bind(
-            "word-autosave",
-            self.word_autosave_switch_row,
-            "active",
-            Gio.SettingsBindFlags.DEFAULT,
-        )
-
-        shared.schema.bind(
             "use-debug-log",
             self.use_debug_log_switch_row,
             "active",
             Gio.SettingsBindFlags.DEFAULT,
         )
 
-        self.word_autosave_switch_row.connect(
-            "notify::active", self.set_save_button_sensetive
+        self.use_debug_log_switch_row.connect(
+            "notify::active", self.__set_use_debug_log
         )
-        self.use_debug_log_switch_row.connect("notify::active", self.set_use_debug_log)
 
         self.gen_word_types()
-
-    def set_use_debug_log(self, *_args) -> None:
-        logger.info(
-            "Setting logger profile to %s",
-            "DEBUG" if self.use_debug_log_switch_row.get_active() else "INFO",
-        )
-        logger.setLevel(
-            logging.DEBUG
-            if self.use_debug_log_switch_row.get_active()
-            else logging.INFO
-        )
-
-    def gen_word_types(self) -> None:
-        """Generate the word types list and populate the list box"""
-        self.available_word_types_list_box.remove_all()
-        if len(shared.config["word-types"]) != 0:
-            for word_type in shared.config["word-types"]:
-                self.available_word_types_list_box.append(
-                    widgets.WordTypeRow(word_type)
-                )
-            self.available_word_types_scrolled_window.set_child(
-                self.available_word_types_list_box
-            )
-        else:
-            self.available_word_types_scrolled_window.set_child(
-                Adw.StatusPage(
-                    title=_("No word types created yet"),
-                    description=_("Add a new word type to get started"),
-                    icon_name=enums.Icon.NO_FOUND,
-                )
-            )
-
-    def set_save_button_sensetive(self, *_args) -> None:
-        """Set save word button sensitiveness according to the word-autosave state"""
-        enabled = not self.word_autosave_switch_row.get_active()
-        logger.info("Word autosave is %s", "enabled" if enabled else "disabled")
-        if enabled:
-            shared.win.save_word_button.set_sensitive(True)
-            shared.win.save_word_button.add_css_class("suggested-action")
-        else:
-            shared.win.save_word_button.set_sensitive(False)
-            shared.win.save_word_button.remove_css_class("suggested-action")
-
-    def set_opened(self, opened: bool) -> None:
-        """Allows the existance of only one Preferences dialog at once
-
-        Parameters
-        ----------
-        opened : bool
-            state for the __class__.opened variable
-        """
-        self.__class__.opened = opened
 
     @Gtk.Template.Callback()
     def on_export_button_clicked(self, *_args) -> None:
         """
-        Handle the export button click event.
+        Handle the export button click event
 
-        Opens a file dialog to save the database backup.
+        Opens a file dialog to save the database backup
         """
         logger.debug("Showing export database dialog")
         dialog = Gtk.FileDialog(initial_name="lexi_backup.zip")
@@ -115,26 +54,26 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     def on_export_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
         """
-        Export the database to the selected file path.
+        Export the database to the selected file path
 
         Parameters
         ----------
         file_dialog : Gtk.FileDialog
-            The file dialog used for selecting the export location.
+            The file dialog used for selecting the export location
         result : Gio.Task
-            The result of the file dialog operation.
+            The result of the file dialog operation
         """
         path = file_dialog.save_finish(result).get_path()
-        logger.info("Exporting database to %s", path)
+        logger.info("Exporting database to “%s”", path)
         backup.export_database(path)
         self.close()
 
     @Gtk.Template.Callback()
     def on_import_button_clicked(self, *_args) -> None:
         """
-        Handle the import button click event.
+        Handle the import button click event
 
-        Presents a confirmation dialog before importing a database.
+        Presents a confirmation dialog before importing a database
         """
         logger.debug("Showing import confirmation dialog")
         self.import_confirmation_dialog.present(shared.win)
@@ -144,14 +83,14 @@ class LexiPreferences(Adw.PreferencesDialog):
         self, _alert_dialog: Adw.AlertDialog, response: str
     ) -> None:
         """
-        Handle the response from the import confirmation dialog.
+        Handle the response from the import confirmation dialog
 
         Parameters
         ----------
         _alert_dialog : Adw.AlertDialog
-            The alert dialog that emitted this method.
+            The alert dialog that emitted this method
         response : str
-            The response ID from the dialog.
+            The response ID from the dialog
         """
         if response == "import":
             logger.debug("Showing import database dialog")
@@ -164,28 +103,28 @@ class LexiPreferences(Adw.PreferencesDialog):
 
     def on_import_database(self, file_dialog: Gtk.FileDialog, result: Gio.Task) -> None:
         """
-        Import the database from the selected file path.
+        Import the database from the selected file path
 
         Parameters
         ----------
         file_dialog : Gtk.FileDialog
-            The file dialog used for selecting the import file.
+            The file dialog used for selecting the import file
         result : Gio.Task
-            The result of the file dialog operation.
+            The result of the file dialog operation
         """
         path = file_dialog.open_finish(result).get_path()
-        logger.info("Importing database from %s", path)
+        logger.info("Importing database from “%s”", path)
         backup.import_database(path)
         self.close()
 
     @Gtk.Template.Callback()
     def add_new_word_type(self, entry_row: Adw.EntryRow) -> None:
-        """Add a new word type to the list of available word types on Enter press.
+        """Add a new word type to the list of available word types on Enter press
 
         Parameters
         ----------
         entry_row : Adw.EntryRow
-            Adw.EntryRow to get new word type from.
+            Adw.EntryRow to get new word type from
         """
         if (
             not entry_row.get_text() in shared.config["word-types"]
@@ -207,6 +146,45 @@ class LexiPreferences(Adw.PreferencesDialog):
         self, file_dialog: Gtk.FileDialog, result: Gio.Task
     ) -> None:
         path = file_dialog.save_finish(result).get_path()
-        logger.info("Exporting database to %s as Memorado database", path)
+        logger.info("Exporting database to “%s” as Memorado database", path)
         backup.export_memorado_database(path)
         self.close()
+
+    def __set_use_debug_log(self, *_args) -> None:
+        logger.info(
+            "Setting logger profile to %s",
+            "DEBUG" if self.use_debug_log_switch_row.get_active() else "INFO",
+        )
+        logger.setLevel(
+            logging.DEBUG
+            if self.use_debug_log_switch_row.get_active()
+            else logging.INFO
+        )
+
+    def gen_word_types(self) -> None:
+        """Generate the word types list and populate the list box"""
+        self.available_word_types_list_box.remove_all()
+        if len(shared.config["word-types"]) != 0:
+            for word_type in shared.config["word-types"]:
+                self.available_word_types_list_box.append(TypeRow(word_type))
+            self.available_word_types_scrolled_window.set_child(
+                self.available_word_types_list_box
+            )
+        else:
+            self.available_word_types_scrolled_window.set_child(
+                Adw.StatusPage(
+                    title=_("No word types created yet"),
+                    description=_("Add a new word type to get started"),
+                    icon_name=enums.Icon.NO_FOUND,
+                )
+            )
+
+    def set_opened(self, opened: bool) -> None:
+        """Allows the existance of only one Preferences dialog at once
+
+        Parameters
+        ----------
+        opened : bool
+            state for the __class__.opened variable
+        """
+        self.__class__.opened = opened

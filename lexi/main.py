@@ -7,11 +7,12 @@ import yaml
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-# pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position, wrong-import-order
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from lexi import shared
 from lexi.logging.logger import log_filename, log_system_info, logger, prev_log_filename
+from lexi.utils.backend import LexiconController
 from lexi.window import LexiWindow
 
 
@@ -30,7 +31,6 @@ class LexiApplication(Adw.Application):
     # pylint: disable=unused-variable
     def do_activate(self) -> None:  # pylint: disable=arguments-differ
         """Action emitted on app launch"""
-        # Check if lexicons dir exists, create it if not
 
         logger.info("Creating application window")
         win = self.props.active_window  # pylint: disable=no-member
@@ -126,7 +126,6 @@ class LexiApplication(Adw.Application):
             )
             scope.add_action(simple_action)
 
-    # pylint: disable=line-too-long
     def on_about_action(self, *_args) -> None:
         """Generates an app about dialog"""
 
@@ -215,7 +214,7 @@ def main(_version):
 
     # Migrate config file and lexicons to newer versions if their structure has changed
     if shared.config["version"] < shared.CACHEV:
-        logger.info("Migrating config file to %s", shared.CACHEV)
+        logger.info("Migrating database version to v%s", shared.CACHEV)
         # pylint: disable=import-outside-toplevel
         from lexi.utils import migrator
 
@@ -236,5 +235,6 @@ def main(_version):
                 )
 
     shared.app = app = LexiApplication()
+    shared.lexictrl = LexiconController()
 
     return app.run(sys.argv)
