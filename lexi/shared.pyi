@@ -22,3 +22,6 @@ win: LexiWindow
 lexictrl: LexiconController
 config_file: TextIO
 config: dict[int, list[str]]
+
+# Handler IDs for connections
+handler_ids: dict[str, int]

@@ -1,7 +1,8 @@
 from gi.repository import Adw, Gio, Gtk
 
-from lexi import shared
+from lexi import enums, shared
 from lexi.logging.logger import logger
+from lexi.ui.WordRow import WordRow
 from lexi.utils.backend import Lexicon
 
 gtc = Gtk.Template.Child  # pylint: disable=invalid-name
@@ -69,6 +70,7 @@ class LexiconRow(Gtk.Box):
             shared.lexictrl.rm_lexicon(self.lexicon.id)
             logger.info("Lexicon “%s” deleted", self.lexicon.name)
             shared.win.build_sidebar()
+            shared.win.set_property("state", enums.WindowState.EMPTY)
         else:
             logger.debug("Lexicon “%s” deletion cancelled", self.lexicon.name)
 
@@ -120,3 +122,71 @@ class LexiconRow(Gtk.Box):
             shared.win.build_sidebar()
         else:
             logger.debug("Lexicon “%s” renaming cancelled", self.lexicon.name)
+
+    def show_add_word_dialog(self, *_args) -> None:
+        self.word_entry_row.set_text("")
+        self.word_entry_row.remove_css_class("error")
+        self.translation_entry_row.set_text("")
+        self.example_entry_row.set_text("")
+        logger.info("Showing add word dialog for lexicon “%s”", self.lexicon.name)
+        self.add_word_dialog.present(shared.win)
+        self.add_word_dialog.grab_focus()
+
+    @Gtk.Template.Callback()
+    def check_if_word_is_empty(self, row: Adw.EntryRow) -> None:
+        """Check if the word entry is empty and apply error styling.
+
+        Parameters
+        ----------
+        row : Adw.EntryRow
+            The entry row to check.
+        """
+        if len(row.get_text()) == 0:
+            row.add_css_class("error")
+        else:
+            row.remove_css_class("error")
+
+    @Gtk.Template.Callback()
+    def on_add_word_dialog_enter_press(self, *_args) -> None:
+        """Handle the Enter key press in the add word dialog."""
+        self.add_word()
+
+    @Gtk.Template.Callback()
+    def add_word(self, *_args) -> None:
+        word = self.word_entry_row.get_text()
+        translation = self.translation_entry_row.get_text()
+        example = self.example_entry_row.get_text()
+
+        if len(word) == 0:
+            self.word_entry_row.add_css_class("error")
+            logger.warning("Word cannot be empty")
+            raise AttributeError("Word cannot be empty")
+
+        if len(translation) == 0:
+            translation = []
+
+        if len(example) == 0:
+            example = []
+
+        id_ = max((w.id for w in self.lexicon.words), default=0) + 1
+        new_word: dict = {
+            "id": id_,
+            "word": word,
+            "translations": [translation] if translation else [],
+            "pronunciation": "",
+            "types": [],
+            "examples": example if example == [] else [example],
+            "references": [],
+            "tags": [],
+        }
+        self.lexicon.add_word(new_word)
+        logger.info("Word “%s” added to the “%s” Lexicon", word, self.lexicon.name)
+        shared.win.lexicon_list_box.append(
+            word_row := WordRow(self.lexicon.get_word(id_))
+        )
+        shared.win.lexicon_list_box.select_row(word_row)
+        word_row.activate()
+        shared.win.set_property("state", enums.WindowState.WORDS)
+        self.add_word_dialog.close()
+        shared.win.lexicon_list_box.invalidate_sort()
+        shared.win.lexicon_list_box.invalidate_filter()

@@ -1,5 +1,3 @@
-import os
-
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from lexi import enums, shared
@@ -21,6 +19,7 @@ class LexiWindow(Adw.ApplicationWindow):
     # Status pages
     no_lexicons_yet: Adw.StatusPage = gtc()
     no_words_yet: Adw.StatusPage = gtc()
+    status_page_add_word_button: Gtk.Button = gtc()
     lexicon_not_selected: Adw.StatusPage = gtc()
 
     # Toast overlay
@@ -60,6 +59,7 @@ class LexiWindow(Adw.ApplicationWindow):
     delete_selected_words_button: Gtk.Button = gtc()
     delete_selected_words_button_revealer: Gtk.Revealer = gtc()
     words_bottom_bar_revealer: Gtk.Revealer = gtc()
+    add_word_button: Gtk.Button = gtc()
     assign_word_type_dialog: Adw.Dialog = gtc()
     assign_word_type_dialog_list_box: Gtk.ListBox = gtc()
     filter_button: Gtk.Button = gtc()
@@ -361,14 +361,28 @@ class LexiWindow(Adw.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def load_lexicon(self, _list_box: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
-        """Load the lexicon into the window static UI elements"""
         row: LexiconRow = row.get_child()
         logger.info("Loading “%s” lexicon into the UI", row.lexicon.name)
+        if (
+            shared.handler_ids["win.add_word_button"] is not None
+            and shared.handler_ids["win.status_page_add_word_button"] is not None
+        ):
+            self.add_word_button.disconnect(shared.handler_ids["win.add_word_button"])
+            self.status_page_add_word_button.disconnect(
+                shared.handler_ids["win.status_page_add_word_button"]
+            )
+        shared.handler_ids["win.add_word_button"] = self.add_word_button.connect(
+            "clicked", row.show_add_word_dialog
+        )
+        shared.handler_ids["win.status_page_add_word_button"] = (
+            self.status_page_add_word_button.connect(
+                "clicked", row.show_add_word_dialog
+            )
+        )
         self.set_property("loaded-lexicon", row.lexicon)
 
     @Gtk.Template.Callback()
     def load_word(self, _list_box: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
-        """Load the word into the window static UI elements"""
         try:
             logger.info("Loading “%s” word into the UI", row.word.word)
             self.set_property("loaded-word", row.word)
@@ -416,6 +430,7 @@ class LexiWindow(Adw.ApplicationWindow):
                 self.__on_state_change(state_=enums.WindowState.EMPTY)
                 self.lexicon_scrolled_window.set_child(self.no_words_yet)
             case enums.WindowState.WORDS:
+                self.lexicon_scrolled_window.set_child(self.lexicon_list_box)
                 self.words_bottom_bar_revealer.set_reveal_child(True)
                 self.sort_menu_button.set_sensitive(True)
                 self.filter_button.set_sensitive(True)
