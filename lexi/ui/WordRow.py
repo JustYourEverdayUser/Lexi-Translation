@@ -29,8 +29,6 @@ class WordRow(Adw.ActionRow):
     tag_alert_dialog: Adw.AlertDialog = gtc()
     tag_alert_dialog_entry: Gtk.Entry = gtc()
 
-    __tmp_tags_buttons = []  # Since Adw.FlowBox doesn't have a remove_all() method
-
     def __init__(self, word: Word) -> "WordRow":
         super().__init__()
         self.word = word
@@ -99,8 +97,6 @@ class WordRow(Adw.ActionRow):
         except IndexError:
             _("No translation yet")
 
-        self.__generate_tag_chips()
-
     def __generate_tag_chips(self) -> None:
         if self.word.tags != []:
 
@@ -114,25 +110,19 @@ class WordRow(Adw.ActionRow):
                 shared.win.lexicon_search_entry.set_text(f"{current_text}#{tag}")
 
             def __rmb_clicked(
-                _gesture: Gtk.GestureClick,
+                gesture: Gtk.GestureClick,
                 _n_press: int,
                 _x: float,
                 _y: float,
                 tag: str,
             ) -> None:
+                widget: Gtk.Button = gesture.get_widget()
                 self.word.rm_tag(tag)
                 logger.info("Tag “#%s” removed from “%s”", tag, self.word.word)
+                self.tags_box.remove(widget)
 
-                for button in self.__tmp_tags_buttons:
-                    if button.get_label() == f"#{tag}":
-                        self.tags_box.remove(button)
-                        self.__tmp_tags_buttons.remove(button)
-                        break
-
-            for _tag in self.__tmp_tags_buttons:
-                if _tag.get_parent() == self.tags_box:
-                    self.tags_box.remove(_tag)
-            self.__tmp_tags_buttons.clear()
+            while (child := self.tags_box.get_first_child()) is not None:
+                self.tags_box.remove(child)
 
             for tag in self.word.tags:
                 button = Gtk.Button(
@@ -143,7 +133,6 @@ class WordRow(Adw.ActionRow):
                         "Click LMB to search words with this tag\nClick RMB to remove this tag"
                     ),
                 )
-                self.__tmp_tags_buttons.append(button)
                 button.connect("clicked", __clicked, tag)
                 rmb = Gtk.GestureClick(button=3)
                 rmb.connect("released", __rmb_clicked, tag)

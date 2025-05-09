@@ -470,6 +470,8 @@ class LexiWindow(Adw.ApplicationWindow):
         try:
             logger.info("Loading “%s” word into the UI", row.word.word)
             self.set_property("loaded-word", row.word)
+            if self.lexicon_split_view.get_collapsed():
+                self.lexicon_split_view.set_show_content(True)
         except AttributeError:
             pass
 

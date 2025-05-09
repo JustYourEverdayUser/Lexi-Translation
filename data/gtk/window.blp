@@ -141,7 +141,7 @@ template $LexiWindow : Adw.ApplicationWindow {
                   vexpand: true;
 
                   ListBox lexicon_list_box {
-                    row-selected => $load_word();
+                    row-activated => $load_word();
 
                     styles ["navigation-sidebar"]
                   }
