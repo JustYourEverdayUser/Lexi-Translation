@@ -42,10 +42,7 @@ class ReferenceRow(Adw.ActionRow):
             self.word.word,
             shared.win.loaded_word.word,
         )
-        for row in shared.win.references_dialog_list_box:
-            if row.word.id == self.word.id:
-                shared.win.references_dialog_list_box.remove(row)
-                break
+        shared.win.references_dialog_list_box.remove(self)
         if shared.win.references_dialog_list_box.get_row_at_index(0) is None:
             logger.debug("No more words to refer")
             shared.win.references_dialog.close()
