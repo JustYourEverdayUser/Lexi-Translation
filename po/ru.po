@@ -8,23 +8,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 02:32+0300\n"
-"PO-Revision-Date: 2025-05-09 06:03+0000\n"
+"POT-Creation-Date: 2025-05-09 23:05+0300\n"
+"PO-Revision-Date: 2025-05-09 23:05+0300\n"
 "Last-Translator: Артём Чичваров <chichvarov1315@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/lexi/lexi/ru/>\n"
+"Language-Team: Russian\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Gtranslator 48.0\n"
 
 #: data/gtk/window.blp:36
 msgid "Lexicons"
 msgstr "Лексиконы"
 
-#: data/gtk/window.blp:47 data/gtk/window.blp:560
+#: data/gtk/window.blp:47 data/gtk/window.blp:545
 msgid "Toggle sidebar"
 msgstr "Переключить боковую панель"
 
@@ -88,8 +88,8 @@ msgstr ""
 msgid "Add word"
 msgstr "Добавить слово"
 
-#: data/gtk/window.blp:210 data/gtk/window.blp:228 data/gtk/window.blp:601
-#: data/gtk/ui/LexiconRow.blp:55 lexi/window.py:721
+#: data/gtk/window.blp:210 data/gtk/window.blp:228 data/gtk/window.blp:606
+#: data/gtk/ui/LexiconRow.blp:55 lexi/window.py:738
 msgid "Word"
 msgstr "Слово"
 
@@ -121,7 +121,7 @@ msgstr "Примеры"
 msgid "Add example"
 msgstr "Добавить пример"
 
-#: data/gtk/window.blp:292 data/gtk/window.blp:613
+#: data/gtk/window.blp:292 data/gtk/window.blp:618
 msgid "References"
 msgstr "Ссылки"
 
@@ -207,51 +207,55 @@ msgstr "Основное"
 msgid "Quit"
 msgstr "Выйти"
 
-#: data/gtk/window.blp:545
+#: data/gtk/window.blp:550
 msgid "Search words"
 msgstr "Найти слова"
 
-#: data/gtk/window.blp:550
+#: data/gtk/window.blp:555
+msgid "Reload words list"
+msgstr "Обновить список слов"
+
+#: data/gtk/window.blp:560
 msgid "Show preferences"
 msgstr "Открыть настройки"
 
-#: data/gtk/window.blp:555 data/gtk/window.blp:579
+#: data/gtk/window.blp:565 data/gtk/window.blp:584
 msgid "Keybindings"
 msgstr "Сочетания клавиш"
 
-#: data/gtk/window.blp:566 data/gtk/ui/Preferences.blp:11
+#: data/gtk/window.blp:571 data/gtk/ui/Preferences.blp:11
 msgid "Editing"
 msgstr "Редактирование"
 
-#: data/gtk/window.blp:569
+#: data/gtk/window.blp:574
 msgid "Add new word"
 msgstr "Добавить новое слово"
 
-#: data/gtk/window.blp:578
+#: data/gtk/window.blp:583
 msgid "Preferences"
 msgstr "Настройки"
 
-#: data/gtk/window.blp:580
+#: data/gtk/window.blp:585
 msgid "About"
 msgstr "О приложении"
 
-#: data/gtk/window.blp:587
+#: data/gtk/window.blp:592
 msgid "Ascending"
 msgstr "По возрастанию"
 
-#: data/gtk/window.blp:593
+#: data/gtk/window.blp:598
 msgid "Descending"
 msgstr "По убыванию"
 
-#: data/gtk/window.blp:607
+#: data/gtk/window.blp:612
 msgid "First Translation"
 msgstr "Первый перевод"
 
-#: data/gtk/ui/LexiconRow.blp:61 lexi/window.py:345 lexi/window.py:518
+#: data/gtk/ui/LexiconRow.blp:61 lexi/window.py:346 lexi/window.py:521
 msgid "Translation"
 msgstr "Перевод"
 
-#: data/gtk/ui/LexiconRow.blp:66 lexi/window.py:346 lexi/window.py:524
+#: data/gtk/ui/LexiconRow.blp:66 lexi/window.py:347 lexi/window.py:527
 msgid "Example"
 msgstr "Пример"
 
@@ -428,7 +432,9 @@ msgstr "Основное окно на малом дисплее"
 #. Translators: Search terms to find this application. Please, do NOT delete original english keywords, just add yuor language translations to them. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.github.dzheremi2.lexi.desktop.in:11
 msgid "dict;dictionary;word;words;lexi;lexicon;lexicons;"
-msgstr "dict;dictionary;word;words;lexi;lexicon;lexicons;словарь;слово;слова;лексикон;лексиконы;"
+msgstr ""
+"dict;dictionary;word;words;lexi;lexicon;lexicons;словарь;слово;слова;"
+"лексикон;лексиконы;"
 
 #: lexi/enums.py:72
 msgid "Noun"
@@ -483,37 +489,37 @@ msgid "Suffix"
 msgstr "Суффикс"
 
 #. Translators: Add Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog. PLEASE, DON'T DELETE PREVIOUS TRANSLATORS CREDITS AND SEPARATE YOURSELF BY NEWLINE `\n` METASYMBOL
-#: lexi/main.py:152
+#: lexi/main.py:153
 msgid "translator-credits"
 msgstr "Артём Чичваров <chichvarov1315@gmail.com>"
 
-#: lexi/main.py:155
+#: lexi/main.py:156
 msgid "Inspiration"
 msgstr "Вдохновение"
 
-#: lexi/main.py:162
+#: lexi/main.py:163
 msgid "Advisers"
 msgstr "Советчики"
 
 #. Translators: This is the name of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:171
+#: lexi/main.py:172
 msgid "Chronograph"
 msgstr "Хронограф"
 
 #. Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:173
+#: lexi/main.py:174
 msgid "Sync lyrics of your loved songs"
 msgstr "Синхронизируйте тексты своих любимых песен"
 
-#: lexi/window.py:481
+#: lexi/window.py:484
 msgid "You have already referenced all words"
 msgstr "Вы уже сослались на все слова"
 
-#: lexi/window.py:495
+#: lexi/window.py:498
 msgid "No word types available"
 msgstr "Нет доступных типов слов"
 
-#: lexi/window.py:495
+#: lexi/window.py:498
 msgid "Configure"
 msgstr "Настроить"
 
@@ -525,15 +531,15 @@ msgstr "Типов слова пока не создано"
 msgid "Add a new word type to get started"
 msgstr "Добавьте новый Тип слова, чтобы начать"
 
-#: lexi/ui/ReferenceRow.py:23 lexi/ui/TypeRow.py:20
+#: lexi/ui/ReferenceRow.py:21 lexi/ui/TypeRow.py:20
 msgid "Delete this reference"
 msgstr "Удалить эту ссылку"
 
-#: lexi/ui/ReferenceRow.py:36 lexi/ui/WordRow.py:41 lexi/ui/WordRow.py:100
+#: lexi/ui/ReferenceRow.py:34 lexi/ui/WordRow.py:39 lexi/ui/WordRow.py:98
 msgid "No translation yet"
 msgstr "Пока перевода нет"
 
-#: lexi/ui/WordRow.py:143
+#: lexi/ui/WordRow.py:133
 msgid ""
 "Click LMB to search words with this tag\n"
 "Click RMB to remove this tag"

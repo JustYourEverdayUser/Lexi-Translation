@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lexi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 02:32+0300\n"
+"POT-Creation-Date: 2025-05-09 23:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Lexicons"
 msgstr ""
 
-#: data/gtk/window.blp:47 data/gtk/window.blp:560
+#: data/gtk/window.blp:47 data/gtk/window.blp:545
 msgid "Toggle sidebar"
 msgstr ""
 
@@ -77,8 +77,8 @@ msgstr ""
 msgid "Add word"
 msgstr ""
 
-#: data/gtk/window.blp:210 data/gtk/window.blp:228 data/gtk/window.blp:601
-#: data/gtk/ui/LexiconRow.blp:55 lexi/window.py:721
+#: data/gtk/window.blp:210 data/gtk/window.blp:228 data/gtk/window.blp:606
+#: data/gtk/ui/LexiconRow.blp:55 lexi/window.py:738
 msgid "Word"
 msgstr ""
 
@@ -110,7 +110,7 @@ msgstr ""
 msgid "Add example"
 msgstr ""
 
-#: data/gtk/window.blp:292 data/gtk/window.blp:613
+#: data/gtk/window.blp:292 data/gtk/window.blp:618
 msgid "References"
 msgstr ""
 
@@ -196,51 +196,55 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: data/gtk/window.blp:545
+#: data/gtk/window.blp:550
 msgid "Search words"
 msgstr ""
 
-#: data/gtk/window.blp:550
+#: data/gtk/window.blp:555
+msgid "Reload words list"
+msgstr ""
+
+#: data/gtk/window.blp:560
 msgid "Show preferences"
 msgstr ""
 
-#: data/gtk/window.blp:555 data/gtk/window.blp:579
+#: data/gtk/window.blp:565 data/gtk/window.blp:584
 msgid "Keybindings"
 msgstr ""
 
-#: data/gtk/window.blp:566 data/gtk/ui/Preferences.blp:11
+#: data/gtk/window.blp:571 data/gtk/ui/Preferences.blp:11
 msgid "Editing"
 msgstr ""
 
-#: data/gtk/window.blp:569
+#: data/gtk/window.blp:574
 msgid "Add new word"
 msgstr ""
 
-#: data/gtk/window.blp:578
+#: data/gtk/window.blp:583
 msgid "Preferences"
 msgstr ""
 
-#: data/gtk/window.blp:580
+#: data/gtk/window.blp:585
 msgid "About"
 msgstr ""
 
-#: data/gtk/window.blp:587
+#: data/gtk/window.blp:592
 msgid "Ascending"
 msgstr ""
 
-#: data/gtk/window.blp:593
+#: data/gtk/window.blp:598
 msgid "Descending"
 msgstr ""
 
-#: data/gtk/window.blp:607
+#: data/gtk/window.blp:612
 msgid "First Translation"
 msgstr ""
 
-#: data/gtk/ui/LexiconRow.blp:61 lexi/window.py:345 lexi/window.py:518
+#: data/gtk/ui/LexiconRow.blp:61 lexi/window.py:346 lexi/window.py:521
 msgid "Translation"
 msgstr ""
 
-#: data/gtk/ui/LexiconRow.blp:66 lexi/window.py:346 lexi/window.py:524
+#: data/gtk/ui/LexiconRow.blp:66 lexi/window.py:347 lexi/window.py:527
 msgid "Example"
 msgstr ""
 
@@ -463,37 +467,37 @@ msgid "Suffix"
 msgstr ""
 
 #. Translators: Add Your Name, Your Name <your.email@example.com>, or Your Name https://your-site.com for it to show up in the About dialog. PLEASE, DON'T DELETE PREVIOUS TRANSLATORS CREDITS AND SEPARATE YOURSELF BY NEWLINE `\n` METASYMBOL
-#: lexi/main.py:152
+#: lexi/main.py:153
 msgid "translator-credits"
 msgstr ""
 
-#: lexi/main.py:155
+#: lexi/main.py:156
 msgid "Inspiration"
 msgstr ""
 
-#: lexi/main.py:162
+#: lexi/main.py:163
 msgid "Advisers"
 msgstr ""
 
 #. Translators: This is the name of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:171
+#: lexi/main.py:172
 msgid "Chronograph"
 msgstr ""
 
 #. Translators: This is the summary of the another app https://flathub.org/apps/io.github.dzheremi2.lrcmake-gtk
-#: lexi/main.py:173
+#: lexi/main.py:174
 msgid "Sync lyrics of your loved songs"
 msgstr ""
 
-#: lexi/window.py:481
+#: lexi/window.py:484
 msgid "You have already referenced all words"
 msgstr ""
 
-#: lexi/window.py:495
+#: lexi/window.py:498
 msgid "No word types available"
 msgstr ""
 
-#: lexi/window.py:495
+#: lexi/window.py:498
 msgid "Configure"
 msgstr ""
 
@@ -505,15 +509,15 @@ msgstr ""
 msgid "Add a new word type to get started"
 msgstr ""
 
-#: lexi/ui/ReferenceRow.py:23 lexi/ui/TypeRow.py:20
+#: lexi/ui/ReferenceRow.py:21 lexi/ui/TypeRow.py:20
 msgid "Delete this reference"
 msgstr ""
 
-#: lexi/ui/ReferenceRow.py:36 lexi/ui/WordRow.py:41 lexi/ui/WordRow.py:100
+#: lexi/ui/ReferenceRow.py:34 lexi/ui/WordRow.py:39 lexi/ui/WordRow.py:98
 msgid "No translation yet"
 msgstr ""
 
-#: lexi/ui/WordRow.py:143
+#: lexi/ui/WordRow.py:133
 msgid ""
 "Click LMB to search words with this tag\n"
 "Click RMB to remove this tag"
