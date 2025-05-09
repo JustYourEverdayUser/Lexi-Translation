@@ -8,9 +8,7 @@ from lexi.utils.backend import Word
 class ReferenceRow(Adw.ActionRow):
     __gtype_name__ = "ReferenceRow"
 
-    def __init__(
-        self, word: Word, has_suffix: bool = True
-    ) -> "ReferenceRow":
+    def __init__(self, word: Word, has_suffix: bool = True) -> "ReferenceRow":
         super().__init__(activatable=True)
         self.word = word
         self.__setup_ui(has_suffix)
@@ -47,9 +45,10 @@ class ReferenceRow(Adw.ActionRow):
         if shared.win.references_dialog_list_box.get_row_at_index(0) is None:
             logger.debug("No more words to refer")
             shared.win.references_dialog.close()
+        shared.win.update_refs_count()
 
     def __on_activated_go(self, *_args) -> None:
-        # shared.win.set_property("loaded-word", self.word)
+        shared.win.set_property("loaded-word", self.word)
         for row in shared.win.lexicon_list_box:
             if row.word == self.word:
                 shared.win.lexicon_list_box.select_row(row)
@@ -63,4 +62,4 @@ class ReferenceRow(Adw.ActionRow):
             shared.win.loaded_word.word,
         )
         shared.win.references_list_box.remove(self)
-        # shared.win.update_refs_count()
+        shared.win.update_refs_count()

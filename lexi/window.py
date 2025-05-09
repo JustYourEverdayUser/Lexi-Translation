@@ -318,6 +318,7 @@ class LexiWindow(Adw.ApplicationWindow):
             self.lexicon_scrolled_window.set_child(self.lexicon_list_box)
             self.lexicon_nav_page.set_title(self.loaded_lexicon.name)
             self.set_property("state", enums.WindowState.WORDS)
+            self.update_refs_count()
         else:
             self.set_property("state", enums.WindowState.EMPTY)
 
@@ -624,7 +625,7 @@ class LexiWindow(Adw.ApplicationWindow):
             The toggle button that emitted this method
         """
         self.set_selection_mode(button.get_active())
-        logger.info("Selection mode toggled: %s", button.get_active())
+        logger.debug("Selection mode toggled: %s", button.get_active())
 
     def set_selection_mode(self, enabled: bool) -> None:
         """
@@ -651,8 +652,11 @@ class LexiWindow(Adw.ApplicationWindow):
             row.check_button_revealer.set_reveal_child(enabled)
             if enabled:
                 row.set_activatable_widget(row.check_button)
+                row.refs_count_label_box.set_visible(False)
             else:
                 row.set_activatable_widget(None)
+                if row.word.ref_count > 0:
+                    row.refs_count_label_box.set_visible(True)
         self.delete_selected_words_button_revealer.set_reveal_child(enabled)
 
     @Gtk.Template.Callback()
@@ -683,6 +687,12 @@ class LexiWindow(Adw.ApplicationWindow):
         for row in self.filter_dialog_list_box:  # pylint: disable=not-an-iterable
             row.get_activatable_widget().set_active(False)
         self.filter_dialog.close()
+
+    def update_refs_count(self) -> None:
+        """Update the reference count for all words in the lexicon list box"""
+        logger.debug("Updating references count")
+        for word_row in self.lexicon_list_box:  # pylint: disable=not-an-iterable
+            word_row.get_ref_count()
 
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:
