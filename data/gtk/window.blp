@@ -542,8 +542,18 @@ ShortcutsWindow help_overlay {
       }
 
       ShortcutsShortcut {
+        title: _("Toggle sidebar");
+        action-name: "win.toggle_sidebar";
+      }
+
+      ShortcutsShortcut {
         title: _("Search words");
         action-name: "win.search";
+      }
+
+      ShortcutsShortcut {
+        title: _("Reload words list");
+        action-name: "win.reload_words_list";
       }
 
       ShortcutsShortcut {
@@ -554,11 +564,6 @@ ShortcutsWindow help_overlay {
       ShortcutsShortcut {
         title: _("Keybindings");
         action-name: "win.show-help-overlay";
-      }
-
-      ShortcutsShortcut {
-        title: _("Toggle sidebar");
-        action-name: "win.toggle_sidebar";
       }
     }
 

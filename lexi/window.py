@@ -694,6 +694,11 @@ class LexiWindow(Adw.ApplicationWindow):
         for word_row in self.lexicon_list_box:  # pylint: disable=not-an-iterable
             word_row.get_ref_count()
 
+    def on_reload_words_list_action(self, *_args) -> None:
+        # pylint: disable=comparison-with-callable
+        if self.state == enums.WindowState.WORDS:
+            self.lexicon_list_box.invalidate_sort()
+
     @GObject.Property(nick="loaded-lexicon")
     def loaded_lexicon(self) -> Lexicon:
         """The currently loaded lexicon"""

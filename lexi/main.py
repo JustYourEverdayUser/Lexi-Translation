@@ -46,6 +46,7 @@ class LexiApplication(Adw.Application):
                 ("show_preferences", ("<primary>comma",), shared.win),
                 ("add_word", ("<primary>n",), shared.win),
                 ("search", ("<primary>f",), shared.win),
+                ("reload_words_list", ("F5",), shared.win),
                 ("about", )
                 # fmt: on
             }
