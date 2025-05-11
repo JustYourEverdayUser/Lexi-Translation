@@ -1,3 +1,27 @@
+## 1.3
+<p>New features</p>
+<ul>
+  <li>An ability to export Lexi database as Memorado flashcard deck</li>
+  <li>F5 press now reloads words list to re-apply sorting</li>
+  <li>Setting for selecting when to save lexicons. On change or on app close (to reduce disk accesses)</li>
+</ul>
+<p>Bug fixes</p>
+<ul>
+  <li>New word is now focusing automatically</li>
+  <li>Bottom bar buttons top margin is now the same as search entry top margin</li>
+  <li>Incorrect tags behavior</li>
+</ul>
+<p>Miscellaneous</p>
+<ul>
+  <li>Removed the “Save” button</li>
+  <li>The app was fully rewritten for better architecture and some small optimizations</li>
+</ul>
+<p>Translations</p>
+<ul>
+  <li>Added Portuguese (Brazil) translation</li>
+  <li>Translations updated</li>
+</ul>
+
 ## 1.2
 <p>New features</p>
 <ul>
