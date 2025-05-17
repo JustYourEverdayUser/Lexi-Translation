@@ -185,7 +185,7 @@ class LexiconRow(Gtk.Box):
             word_row := WordRow(self.lexicon.get_word(id_))
         )
         shared.win.lexicon_list_box.select_row(word_row)
-        word_row.activate()
+        shared.win.load_word(None, word_row)
         shared.win.set_property("state", enums.WindowState.WORDS)
         self.add_word_dialog.close()
         shared.win.lexicon_list_box.invalidate_sort()
