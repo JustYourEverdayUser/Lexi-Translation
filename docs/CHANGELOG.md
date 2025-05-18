@@ -1,3 +1,9 @@
+## 1.3.1
+<p>Bug fix</p>
+<ul>
+  <li>Fixed automatic word loading when new word added</li>
+</ul>
+
 ## 1.3
 <p>New features</p>
 <ul>
