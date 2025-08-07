@@ -1,3 +1,5 @@
+My (in-progress) attempt at adding a basic translator to Lexi. Below is the original readme.
+
 <div align="center">
 
 <img src="data/icons/hicolor/scalable/apps/io.github.dzheremi2.lexi.svg" width="128" height="128">
